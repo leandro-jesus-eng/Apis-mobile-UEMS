@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Ápis</string>
+
+    <string name="btn_salvar">Salvar</string>
+
+    <!--Activity configurações-->
+    <string name="action_settings">Configurações</string>
+    <string name="title_activity_configurar">Configurações</string>
+
+    <!--Activity adicionar animal-->
+    <string name="title_activity_adicionar_animal">Adicionar animal</string>
+    <string name="lbl_nome">Nome</string>
+    <string name="experimento">Experimento</string>
+
+    <!--Activity inserir comportamento-->
+    <string name="title_activity_inserir_comportamento">Inserir Comportamento</string>
+    <string name="comportamento_fisiol_gico">Comportamento Fisiológico</string>
+    <string name="lbl_pastejando">Pastejando</string>
+    <string name="lbl_op">Ociosa em pé</string>
+    <string name="lbl_od">Ociosa deitada</string>
+    <string name="lbl_rumpe">Ruminando em pé</string>
+    <string name="lbl_rumdei">Ruminando deitada</string>
+    <string name="comportamento_repro">Comportamento Reprodutivo</string>
+    <string name="lbl_acmonta">Aceita monta</string>
+    <string name="lbl_montaoutra">Monta outra</string>
+    <string name="lbl_inquieta">Inquieta</string>
+    <string name="uso_da_sombra">Uso da sombra</string>
+    <string name="lbl_sol">Sol</string>
+    <string name="lbl_sombra">Sombra</string>
+    <string name="lbl_observacoes">Observações</string>
+    <string name="title_activity_adicionar_comportamento">Adicionar comportamento</string>
+    <string name="adicionar_lote">Adicionar lote</string>
+    <string name="title_activity_adicionar_lote">Adicionar lote</string>
+    <string name="title_activity_lista_animais">Lista de animais</string>
+
+    <!-- Settings -->
+    <string name="title_activity_settings">Configurações</string>
+    <string-array name="settings_list_preference_titles">
+        <item>1 minuto</item>
+        <item>5 minutos</item>
+        <item>15 minutos</item>
+        <item>30 minutos</item>
+        <item>45 minutos</item>
+        <item>1 hora</item>
+        <item>2 horas</item>
+    </string-array>
+    <string-array name="settings_list_preference_values">
+        <item>1</item>
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+
+    <string name="intervalo_atualizacao">5</string>
+    <string name="title_activity_sett">Configurações</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_drawer">Drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Ápis</string>
+    <string name="nav_header_subtitle">https://ifms.edu.br</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+
+</resources>

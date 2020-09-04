@@ -1,0 +1,47 @@
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="notifications_category"
+        app:title="Notificações">
+
+        <SwitchPreferenceCompat
+            app:key="notifications"
+            app:title="Lembrete de atualização de dados"/>
+
+        <ListPreference
+            android:dialogTitle="Selecione o intervalo de tempo"
+            android:entries="@array/settings_list_preference_titles"
+            android:entryValues="@array/settings_list_preference_values"
+            android:key="intervalo_atualizacao"
+            android:summary="Escolha o tempo entre a atualização de dados"
+            android:title="Intervalo entre notificações" />
+
+
+    </PreferenceCategory>
+
+    
+
+    <PreferenceCategory
+        app:key="dados_category"
+        app:title="Sobre">
+
+        <Preference
+            app:key="github"
+            app:summary="http://github.com/joaocou/apis/"
+            app:title="GitHub">
+                <intent android:action="android.intent.action.VIEW"
+                    android:data="http://github.com/joaocou/apis/" />
+        </Preference>
+
+        <Preference
+            app:key="icons"
+            app:summary="http://flaticon.com e http://material.io"
+            app:title="Ícones e recursos gráficos">
+        </Preference>
+
+
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
