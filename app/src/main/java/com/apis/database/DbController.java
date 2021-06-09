@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class DbController {
@@ -226,11 +227,20 @@ public class DbController {
             try {
                 try {
 
-                    //Cria outro arquivo, mais novo
-                    File f = new File(Environment.getExternalStorageDirectory() + "/apis/exportado/", "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
+                    /*File directory = new File ( "/apis/");
+                    if (! directory.exists()){
+                        directory.mkdir();
+                    }*/
 
-                    if (!f.exists()){
-                        f.getParentFile().mkdirs();
+                    System.out.println("DAta can write??--->"+Environment.getExternalStorageDirectory().canWrite());
+                    System.out.println("DAta can read??--->"+Environment.getExternalStorageDirectory().canRead());
+
+                    //Cria outro arquivo, mais novo
+                    //File f = new File(Environment.getExternalStorageDirectory() + "/apis/exportado/", "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
+                    File f = new File(Environment.getExternalStorageDirectory() , "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
+                   if (!f.exists()){
+                        //Files.createDirectories( f.getParentFile().getPath(), null );
+                        //f.getParentFile().mkdirs();
                         f.createNewFile();
                     }
 

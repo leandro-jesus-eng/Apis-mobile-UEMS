@@ -180,6 +180,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     final static String[] PERMISSIONS_INTERNET = {
             Manifest.permission.INTERNET
     };
+    final static String[] PERMISSIONS_LOCATION = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
+    final static String[] PERMISSIONS_WRITE_EXTERNAL_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            Manifest.permission.WAKE_LOCK,
+            Manifest.permission.INTERNET
+
+    };
+
 
 
     public void pedirPermissoes() {
@@ -198,6 +211,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ActivityCompat.requestPermissions(
                     this,
                     PERMISSIONS_INTERNET,
+                    1
+            );
+        }
+
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_LOCATION,
+                    1
+            );
+        }
+
+        permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_WRITE_EXTERNAL_STORAGE,
                     1
             );
         }
