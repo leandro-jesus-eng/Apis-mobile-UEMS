@@ -42,7 +42,7 @@ public class ListaPreferencias extends AppCompatActivity {
         configurarLista();
 
         //Arquivo de comportamentos temporarios
-        FileControl fc = new FileControl();
+        FileControl fc = new FileControl(getApplicationContext());
         fc.deleteTmpFile();
 
         //Botão flutuante

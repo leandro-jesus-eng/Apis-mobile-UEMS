@@ -3,6 +3,7 @@ package com.apis.models;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.apis.database.DbController;
 
@@ -18,14 +19,42 @@ import java.util.ArrayList;
 
 public class FileControl {
 
-    public void writeTmp(String value){
-        try {
+    private Context context;
 
-            File f = new File(Environment.getExternalStorageDirectory() + "/apis/temp", "marked_options.tmp");
-            if (!f.exists()){
-                f.getParentFile().mkdirs();
+    public FileControl(Context context) {
+        this.context = context;
+    }
+
+    public static String getNameOfLoteCSV (Lote lote) {
+        return "dados_Lote_" + lote.getNome().replace(" ", "") + ".csv";
+    }
+
+
+    public static String getNameOfAnimalCSV (Lote lote, Animal animal) {
+        return "dados_Lote_" + lote.getNome().replace(" ", "") + "__Animal_" + animal.getNome().replace(" ", "") + ".csv";
+    }
+
+    private File getMarkedOptionsFile () throws IOException {
+
+        File files[] = context.getExternalFilesDirs(null);
+        File f = null;
+        if(files.length > 0) {
+            f = new File( files[0] , "marked_options.tmp");
+            if (!f.exists()) {
                 f.createNewFile();
             }
+        } else {
+            Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        return f;
+    }
+
+    public void writeTmp(String value){
+        try {
+            File f = getMarkedOptionsFile();
+            if(f == null) return;
 
             FileOutputStream out = new FileOutputStream(f, true);
             out.write(value.getBytes());
@@ -35,20 +64,22 @@ public class FileControl {
 
 
         } catch (FileNotFoundException e) {
-
-        } catch (IOException e){
-
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void deleteValue(String value){
 
         ArrayList<String> valores = new ArrayList<String>();
-        String path = Environment.getExternalStorageDirectory() + "/apis/temp/marked_options.tmp";
-
 
         try {
-            FileReader arq = new FileReader(path);
+
+            File f = getMarkedOptionsFile();
+            if(f == null) return;
+
+            FileReader arq = new FileReader(f);
             BufferedReader lerArq = new BufferedReader(arq);
 
             String linha = lerArq.readLine();
@@ -62,12 +93,12 @@ public class FileControl {
             }
 
             arq.close();
+
+            f.delete();
+
         } catch (IOException e) {
             Log.e("FILE: ", "Erro na abertura do arquivo: "+ e.getMessage());
         }
-
-        File oldFile = new File(path);
-        oldFile.delete();
 
         //Grava os novos valores
         while(!valores.isEmpty()){
@@ -79,12 +110,14 @@ public class FileControl {
     public void updateValue(String value){
 
         ArrayList<String> valores = new ArrayList<String>();
-        String path = Environment.getExternalStorageDirectory() + "/apis/temp/marked_options.tmp";
         boolean existeValorIgual = false;
 
-
         try {
-            FileReader arq = new FileReader(path);
+
+            File f = getMarkedOptionsFile();
+            if(f == null) return;
+
+            FileReader arq = new FileReader(f);
             BufferedReader lerArq = new BufferedReader(arq);
 
             String linha = lerArq.readLine();
@@ -111,19 +144,25 @@ public class FileControl {
     }
 
     public void deleteTmpFile(){
-        String path = Environment.getExternalStorageDirectory() + "/apis/temp/marked_options.tmp";
-        File oldFile = new File(path);
-        oldFile.delete();
+        try {
+            File f = getMarkedOptionsFile();
+            if(f == null) return;
+            f.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public ArrayList<String> returnValues() {
 
         ArrayList<String> valores = new ArrayList<String>();
-        String path = Environment.getExternalStorageDirectory() + "/apis/temp/marked_options.tmp";
-
 
         try {
-            FileReader arq = new FileReader(path);
+            File f = getMarkedOptionsFile();
+            if(f == null) return valores;
+
+            FileReader arq = new FileReader(f);
             BufferedReader lerArq = new BufferedReader(arq);
 
             String linha = lerArq.readLine();
@@ -144,21 +183,32 @@ public class FileControl {
     public void deleteLoteFile(Context context, int idLote){
 
         DbController database = new DbController(context);
+        Lote lote = database.retornarLote(idLote);
 
-        String path = Environment.getExternalStorageDirectory() + "/apis/dados_Lote" + idLote + "_" + database.retornarNomeLote(idLote).replace(" ", "") + ".cvs";
-        File oldFile = new File(path);
-        oldFile.delete();
-    }
-
-    public void deleteEverthing() {
-        File myDir = new File(Environment.getExternalStorageDirectory() + "/apis/");
-
-        if (myDir.isDirectory()) {
-            String[] children = myDir.list();
-            for (int i = 0; i < children.length; i++) {
-                new File(myDir, children[i]).delete();
-            }
+        File files[] = context.getExternalFilesDirs(null);
+        File f = null;
+        if(files.length > 0) {
+            f = new File( files[0] , FileControl.getNameOfLoteCSV(lote));
+            f.delete();
+        } else {
+            Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
         }
     }
 
+    public void deleteEverthing() {
+
+        File files[] = context.getExternalFilesDirs(null);
+        File f = null;
+        if(files.length > 0) {
+
+            if (files[0].isDirectory()) {
+                String[] children = files[0].list();
+                for (int i = 0; i < children.length; i++) {
+                    new File(files[0], children[i]).delete();
+                }
+            }
+        } else {
+            Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

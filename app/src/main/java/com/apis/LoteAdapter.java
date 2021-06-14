@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -16,11 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.database.DbController;
+import com.apis.models.Animal;
+import com.apis.models.Comportamento;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
@@ -70,12 +76,19 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
                                 DbController database = new DbController(view.getContext());
 
-                                if(database.excluir(lote.getId(), "Lote")) {
-                                    removerLote(lote);
+                                //Apaga arquivo
+                                FileControl fileControl = new FileControl(context);
+                                fileControl.deleteLoteFile(context, lote.getId());
 
-                                    //Apaga arquivo
-                                    FileControl fileControl = new FileControl();
-                                    fileControl.deleteLoteFile(context, lote.getId());
+                                if(database.excluir(lote.getId(), "Lote")) {
+
+                                    // remove animais desse lote
+                                    ArrayList<Animal> animaisLote = database.retornarAnimais(lote.getId());
+                                    for(Animal animal: animaisLote) {
+                                        database.excluir(animal.getId(), "Animal");
+                                    }
+
+                                    removerLote(lote);
 
                                     Toast.makeText(context, "Excluído!", Toast.LENGTH_LONG).show();
                                 }else{
@@ -90,20 +103,92 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
         });
 
         //Action botão EXPORTAR
+       /* holder.btnExportarDados.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Tela de compartilhamento
+                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+                File files[] = context.getExternalFilesDirs(null);
+                File fileWithinMyDir = null;
+                String fileName = FileControl.getNameOfLoteCSV(lote);
+
+                if(files.length > 0) {
+                    fileWithinMyDir = new File( files[0] , fileName);
+                } else {
+                    Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+                }
+
+                if(fileWithinMyDir.exists()) {
+                    intentShareFile.setType("application/pdf");
+                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" +fileName));
+
+                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                            "Dados Lote : " + lote.getNome());
+
+                    context.startActivity(Intent.createChooser(intentShareFile, "Enviar para"));
+                } else {
+                    Toast.makeText(context, "Não existem dados para este lote!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });*/
+
+
         holder.btnExportarDados.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Tela de compartilhamento
                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                File fileWithinMyDir = new File(Environment.getExternalStorageDirectory() + "/apis/", "dados_Lote"+lote.getId()+".cvs");
 
-                if(fileWithinMyDir.exists()) {
+                File files[] = context.getExternalFilesDirs(null);
+                String fileName = FileControl.getNameOfLoteCSV(lote);
+                //Antes de fazer a consulta
+                //Apaga o arquivo de dados do animal, se houver
+                File f = null;
+                if (files.length > 0) {
+                    try {
+                        f = new File(files[0], fileName);
+                        f.delete();
+                        f.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                boolean existeDados = false;
+                DbController dbController = new DbController(context);
+                ArrayList<Animal> listAnimais = dbController.retornarAnimais(lote.getId());
+                try {
+                    FileOutputStream out = new FileOutputStream(f, true);
+                    for(Animal animal : listAnimais) {
+                        ArrayList<Comportamento> listComp = dbController.retornarComportamento(animal.getId());
+                        for (Comportamento comportamento : listComp) {
+                           out.write(comportamento.toString().getBytes());
+                           out.write('\n');
+                            existeDados = true;
+                        }
+                    }
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                } finally {
+                }
+
+
+               if(existeDados && f != null && f.exists()) {
                     intentShareFile.setType("application/pdf");
-                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() + "/apis/dados_Lote"+lote.getId()+".cvs"));
-
-                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                            "Dados Lote " + lote.getId() + ": " + lote.getNome());
+                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" +fileName));
+                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Dados Lote : " + lote.getNome());
 
                     context.startActivity(Intent.createChooser(intentShareFile, "Enviar para"));
                 } else {

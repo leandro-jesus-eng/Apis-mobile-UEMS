@@ -96,7 +96,7 @@ public class PreferenciaAdapter extends RecyclerView.Adapter<PreferenciaViewHold
             @Override
             public void onClick(View v) {
 
-                FileControl fc = new FileControl();
+                FileControl fc = new FileControl(context);
                 fc.updateValue(preferencias.get(position).getNome());
 
             }

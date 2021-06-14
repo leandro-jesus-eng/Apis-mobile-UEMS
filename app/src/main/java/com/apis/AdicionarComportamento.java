@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,14 +27,17 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.database.DbController;
+import com.apis.models.Animal;
 import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FileControl;
+import com.apis.models.Lote;
 import com.apis.models.Preferencia;
 
 import java.io.File;
@@ -77,7 +81,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         getSupportActionBar().setTitle(nomeAnimal);
 
         //Arquivo de comportamentos temporarios
-        FileControl fc = new FileControl();
+        FileControl fc = new FileControl(getApplicationContext());
         fc.deleteTmpFile();
 
         //Click do botão 'Salvar'
@@ -103,13 +107,22 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         DbController database = new DbController(this);
         database.exportarDados(idLote, idAnimal);
+        Lote lote = database.retornarLote(idLote);
+        Animal animal = database.retornarAnimal(idLote, idAnimal);
 
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        File fileWithinMyDir = new File(Environment.getExternalStorageDirectory() + "/apis/exportado/", "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
+
+        File files[] = getBaseContext().getExternalFilesDirs(null);
+        File fileWithinMyDir = null;
+        if(files.length > 0) {
+            fileWithinMyDir = new File( files[0] , FileControl.getNameOfAnimalCSV(lote, animal));
+        } else {
+            Toast.makeText(getApplicationContext(), "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+        }
 
         if(fileWithinMyDir.exists()) {
             intentShareFile.setType("application/pdf");
-            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() + "/apis/exportado/dados_Lote"+idLote+"_Animal"+idAnimal+".cvs"));
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/"+FileControl.getNameOfAnimalCSV(lote, animal) ));
 
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                     "Dados" + nomeLote + " - " + nomeAnimal);
@@ -235,7 +248,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         //Pega os dados personalizados
 
-        FileControl fc = new FileControl();
+        FileControl fc = new FileControl(getApplicationContext());
         ArrayList<String> comportamentosPersonalizados = fc.returnValues();//Pega os checkboxes marcados pelo usuário (ficam em um arquivo temporário)
         ArrayList<Preferencia> prefs = database.retornarPreferencia();//Pega a lista de comportamentos personalizados definido pelo usuário
 
@@ -314,7 +327,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Salvo!", Toast.LENGTH_LONG).show();
 
                             //Arquivo de comportamentos temporarios
-                            FileControl fc = new FileControl();
+                            FileControl fc = new FileControl(getApplicationContext());
                             fc.deleteTmpFile();
 
                             finish();
@@ -340,16 +353,24 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){
 
-        //String conteudo = "ID Animal;Data;Hora;Fisiologico;Reprodutivo;Uso de sombra;Observação;";
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
+
+        DbController database = new DbController(getApplicationContext());
+        Lote lote = database.retornarLote(idLote);
 
         try {
                 try {
 
-                    File f = new File(Environment.getExternalStorageDirectory() + "/apis", "dados_Lote"+idLote+".cvs");
-                    if (!f.exists()){
-                        f.getParentFile().mkdirs();
-                        f.createNewFile();
+                    File files[] = getBaseContext().getExternalFilesDirs(null);
+                    File f = null;
+                    if(files.length > 0) {
+                        f = new File( files[0] , FileControl.getNameOfLoteCSV(lote));
+                        if (!f.exists()){
+                            f.createNewFile();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
                     FileOutputStream out = new FileOutputStream(f, true);
@@ -383,6 +404,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
+        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
     }
 
     @Override

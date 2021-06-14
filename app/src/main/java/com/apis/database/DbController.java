@@ -2,8 +2,10 @@ package com.apis.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.apis.models.Animal;
 import com.apis.models.Comportamento;
@@ -21,7 +23,10 @@ import java.util.ArrayList;
 public class DbController {
 
     private DbHelper database;
+    private Context context;
+
     public DbController(Context ctx){
+        context = ctx;
         database = new DbHelper(ctx);
     }
 
@@ -30,8 +35,8 @@ public class DbController {
     public boolean adicionarLote(String nome, String experimento){
 
         ContentValues cv = new ContentValues();
-        cv.put("nome", nome);
-        cv.put("experimento", experimento);
+        cv.put("nome", nome.trim());
+        cv.put("experimento", experimento.trim());
 
         return database.getWritableDatabase().insert("Lote", null, cv) > 0;
     }
@@ -44,11 +49,27 @@ public class DbController {
         }
         cursor.close();
         return nome;
-
     }
-    public boolean loteExiste(String nomeLote){
 
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE nome = '"+nomeLote+"'", null);
+    public Lote retornarLote(int idLote){
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE id = " + idLote, null);
+
+        Lote lote = null;
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String nome = cursor.getString(cursor.getColumnIndex("nome"));
+            String experimento = cursor.getString(cursor.getColumnIndex("experimento"));
+            lote = new Lote(id, nome, experimento);
+        }
+        cursor.close();
+
+        return lote;
+    }
+
+    public boolean loteExiste(String nomeLote, String experimento){
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE nome = '"+nomeLote+"' and experimento = '"+ experimento+"'", null);
         if(cursor.getCount() > 0) {
             return true;
         } else {
@@ -91,6 +112,21 @@ public class DbController {
         }
 
     }
+
+    public Animal retornarAnimal(int loteId, int animalId){
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId+" AND id = "+animalId, null);
+
+        Animal animal = null;
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String nome = cursor.getString(cursor.getColumnIndex("nome"));
+            animal = new Animal(id, nome, loteId);
+        }
+        cursor.close();
+        return animal;
+    }
+
     public ArrayList<Animal> retornarAnimais(int loteId){
 
         Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId, null);
@@ -205,11 +241,21 @@ public class DbController {
     //Exportar dados
     public boolean exportarDados(int idLote, int idAnimal){
 
+        Lote lote = retornarLote(idLote);
+        Animal animal = retornarAnimal(idLote, idAnimal);
+
         //Antes de fazer a consulta
         //Apaga o arquivo de dados do animal, se houver
-        File oldFile = new File(Environment.getExternalStorageDirectory() + "/apis/exportado/", "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
-        oldFile.delete();
+        File files[] = context.getExternalFilesDirs(null);
+        File f = null;
+        if(files.length > 0) {
+            f = new File( files[0] , FileControl.getNameOfAnimalCSV(lote, animal));
+            f.delete();
+        } else {
+            Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+        }
 
+        // TODO Refatorar para usar o 'retornarComportamentos (id_animal)'
         Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = " + idAnimal, null);
 
         while(cursor.moveToNext()) {
@@ -226,21 +272,7 @@ public class DbController {
 
             try {
                 try {
-
-                    /*File directory = new File ( "/apis/");
-                    if (! directory.exists()){
-                        directory.mkdir();
-                    }*/
-
-                    System.out.println("DAta can write??--->"+Environment.getExternalStorageDirectory().canWrite());
-                    System.out.println("DAta can read??--->"+Environment.getExternalStorageDirectory().canRead());
-
-                    //Cria outro arquivo, mais novo
-                    //File f = new File(Environment.getExternalStorageDirectory() + "/apis/exportado/", "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
-                    File f = new File(Environment.getExternalStorageDirectory() , "dados_Lote"+idLote+"_Animal"+idAnimal+".cvs");
                    if (!f.exists()){
-                        //Files.createDirectories( f.getParentFile().getPath(), null );
-                        //f.getParentFile().mkdirs();
                         f.createNewFile();
                     }
 
@@ -272,7 +304,7 @@ public class DbController {
         database.getWritableDatabase().delete("Animal", "1", null);
         database.getWritableDatabase().delete("Preferencia", "1", null);
 
-        FileControl fc = new FileControl();
+        FileControl fc = new FileControl(context);
         fc.deleteEverthing();
 
         return true;

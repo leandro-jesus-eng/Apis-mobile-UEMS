@@ -40,4 +40,9 @@ public class Comportamento implements Serializable {
     public int hashCode(){
         return this.id;
     }
+
+    @Override
+    public String toString() {
+        return ""+id_animal + ";" + nome_animal + ";" + data + ";" + hora + ";" + comportamento + ";" + obs;
+    }
 }

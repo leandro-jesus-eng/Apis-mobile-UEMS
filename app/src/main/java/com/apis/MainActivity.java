@@ -140,12 +140,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             DbController database = new DbController(getBaseContext());
                             boolean loteJaExiste = false;
-                            if(database.loteExiste(nomeLote)){
+                            if(database.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
                                 loteJaExiste = true;
                             }
 
                             if(loteJaExiste) {
-                                Toast.makeText(getApplicationContext(), "O lote com esse nome já existe!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "O lote com esse nome e experimento já existe!", Toast.LENGTH_LONG).show();
 
                             } else {
                                 ////Salva no BD
