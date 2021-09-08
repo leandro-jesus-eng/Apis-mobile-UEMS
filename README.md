@@ -8,6 +8,8 @@
 [![Languages](https://img.shields.io/github/languages/count/joaocou/apis?color=222222)](https://github.com/joaocou/apis/)
 
 O Ápis é um aplicativo Android que auxilia no monitoramento do comportamento de bovinos a pasto.
+#### Wireframes
+https://www.figma.com/file/4Dtvw6dieHw7DH9Dlq17iW/Design-Lista-de-animais-a-serem-observados?node-id=0%3A1
 
 #### 📌 Características
 
