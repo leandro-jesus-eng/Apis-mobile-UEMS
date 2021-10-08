@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:windowSoftInputMode="adjustPan"
-    tools:context=".AdicionarComportamento">
+    tools:context=".features.comportamentos_list.AdicionarComportamento">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

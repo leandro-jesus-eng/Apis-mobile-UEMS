@@ -18,9 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IntroActivity"></activity>
+        <activity android:name=".features.others.IntroActivity"></activity>
         <activity
-            android:name=".SplashScreen"
+            android:name=".features.others.SplashScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,26 +28,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListaPreferencias" />
+        <activity android:name=".features.comportamentosPersonalizados_list.ListaPreferencias" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".features.others.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ListaAnimais"
+            android:name=".features.animal_list.ListaAnimais"
             android:label="@string/title_activity_lista_animais"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdicionarComportamento"
+            android:name=".features.comportamentos_list.AdicionarComportamento"
             android:label="@string/title_activity_adicionar_comportamento"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".MainActivity"
+            android:name=".features.lote_list.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".features.others.AlarmReceiver"
             android:process=":remote" />
     </application>
 

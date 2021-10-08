@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DbController {
 
@@ -50,7 +51,7 @@ public class DbController {
         cursor.close();
         return nome;
     }
-
+    
     public Lote retornarLote(int idLote){
 
         Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE id = " + idLote, null);
@@ -137,6 +138,28 @@ public class DbController {
             String nome = cursor.getString(cursor.getColumnIndex("nome"));
             animais.add(new Animal(id, nome, loteId));
         }
+        cursor.close();
+        return animais;
+    }
+
+    public ArrayList<Animal> retornarAnimaisEmOrdemAlfabetica(int loteId){
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId, null);
+
+        ArrayList<Animal> animais = new ArrayList<>();
+        ArrayList<String> nomesOrdenados = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String nome = cursor.getString(cursor.getColumnIndex("nome"));
+            nomesOrdenados.add(nome);
+            ids.add(id);
+        }
+        Collections.sort(nomesOrdenados);
+        for(int i=0; i < nomesOrdenados.size(); i++){
+            animais.add(new Animal(ids.get(i), nomesOrdenados.get(i), loteId));
+        }
+
         cursor.close();
         return animais;
     }
@@ -235,6 +258,24 @@ public class DbController {
             return "";
         }else {
             return data + " às " + hora;
+        }
+    }
+    public  String pegarUltimoUpdateAnimalEnxutado(int idAnimal) {
+
+        String data = "";
+        String hora = "";
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = " + idAnimal, null);
+        while (cursor.moveToNext()) {
+            data = cursor.getString(cursor.getColumnIndex("data"));
+            hora = cursor.getString(cursor.getColumnIndex("hora"));
+        }
+        cursor.close();
+
+        if(data == hora){
+            return "";
+        }else {
+            return data +" "+ hora;
         }
     }
 

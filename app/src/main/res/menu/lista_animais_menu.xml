@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item android:title="@string/ordena_o_da_lista">
+        <menu>
+            <item
+                android:id="@+id/ordenacaoNome"
+                android:orderInCategory="100"
+                android:title="@string/ordenar_por_nome"
+                android:checkable="true"
+               />
+
+            <item
+                android:id="@+id/ordenacaoAnotacaoDSC"
+                android:orderInCategory="100"
+                android:title="@string/ordenar_por_anota_o_mais_antiga"
+                android:checkable="true"
+                />
+            <item
+                android:id="@+id/ordenacaoAnotacaoASC"
+                android:orderInCategory="100"
+                android:title="@string/ordenar_por_anota_o_mais_recente"
+                android:checkable="true"
+                />
+
+        </menu>
+    </item>
+
+    <item android:title="@string/voltar">
+        <menu>
+            <item
+                android:id="@+id/voltar"
+                android:orderInCategory="100"
+                android:title="@string/voltar_lista_de_lotes"
+                android:icon="@drawable/ic_baseline_arrow_back_24"/>
+        </menu>
+    </item>
+
+</menu>
