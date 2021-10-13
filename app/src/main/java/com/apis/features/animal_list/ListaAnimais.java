@@ -91,7 +91,6 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "On resume!", Toast.LENGTH_SHORT).show();
         configurarLista();
     }
 
@@ -114,14 +113,17 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
         if(ordAscChecked){
-            animais = database.retornarAnimais(idLote);
-            setOrder(true);
+            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
         }else if(nameChecked){
+            animais= database.retornarAnimais(idLote);
             animais = database.retornarAnimaisEmOrdemAlfabetica(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
-            animais = database.retornarAnimais(idLote);
-            setOrder(false);
+            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
+            Collections.reverse(animais);
+            //setOrder(false);
         }
 
         TextView nenhumAnimal = (TextView) findViewById(R.id.textNenhumAnimal);
@@ -198,10 +200,10 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordAscChecked = true;
             ordDscChecked = false;
             nameChecked = false;
+            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
 
-            animais = database.retornarAnimais(idLote);
-
-            setOrder(true);
+            //setOrder(true);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por anotação mais recente!", Toast.LENGTH_SHORT).show();
@@ -210,10 +212,9 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordAscChecked = false;
             ordDscChecked = true;
             nameChecked = false;
-
-            animais = database.retornarAnimais(idLote);
-
-            setOrder(false);
+            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
+            Collections.reverse(animais);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por anotação mais antiga!", Toast.LENGTH_SHORT).show();
@@ -232,22 +233,6 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         }
         recyclerView.setAdapter(new AnimalAdapter(animais, this));
         return true;
-    }
-
-    public void setOrder(Boolean valor){
-
-        //Inserir contexto no model Animal
-        for(Animal animal : animais){
-            animal.setContext(getApplicationContext());
-        }
-        //Se for true ordena por mais recente, senão, mais antigo
-        if(valor){
-            Collections.sort(animais);
-
-        }else{
-            Collections.sort(animais);
-            Collections.reverse(animais);
-        }
     }
 
 }

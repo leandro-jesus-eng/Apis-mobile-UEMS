@@ -10,10 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Animal implements Serializable, Comparable<Animal> {
-    private Context context;
+
     private int id;
     private String nome;
     private int LoteId;
+    private String lastUpdate;
 
     public Animal(int id, String nome, int LoteId){
         this.id = id;
@@ -35,13 +36,12 @@ public class Animal implements Serializable, Comparable<Animal> {
         return this.id;
     }
 
-    public Context setContext(Context context){
-        return this.context= context;
+    public String getLastUpdate(){
+        return this.lastUpdate;
     }
 
-    public String getLastUpdate(){
-        DbController database = new DbController(setContext(context));
-        return database.pegarUltimoUpdateAnimalEnxutado(this.getId());
+    public void setLastUpdate(String data){
+        this.lastUpdate= data;
     }
 
     @Override

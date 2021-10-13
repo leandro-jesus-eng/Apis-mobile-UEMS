@@ -260,23 +260,26 @@ public class DbController {
             return data + " às " + hora;
         }
     }
-    public  String pegarUltimoUpdateAnimalEnxutado(int idAnimal) {
 
-        String data = "";
-        String hora = "";
+    public ArrayList<Animal> retornarAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
 
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = " + idAnimal, null);
-        while (cursor.moveToNext()) {
-            data = cursor.getString(cursor.getColumnIndex("data"));
-            hora = cursor.getString(cursor.getColumnIndex("hora"));
+        for(Animal animal : animais){
+            String data = "";
+            String hora = "";
+            String dataHora;
+            Cursor cursor = database.getWritableDatabase().rawQuery(
+                    "SELECT * FROM Comportamento WHERE Animal_id = " + animal.getId(), null);
+
+            while (cursor.moveToNext()) {
+                data = cursor.getString(cursor.getColumnIndex("data"));
+                hora = cursor.getString(cursor.getColumnIndex("hora"));
+            }
+            dataHora= data+" "+hora;
+            animal.setLastUpdate(dataHora);
+            cursor.close();
         }
-        cursor.close();
-
-        if(data == hora){
-            return "";
-        }else {
-            return data +" "+ hora;
-        }
+        Collections.sort(animais);
+        return animais;
     }
 
     //Exportar dados
