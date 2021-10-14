@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.features.comportamentos_list.AdicionarComportamento;
@@ -46,13 +48,20 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
         return animalViewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(AnimalViewHolder holder, final int position)
+    public void onBindViewHolder(final AnimalViewHolder holder, final int position)
     {
-        holder.nome.setText(animais.get(position).getNome());
-        holder.idAnimal.setText("ID: "+animais.get(position).getId());
+        holder.nome.setText(animais.get(holder.getAdapterPosition()).getNome());
+        holder.idAnimal.setText("ID: "+animais.get(holder.getAdapterPosition()).getId());
+        holder.dataAnotacao.setText(animais.get(holder.getAdapterPosition()).getLastUpdate());
+        if(animais.get(holder.getAdapterPosition()).getLastUpdate() != "Sem anotação!"){
+            holder.dataTitle.setText("Última anotação:");
+        }else{
+            holder.dataTitle.setText("");
+        }
 
-        final Animal animal = animais.get(position);
+        final Animal animal = animais.get(holder.getAdapterPosition());
 
         //Action botão excluir
         holder.btnExcluir.setOnClickListener(new Button.OnClickListener() {
@@ -87,12 +96,13 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
             public void onClick(View v) {
                 //Passa o id do animal clicado para a Activity AdicionarComportamento
                 Intent intent = new Intent(context, AdicionarComportamento.class);
-                intent.putExtra("animal_nome", animais.get(position).getNome());
-                intent.putExtra("animal_id", animais.get(position).getId());
-                intent.putExtra("lote_id", animais.get(position).getLoteId());
+                intent.putExtra("animal_nome", animais.get(holder.getAdapterPosition()).getNome());
+                intent.putExtra("animal_id", animais.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("lote_id", animais.get(holder.getAdapterPosition()).getLoteId());
                 context.startActivity(intent);
             }
         });
+
     }
 
     @Override

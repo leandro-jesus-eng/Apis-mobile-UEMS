@@ -161,6 +161,7 @@ public class DbController {
         }
 
         cursor.close();
+        setUpdateAnimais(animais);
         return animais;
     }
 
@@ -254,7 +255,7 @@ public class DbController {
         }
         cursor.close();
 
-        if(data == hora){
+        if(data.equals(hora)){
             return "";
         }else {
             return data + " às " + hora;
@@ -262,6 +263,14 @@ public class DbController {
     }
 
     public ArrayList<Animal> retornarAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
+
+        setUpdateAnimais(animais);
+        Collections.sort(animais);
+
+        return animais;
+    }
+
+    public void setUpdateAnimais(ArrayList<Animal> animais){
 
         for(Animal animal : animais){
             String data = "";
@@ -274,12 +283,16 @@ public class DbController {
                 data = cursor.getString(cursor.getColumnIndex("data"));
                 hora = cursor.getString(cursor.getColumnIndex("hora"));
             }
-            dataHora= data+" "+hora;
-            animal.setLastUpdate(dataHora);
+
+            if(data.equals(hora)){
+                animal.setLastUpdate("Sem anotação!");
+            }else{
+                dataHora = data+" "+hora;
+                animal.setLastUpdate(dataHora);
+            }
             cursor.close();
         }
-        Collections.sort(animais);
-        return animais;
+
     }
 
     //Exportar dados

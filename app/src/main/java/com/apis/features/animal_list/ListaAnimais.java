@@ -3,11 +3,13 @@ package com.apis.features.animal_list;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -113,17 +116,15 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
         if(ordAscChecked){
-            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
         }else if(nameChecked){
-            animais= database.retornarAnimais(idLote);
             animais = database.retornarAnimaisEmOrdemAlfabetica(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
-            animais= database.retornarAnimais(idLote);
+            animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
-            //setOrder(false);
         }
 
         TextView nenhumAnimal = (TextView) findViewById(R.id.textNenhumAnimal);
@@ -140,6 +141,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         recyclerView.setAdapter(new AnimalAdapter(animais, this));
         LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
+        
     }
 
     public void salvarAnimal(){
@@ -171,7 +173,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
                                 if (!database.adicionarAnimal(nomeAnimal, idLote)) {
                                     Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                                 }
-                                configurarLista();
+                                finish();
+                                startActivity(getIntent());
                             }
 
                         } else {
@@ -200,10 +203,9 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordAscChecked = true;
             ordDscChecked = false;
             nameChecked = false;
-            animais= database.retornarAnimais(idLote);
-            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
 
-            //setOrder(true);
+            animais = database.retornarAnimais(idLote);
+            animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por anotação mais recente!", Toast.LENGTH_SHORT).show();
@@ -212,7 +214,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordAscChecked = false;
             ordDscChecked = true;
             nameChecked = false;
-            animais= database.retornarAnimais(idLote);
+
+            animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
 

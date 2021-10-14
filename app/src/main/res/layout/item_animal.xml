@@ -71,6 +71,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/cow" />
 
+        <TextView
+            android:id="@+id/textUpdateDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toStartOf="@+id/btnDeleteAnimal"
+            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintStart_toEndOf="@+id/lbl_nome_animal"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_nome_animal" />
+
+        <TextView
+            android:id="@+id/textDataTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/textUpdateDate"
+            app:layout_constraintEnd_toEndOf="@+id/textUpdateDate"
+            app:layout_constraintStart_toStartOf="@+id/textUpdateDate"
+            app:layout_constraintTop_toTopOf="@+id/lbl_nome_animal" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
