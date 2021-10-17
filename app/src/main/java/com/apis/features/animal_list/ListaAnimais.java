@@ -119,7 +119,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
         }else if(nameChecked){
-            animais = database.retornarAnimaisEmOrdemAlfabetica(idLote);
+            animais = database.retornarAnimaisPorId(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
             animais = database.retornarAnimais(idLote);
@@ -141,7 +141,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         recyclerView.setAdapter(new AnimalAdapter(animais, this));
         LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
-        
+
     }
 
     public void salvarAnimal(){
@@ -227,7 +227,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = false;
             nameChecked = true;
 
-            animais = database.retornarAnimaisEmOrdemAlfabetica(idLote);
+            animais = database.retornarAnimaisPorId(idLote);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por nome!", Toast.LENGTH_SHORT).show();

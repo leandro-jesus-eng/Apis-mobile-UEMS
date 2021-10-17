@@ -142,22 +142,22 @@ public class DbController {
         return animais;
     }
 
-    public ArrayList<Animal> retornarAnimaisEmOrdemAlfabetica(int loteId){
+    public ArrayList<Animal> retornarAnimaisPorId(int loteId){
 
         Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId, null);
 
         ArrayList<Animal> animais = new ArrayList<>();
-        ArrayList<String> nomesOrdenados = new ArrayList<>();
+        ArrayList<String> nomes = new ArrayList<>();
         ArrayList<Integer> ids = new ArrayList<>();
         while(cursor.moveToNext()){
             int id = cursor.getInt(cursor.getColumnIndex("id"));
             String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            nomesOrdenados.add(nome);
+            nomes.add(nome);
             ids.add(id);
         }
-        Collections.sort(nomesOrdenados);
-        for(int i=0; i < nomesOrdenados.size(); i++){
-            animais.add(new Animal(ids.get(i), nomesOrdenados.get(i), loteId));
+        Collections.sort(ids);
+        for(int i=0; i < ids.size(); i++){
+            animais.add(new Animal(ids.get(i), nomes.get(i), loteId));
         }
 
         cursor.close();
