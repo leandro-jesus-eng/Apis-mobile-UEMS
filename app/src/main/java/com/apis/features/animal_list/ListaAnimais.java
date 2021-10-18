@@ -50,7 +50,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     private String nomeAnimal;
     private int idLote;
 
-    static boolean nameChecked= false;
+    static boolean idChecked= false;
     static boolean ordAscChecked= false;
     static boolean ordDscChecked= false;
 
@@ -118,7 +118,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         if(ordAscChecked){
             animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
-        }else if(nameChecked){
+        }else if(idChecked){
             animais = database.retornarAnimaisPorId(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
@@ -202,7 +202,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         if(id == R.id.ordenacaoAnotacaoASC){
             ordAscChecked = true;
             ordDscChecked = false;
-            nameChecked = false;
+            idChecked = false;
 
             animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
@@ -213,7 +213,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         }else if(id == R.id.ordenacaoAnotacaoDSC){
             ordAscChecked = false;
             ordDscChecked = true;
-            nameChecked = false;
+            idChecked = false;
 
             animais = database.retornarAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
@@ -222,15 +222,15 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por anotação mais antiga!", Toast.LENGTH_SHORT).show();
 
-        }else if(id == R.id.ordenacaoNome){
+        }else if(id == R.id.ordenacaoID){
             ordAscChecked = false;
             ordDscChecked = false;
-            nameChecked = true;
+            idChecked = true;
 
             animais = database.retornarAnimaisPorId(idLote);
 
             drawer.closeDrawer(GravityCompat.START);
-            Toast.makeText(getApplicationContext(), "Lista ordenada por nome!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Lista ordenada por identificação!", Toast.LENGTH_SHORT).show();
         }else{
             finish();
         }

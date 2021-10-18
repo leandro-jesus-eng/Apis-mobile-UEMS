@@ -5,7 +5,7 @@
     <item android:title="@string/ordena_o_da_lista">
         <menu>
             <item
-                android:id="@+id/ordenacaoNome"
+                android:id="@+id/ordenacaoID"
                 android:orderInCategory="100"
                 android:title="@string/ordenar_por_id"
                 android:checkable="true"

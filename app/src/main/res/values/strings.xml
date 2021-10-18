@@ -84,7 +84,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-    <string name="ordenar_por_id">Ordenar por Identificação</string>
+    <string name="ordenar_por_id">Ordenar por identificação</string>
     <string name="ordenar_por_anota_o_mais_recente">Ordenar por anotação mais recente</string>
     <string name="ordenar_por_anota_o_mais_antiga">Ordenar por anotação mais antiga</string>
     <string name="voltar_lista_de_lotes">Voltar à lista de lotes</string>
