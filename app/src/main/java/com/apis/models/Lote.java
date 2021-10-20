@@ -1,11 +1,18 @@
 package com.apis.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
+@Entity(tableName = "tb_lote")
 public class Lote implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
+    @ColumnInfo(name = "nome")
     private String nome;
+    @ColumnInfo(name = "experimento")
     private String experimento;
 
     public Lote(int id, String nome, String experimento){

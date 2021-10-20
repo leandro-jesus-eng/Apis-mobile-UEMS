@@ -1,15 +1,23 @@
 package com.apis.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Entity(tableName = "tb_animal")
 public class Animal implements Serializable, Comparable<Animal> {
-
+    @PrimaryKey(autoGenerate = true)
     private int id;
+    @ColumnInfo(name = "nome")
     private String nome;
+    @ColumnInfo(name = "idLote")
     private int LoteId;
+    @ColumnInfo(name = "lastUpdate")
     private String lastUpdate;
 
     public Animal(int id, String nome, int LoteId){

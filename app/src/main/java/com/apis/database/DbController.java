@@ -2,264 +2,76 @@ package com.apis.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.database.Cursor;
-import android.os.Environment;
 import android.widget.Toast;
 
+import com.apis.database.DAOs.AnimalDao;
+import com.apis.database.DAOs.LoteDao;
 import com.apis.models.Animal;
 import com.apis.models.Comportamento;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
-import com.apis.models.Preferencia;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class DbController {
 
-    private DbHelper database;
-    private Context context;
+    final private Context context;
+    final private AnimalDao animalDao;
+    final private LoteDao loteDao;
 
     public DbController(Context ctx){
         context = ctx;
-        database = new DbHelper(ctx);
+        animalDao = Database.getInstance(ctx).animalDao();
+        loteDao = Database.getInstance(ctx).loteDao();
     }
 
-
-    ///LOTES
-    public boolean adicionarLote(String nome, String experimento){
-
-        ContentValues cv = new ContentValues();
-        cv.put("nome", nome.trim());
-        cv.put("experimento", experimento.trim());
-
-        return database.getWritableDatabase().insert("Lote", null, cv) > 0;
-    }
-    public String retornarNomeLote(int idLote){
-
-        String nome = "";
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT nome FROM Lote WHERE id = " + idLote, null);
-        while (cursor.moveToNext()) {
-            nome = cursor.getString(cursor.getColumnIndex("nome"));
-        }
-        cursor.close();
-        return nome;
-    }
-    
-    public Lote retornarLote(int idLote){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE id = " + idLote, null);
-
-        Lote lote = null;
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            String experimento = cursor.getString(cursor.getColumnIndex("experimento"));
-            lote = new Lote(id, nome, experimento);
-        }
-        cursor.close();
-
-        return lote;
+    //Animais
+    public List<Animal> returnAnimais(int idLote){
+        return animalDao.returnAnimaisLote(idLote);
     }
 
-    public boolean loteExiste(String nomeLote, String experimento){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote WHERE nome = '"+nomeLote+"' and experimento = '"+ experimento+"'", null);
-        if(cursor.getCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-    public ArrayList<Lote> retornarLotes(){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Lote", null);
-
-        ArrayList<Lote> lotes = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            String experimento = cursor.getString(cursor.getColumnIndex("experimento"));
-            lotes.add(new Lote(id, nome, experimento));
-        }
-        cursor.close();
-        return lotes;
+    public Animal returnAnimal(int idLote, int animalId){
+        return animalDao.returnAnimal(idLote, animalId);
     }
 
-
-    ///ANIMAL
-    public boolean adicionarAnimal(String nome, int loteId){
-
-        ContentValues cv = new ContentValues();
-        cv.put("nome", nome);
-        cv.put("Lote_id", loteId);
-
-        return database.getWritableDatabase().insert("Animal", null, cv) > 0;
+    public void insertAnimal(String nome, int loteId){
+        animalDao.insertAnimal(nome, loteId);
     }
+
     public boolean animalExiste(String nomeAnimal){
+        List<Animal> result = animalDao.returnAllAnimais(nomeAnimal);
 
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE nome = '"+nomeAnimal+"'", null);
-        if(cursor.getCount() > 0) {
-            return true;
-        } else {
-            return false;
+        for(Animal animal : result){
+            if(animal.getNome().equals(nomeAnimal)){
+                return true;
+            }
         }
-
+        return false;
     }
 
-    public Animal retornarAnimal(int loteId, int animalId){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId+" AND id = "+animalId, null);
-
-        Animal animal = null;
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            animal = new Animal(id, nome, loteId);
-        }
-        cursor.close();
-        return animal;
-    }
-
-    public ArrayList<Animal> retornarAnimais(int loteId){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId, null);
-
-        ArrayList<Animal> animais = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            animais.add(new Animal(id, nome, loteId));
-        }
-        cursor.close();
-        return animais;
-    }
-
-    public ArrayList<Animal> retornarAnimaisPorId(int loteId){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Animal WHERE Lote_id = "+loteId, null);
-
+    public List<Animal> returnAnimaisPorId(int idLote){
+        List<Animal> result = animalDao.returnAnimaisLote(idLote);
         ArrayList<Animal> animais = new ArrayList<>();
         ArrayList<String> nomes = new ArrayList<>();
         ArrayList<Integer> ids = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome = cursor.getString(cursor.getColumnIndex("nome"));
-            nomes.add(nome);
-            ids.add(id);
+
+        for(Animal animal : result){
+            nomes.add(animal.getNome());
+            ids.add(animal.getId());
         }
         Collections.sort(ids);
         for(int i=0; i < ids.size(); i++){
-            animais.add(new Animal(ids.get(i), nomes.get(i), loteId));
+            animais.add(new Animal(ids.get(i), nomes.get(i), idLote));
         }
-
-        cursor.close();
-        setUpdateAnimais(animais);
+        //TODO Adicionar setUpdateAnimais
         return animais;
-    }
-
-
-    ///COMPORTAMENTO
-    public boolean adicionarComportamento(int id_animal, String nome_animal, String data, String hora, String comportamento, String obs){
-
-        ContentValues cv = new ContentValues();
-        cv.put("Animal_nome", nome_animal);
-        cv.put("Animal_id", id_animal);
-        cv.put("data", data);
-        cv.put("hora", hora);
-        cv.put("comportamento", comportamento);
-        cv.put("observacao", obs);
-
-        return database.getWritableDatabase().insert("Comportamento", null, cv) > 0;
-    }
-    public ArrayList<Comportamento> retornarComportamento(int animalId){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = "+animalId, null);
-
-        ArrayList<Comportamento> comportamentos = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome_animal = cursor.getString(cursor.getColumnIndex("Animal_nome"));
-            int id_animal = cursor.getInt(cursor.getColumnIndex("Animal_id"));
-            String data = cursor.getString(cursor.getColumnIndex("data"));
-            String hora = cursor.getString(cursor.getColumnIndex("hora"));
-            String comportamento = cursor.getString(cursor.getColumnIndex("comportamento"));
-            String obs =  cursor.getString(cursor.getColumnIndex("observacao"));
-            comportamentos.add(new Comportamento(id, nome_animal, id_animal, data, hora, comportamento, obs));
-        }
-        cursor.close();
-        return comportamentos;
-    }
-
-
-    ///PREFERENCIA
-    public boolean adicionarPreferencia(String nome_preferencia, String valor_preferencia){
-
-        ContentValues cv = new ContentValues();
-        cv.put("nome", nome_preferencia);
-        cv.put("valor", valor_preferencia);
-
-        return database.getWritableDatabase().insert("Preferencia", null, cv) > 0;
-    }
-    public ArrayList<Preferencia> retornarPreferencia(){
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Preferencia", null);
-
-        ArrayList<Preferencia> preferencias = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome_preferencia = cursor.getString(cursor.getColumnIndex("nome"));
-            String valor_preferencia = cursor.getString(cursor.getColumnIndex("valor"));
-
-            preferencias.add(new Preferencia(id, nome_preferencia, valor_preferencia));
-        }
-        cursor.close();
-        return preferencias;
-    }
-
-
-    //Excluir
-    public boolean excluir(int id, String tableName){
-        return database.getWritableDatabase().delete(tableName, "id=?", new String[]{ id + "" }) > 0;
-    }
-
-    //Pegar ID
-    public int pegarId(String tableName, String nomeLote) {
-
-        int id = 0;
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT id FROM " + tableName + " WHERE nome = " + nomeLote, null);
-        while (cursor.moveToNext()) {
-            id = cursor.getInt(cursor.getColumnIndex("id"));
-        }
-        cursor.close();
-        return id;
-    }
-
-    //Pegar data/hora da última atualização lote
-    public String pegarUltimoUpdateAnimal(int idAnimal) {
-
-        String data = "";
-        String hora = "";
-
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = " + idAnimal, null);
-        while (cursor.moveToNext()) {
-            data = cursor.getString(cursor.getColumnIndex("data"));
-            hora = cursor.getString(cursor.getColumnIndex("hora"));
-        }
-        cursor.close();
-
-        if(data.equals(hora)){
-            return "";
-        }else {
-            return data + " às " + hora;
-        }
     }
 
     public ArrayList<Animal> retornarAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
@@ -292,6 +104,87 @@ public class DbController {
             }
             cursor.close();
         }
+
+    }
+
+    //Lotes
+    public void insertLote(String nome, String experimento){
+        loteDao.insertLote(nome, experimento);
+    }
+
+    public Lote returnLote(int idLote){
+        return loteDao.returnLote(idLote);
+    }
+
+    public List<Lote> returnAllLotes(){
+        return loteDao.returnAllLotes();
+    }
+
+    public boolean loteExiste(String nomeLote, String experimento){
+        List<Lote> result = loteDao.returnAllLotes();
+
+        for(Lote lote : result){
+            if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String returnNomeLote(int idLote){
+        Lote result = loteDao.returnLote(idLote);
+
+        return result.getNome();
+    }
+
+    //Comportamentos
+    public boolean adicionarComportamento(int id_animal, String nome_animal, String data, String hora, String comportamento, String obs){
+
+        ContentValues cv = new ContentValues();
+        cv.put("Animal_nome", nome_animal);
+        cv.put("Animal_id", id_animal);
+        cv.put("data", data);
+        cv.put("hora", hora);
+        cv.put("comportamento", comportamento);
+        cv.put("observacao", obs);
+
+        return database.getWritableDatabase().insert("Comportamento", null, cv) > 0;
+    }
+    public ArrayList<Comportamento> retornarComportamento(int animalId){
+
+        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = "+animalId, null);
+
+        ArrayList<Comportamento> comportamentos = new ArrayList<>();
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String nome_animal = cursor.getString(cursor.getColumnIndex("Animal_nome"));
+            int id_animal = cursor.getInt(cursor.getColumnIndex("Animal_id"));
+            String data = cursor.getString(cursor.getColumnIndex("data"));
+            String hora = cursor.getString(cursor.getColumnIndex("hora"));
+            String comportamento = cursor.getString(cursor.getColumnIndex("comportamento"));
+            String obs =  cursor.getString(cursor.getColumnIndex("observacao"));
+            comportamentos.add(new Comportamento(id, nome_animal, id_animal, data, hora, comportamento, obs));
+        }
+        cursor.close();
+        return comportamentos;
+    }
+
+    //Excluir
+    public boolean excluir(int id, String tableName){
+        return database.getWritableDatabase().delete(tableName, "id=?", new String[]{ id + "" }) > 0;
+    }
+
+    public boolean apagarTudo() {
+
+        database.getWritableDatabase().delete("Lote", "1", null);
+        database.getWritableDatabase().delete("Comportamento", "1", null);
+        database.getWritableDatabase().delete("Animal", "1", null);
+        database.getWritableDatabase().delete("Preferencia", "1", null);
+
+        FileControl fc = new FileControl(context);
+        fc.deleteEverthing();
+
+        return true;
 
     }
 
@@ -353,18 +246,4 @@ public class DbController {
         return true;
     }
 
-    //Apagar tudo
-    public boolean apagarTudo() {
-
-        database.getWritableDatabase().delete("Lote", "1", null);
-        database.getWritableDatabase().delete("Comportamento", "1", null);
-        database.getWritableDatabase().delete("Animal", "1", null);
-        database.getWritableDatabase().delete("Preferencia", "1", null);
-
-        FileControl fc = new FileControl(context);
-        fc.deleteEverthing();
-
-        return true;
-
-    }
 }

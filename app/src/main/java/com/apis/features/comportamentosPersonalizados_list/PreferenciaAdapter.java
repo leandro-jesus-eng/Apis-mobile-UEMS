@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbController;
 import com.apis.models.FileControl;
-import com.apis.models.Preferencia;
 
 import java.util.ArrayList;
 

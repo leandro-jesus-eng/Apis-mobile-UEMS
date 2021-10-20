@@ -1,6 +1,5 @@
 package com.apis.features.comportamentos_list;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -28,7 +27,6 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.apis.features.animal_list.ListaAnimais;
 import com.apis.features.comportamentosPersonalizados_list.PreferenciaAdapter;
 import com.apis.R;
 import com.apis.database.DbController;
@@ -38,7 +36,6 @@ import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
-import com.apis.models.Preferencia;
 
 import java.io.File;
 import java.io.FileNotFoundException;

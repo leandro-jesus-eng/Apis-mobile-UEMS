@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.apis.R;
 import com.apis.database.DbController;
 import com.apis.models.FileControl;
-import com.apis.models.Preferencia;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
