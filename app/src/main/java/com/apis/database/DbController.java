@@ -6,11 +6,18 @@ import android.database.Cursor;
 import android.widget.Toast;
 
 import com.apis.database.DAOs.AnimalDao;
+import com.apis.database.DAOs.AnotacaoComportamentoDao;
+import com.apis.database.DAOs.ComportamentoDao;
+import com.apis.database.DAOs.FormularioComportamentoDao;
 import com.apis.database.DAOs.LoteDao;
+import com.apis.database.DAOs.TipoComportamentoDao;
 import com.apis.models.Animal;
+import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 import com.apis.models.FileControl;
+import com.apis.models.FormularioComportamento;
 import com.apis.models.Lote;
+import com.apis.models.TipoComportamento;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class DbController {
@@ -25,11 +33,19 @@ public class DbController {
     final private Context context;
     final private AnimalDao animalDao;
     final private LoteDao loteDao;
+    final private FormularioComportamentoDao formularioComportamentoDao;
+    final private TipoComportamentoDao tipoComportamentoDao;
+    final private AnotacaoComportamentoDao anotacaoComportamentoDao;
+    final private ComportamentoDao comportamentoDao;
 
     public DbController(Context ctx){
         context = ctx;
         animalDao = Database.getInstance(ctx).animalDao();
         loteDao = Database.getInstance(ctx).loteDao();
+        formularioComportamentoDao = Database.getInstance(ctx).formularioComportamentoDao();
+        tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
+        anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
+        comportamentoDao = Database.getInstance(ctx).comportamentoDao();
     }
 
     //Animais
@@ -41,12 +57,11 @@ public class DbController {
         return animalDao.returnAnimal(idLote, animalId);
     }
 
-    public void insertAnimal(String nome, int loteId){
-        animalDao.insertAnimal(nome, loteId);
+    public void insertAnimal(Animal animalNovo){
+        animalDao.insertAnimal(animalNovo);
     }
-
     public boolean animalExiste(String nomeAnimal){
-        List<Animal> result = animalDao.returnAllAnimais(nomeAnimal);
+        List<Animal> result = animalDao.returnAllAnimais();
 
         for(Animal animal : result){
             if(animal.getNome().equals(nomeAnimal)){
@@ -75,7 +90,6 @@ public class DbController {
     }
 
     public ArrayList<Animal> retornarAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
-
         setUpdateAnimais(animais);
         Collections.sort(animais);
 
@@ -83,33 +97,24 @@ public class DbController {
     }
 
     public void setUpdateAnimais(ArrayList<Animal> animais){
-
         for(Animal animal : animais){
-            String data = "";
-            String hora = "";
             String dataHora;
-            Cursor cursor = database.getWritableDatabase().rawQuery(
-                    "SELECT * FROM Comportamento WHERE Animal_id = " + animal.getId(), null);
 
-            while (cursor.moveToNext()) {
-                data = cursor.getString(cursor.getColumnIndex("data"));
-                hora = cursor.getString(cursor.getColumnIndex("hora"));
-            }
+            List<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(animal.getId());
 
-            if(data.equals(hora)){
+            dataHora = result.get(result.size() - 1).getDataHora();
+
+            if(dataHora == null){
                 animal.setLastUpdate("Sem anotação!");
             }else{
-                dataHora = data+" "+hora;
                 animal.setLastUpdate(dataHora);
             }
-            cursor.close();
         }
-
     }
 
     //Lotes
-    public void insertLote(String nome, String experimento){
-        loteDao.insertLote(nome, experimento);
+    public void insertLote(Lote lote){
+        loteDao.insertLote(lote);
     }
 
     public Lote returnLote(int idLote){
@@ -137,62 +142,60 @@ public class DbController {
         return result.getNome();
     }
 
-    //Comportamentos
-    public boolean adicionarComportamento(int id_animal, String nome_animal, String data, String hora, String comportamento, String obs){
+    //Comportamentos e afins
+    public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
+        anotacaoComportamentoDao.insertAnotacao(anotacao);
 
-        ContentValues cv = new ContentValues();
-        cv.put("Animal_nome", nome_animal);
-        cv.put("Animal_id", id_animal);
-        cv.put("data", data);
-        cv.put("hora", hora);
-        cv.put("comportamento", comportamento);
-        cv.put("observacao", obs);
-
-        return database.getWritableDatabase().insert("Comportamento", null, cv) > 0;
     }
-    public ArrayList<Comportamento> retornarComportamento(int animalId){
+    public List<AnotacaoComportamento> returnAnotacoesComportamento(int animalId){
+        return anotacaoComportamentoDao.returnAllAnotacoesAnimal(animalId);
 
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = "+animalId, null);
-
-        ArrayList<Comportamento> comportamentos = new ArrayList<>();
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome_animal = cursor.getString(cursor.getColumnIndex("Animal_nome"));
-            int id_animal = cursor.getInt(cursor.getColumnIndex("Animal_id"));
-            String data = cursor.getString(cursor.getColumnIndex("data"));
-            String hora = cursor.getString(cursor.getColumnIndex("hora"));
-            String comportamento = cursor.getString(cursor.getColumnIndex("comportamento"));
-            String obs =  cursor.getString(cursor.getColumnIndex("observacao"));
-            comportamentos.add(new Comportamento(id, nome_animal, id_animal, data, hora, comportamento, obs));
-        }
-        cursor.close();
-        return comportamentos;
     }
 
     //Excluir
-    public boolean excluir(int id, String tableName){
-        return database.getWritableDatabase().delete(tableName, "id=?", new String[]{ id + "" }) > 0;
+    public void excluirAnimal(Animal animal){
+        animalDao.deleteAnimal(animal);
+    }
+    public void excluirLote(Lote lote){
+        loteDao.deleteLote(lote);
+    }
+    public void excluirTipoComportamento(TipoComportamento tipoComportamento){
+        tipoComportamentoDao.deleteTipo(tipoComportamento);
+    }
+    public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
+        anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
+    }
+    public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
+        formularioComportamentoDao.deleteFormulario(formularioComportamento);
+    }
+    public void excluirComportamento(Comportamento comportamento){
+        comportamentoDao.deleteComportamento(comportamento);
     }
 
-    public boolean apagarTudo() {
+    public boolean excluirTudo() {
+        animalDao.deleteAllAnimais();
 
-        database.getWritableDatabase().delete("Lote", "1", null);
-        database.getWritableDatabase().delete("Comportamento", "1", null);
-        database.getWritableDatabase().delete("Animal", "1", null);
-        database.getWritableDatabase().delete("Preferencia", "1", null);
+        loteDao.deleteAllLotes();
+
+        tipoComportamentoDao.deleteAllTipos();
+
+        anotacaoComportamentoDao.deleteAllAnotacoes();
+
+        formularioComportamentoDao.deleteAllFormularios();
+
+        comportamentoDao.deleteAllComportamentos();
 
         FileControl fc = new FileControl(context);
         fc.deleteEverthing();
 
         return true;
-
     }
 
     //Exportar dados
     public boolean exportarDados(int idLote, int idAnimal){
 
-        Lote lote = retornarLote(idLote);
-        Animal animal = retornarAnimal(idLote, idAnimal);
+        Lote lote = loteDao.returnLote(idLote);
+        Animal animal = animalDao.returnAnimal(idLote, idAnimal);
 
         //Antes de fazer a consulta
         //Apaga o arquivo de dados do animal, se houver
@@ -205,20 +208,16 @@ public class DbController {
             Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
         }
 
-        // TODO Refatorar para usar o 'retornarComportamentos (id_animal)'
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT * FROM Comportamento WHERE Animal_id = " + idAnimal, null);
+        List<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(idAnimal);
 
-        while(cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String nome_animal = cursor.getString(cursor.getColumnIndex("Animal_nome"));
-            String id_animal = cursor.getString(cursor.getColumnIndex("Animal_id"));
-            String data = cursor.getString(cursor.getColumnIndex("data"));
-            String hora = cursor.getString(cursor.getColumnIndex("hora"));
-            String comportamento = cursor.getString(cursor.getColumnIndex("comportamento"));
-            String obs = cursor.getString(cursor.getColumnIndex("observacao"));
+        for(int i = 0; i < result.size(); i++ ){
+            int id_animal = result.get(i).getIdAnimal();
+            String nome_animal = result.get(i).getNomeAnimal();
+            String dataHora = result.get(i).getDataHora();
+            String comportamento = result.get(i).getComportamento().getNome();
+            String obs = result.get(i).getObs();
 
-            //String conteudo = "ID Animal;Data;Hora;Fisiologico;Reprodutivo;Uso de sombra;Observação;";
-            String conteudo = id_animal+";"+nome_animal+";"+data+";"+hora+";"+comportamento+";"+obs;
+            String conteudo = id_animal+";"+nome_animal+";"+dataHora+";"+comportamento+";"+obs;
 
             try {
                 try {

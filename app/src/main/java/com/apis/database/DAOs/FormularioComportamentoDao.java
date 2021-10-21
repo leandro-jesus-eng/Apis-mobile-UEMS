@@ -1,19 +1,29 @@
 package com.apis.database.DAOs;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 import com.apis.models.Comportamento;
+import com.apis.models.FormularioComportamento;
 
 import java.util.List;
 
 @Dao
 public interface FormularioComportamentoDao {
 
-    void insertFormulario();
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertFormulario(FormularioComportamento formularioComportamento);
 
-    void deleteFormulario();
+    @Delete
+    void deleteFormulario(FormularioComportamento formularioComportamento);
 
-    Comportamento returnFormulario();
+    @Query("DELETE FROM tb_formularioComportamento")
+    void deleteAllFormularios();
 
-    List<Comportamento> returnAllFormulario();
+    @Query("SELECT * FROM tb_formularioComportamento WHERE id = :idFormulario")
+    Comportamento returnFormulario(int idFormulario);
+
 }

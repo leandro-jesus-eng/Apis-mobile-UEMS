@@ -6,16 +6,22 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import com.apis.models.Comportamento;
+import com.apis.models.TipoComportamento;
+
 import java.util.List;
 
 @Dao
 public interface ComportamentoDao {
 
-    void insertComportamento();
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertComportamento(Comportamento comportamento);
 
-    void deleteComportamento();
+    @Delete
+    void deleteComportamento(Comportamento comportamento);
 
-    Comportamento returnComportamento();
+    @Query("DELETE FROM tb_comportamento")
+    void deleteAllComportamentos();
 
-    List<Comportamento> returnAllComportamentos();
+    @Query("SELECT * FROM tb_anotacaoComportamento WHERE id = :idComportamento")
+    Comportamento returnComportamento(int idComportamento);
 }

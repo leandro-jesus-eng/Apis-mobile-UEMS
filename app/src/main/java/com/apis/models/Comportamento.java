@@ -1,35 +1,32 @@
 package com.apis.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
+@Entity(tableName = "tb_comportamento")
 public class Comportamento implements Serializable {
 
-    private int id;
-    private String nome_animal;
-    private int id_animal;
-    private String data;
-    private String hora;
-    private String comportamento;
-    private String obs;
+    @PrimaryKey(autoGenerate = true)
+    final private int id;
 
-    public Comportamento(int id, String nome_animal, int id_animal, String data, String hora, String comportamento, String obs) {
-        this.id = id;
-        this.nome_animal = nome_animal;
-        this.id_animal = id_animal;
-        this.data = data;
-        this.hora = hora;
-        this.comportamento = comportamento;
-        this.obs = obs;
+    @ColumnInfo(name = "nome")
+    final private String nome;
+
+    @ColumnInfo(name = "tipo")
+    final private TipoComportamento tipo;
+
+    public Comportamento(int id, String nome, TipoComportamento tipo){
+       this.id = id;
+       this.nome = nome;
+       this.tipo = tipo;
     }
 
     public int getId() { return id; }
-    public int getId_animal() { return id_animal; }
-    public String getNome_animal() { return nome_animal; }
-    public String getData() { return data; }
-    public String getHora() { return hora; }
-    public String getComportamento() { return comportamento; }
-    public String getObs() { return obs; }
+    public String getNome(){return nome;}
 
+    public String getTipo(){ return tipo;}
 
     @Override
     public boolean equals(Object o){
@@ -41,8 +38,4 @@ public class Comportamento implements Serializable {
         return this.id;
     }
 
-    @Override
-    public String toString() {
-        return ""+id_animal + ";" + nome_animal + ";" + data + ";" + hora + ";" + comportamento + ";" + obs;
-    }
 }

@@ -15,10 +15,13 @@ import java.util.List;
 public interface LoteDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertLote(String nome, String experimento);
+    void insertLote(Lote lote);
 
     @Delete
-    void deleteLote(int loteId);
+    void deleteLote(Lote lote);
+
+    @Query("DELETE FROM tb_lote")
+    void deleteAllLotes();
 
     @Query("SELECT * FROM tb_lote WHERE id = :loteId")
     Lote returnLote(int loteId);

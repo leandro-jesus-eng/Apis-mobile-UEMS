@@ -14,10 +14,13 @@ import java.util.List;
 public interface AnimalDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAnimal(String nome, int loteId);
+    void insertAnimal(Animal animal);
 
     @Delete
     void deleteAnimal(Animal animal);
+
+    @Query("DELETE FROM tb_animal")
+    void deleteAllAnimais();
 
     @Query("SELECT * FROM tb_animal WHERE idLote = :loteId AND id = :animalId")
     Animal returnAnimal(int loteId, int animalId);
@@ -26,6 +29,6 @@ public interface AnimalDao {
     List<Animal> returnAnimaisLote(int loteId);
 
     @Query("SELECT * FROM tb_animal")
-    List<Animal> returnAllAnimais(String nomeAnimal);
+    List<Animal> returnAllAnimais();
 
 }

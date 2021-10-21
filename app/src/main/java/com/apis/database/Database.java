@@ -8,11 +8,22 @@ import com.apis.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.database.DAOs.ComportamentoDao;
 import com.apis.database.DAOs.FormularioComportamentoDao;
 import com.apis.database.DAOs.LoteDao;
+import com.apis.database.DAOs.TipoComportamentoDao;
 import com.apis.models.Animal;
+import com.apis.models.AnotacaoComportamento;
+import com.apis.models.Comportamento;
+import com.apis.models.FormularioComportamento;
 import com.apis.models.Lote;
 import com.apis.models.TipoComportamento;
 
-@androidx.room.Database(entities = {Animal.class, Lote.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {
+        Animal.class,
+        Lote.class,
+        FormularioComportamento.class,
+        TipoComportamento.class,
+        Comportamento.class,
+        AnotacaoComportamento.class,
+}, version = 1, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
     public abstract AnimalDao animalDao();
@@ -20,7 +31,7 @@ abstract public class Database extends RoomDatabase {
     public abstract AnotacaoComportamentoDao anotacaoComportamentoDao();
     public abstract ComportamentoDao comportamentoDao();
     public abstract FormularioComportamentoDao formularioComportamentoDao();
-    public abstract TipoComportamento tipoComportamento();
+    public abstract TipoComportamentoDao tipoComportamentoDao();
 
     private static Database database;
     final private static String DATABASE_NAME = "Apis.db";

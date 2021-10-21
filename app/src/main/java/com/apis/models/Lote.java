@@ -9,11 +9,13 @@ import java.io.Serializable;
 public class Lote implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    final private int id;
+
     @ColumnInfo(name = "nome")
-    private String nome;
+    final private String nome;
+
     @ColumnInfo(name = "experimento")
-    private String experimento;
+    final private String experimento;
 
     public Lote(int id, String nome, String experimento){
         this.id = id;
