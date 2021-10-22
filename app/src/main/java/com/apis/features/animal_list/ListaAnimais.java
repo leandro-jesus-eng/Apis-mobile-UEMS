@@ -116,13 +116,13 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
         if(ordAscChecked){
-            animais = database.retornarAnimais(idLote);
+            animais = database.returnAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
         }else if(idChecked){
-            animais = database.retornarAnimaisPorId(idLote);
+            animais = database.returnAnimaisPorId(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
-            animais = database.retornarAnimais(idLote);
+            animais = database.returnAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
         }
@@ -170,13 +170,15 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
                                 Toast.makeText(getApplicationContext(), "O animal com esse nome já existe!", Toast.LENGTH_LONG).show();
                             } else {
                                 ////Salva no BD
-                                if (!database.adicionarAnimal(nomeAnimal, idLote)) {
+                                Animal animal = new Animal(0, nomeAnimal, idLote);
+                                try {
+                                    database.insertAnimal(animal);
+                                    finish();
+                                    startActivity(getIntent());
+                                }catch (Throwable throwable){
                                     Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                                 }
-                                finish();
-                                startActivity(getIntent());
                             }
-
                         } else {
                             Toast.makeText(getApplicationContext(), "O animal não pode ter um nome em branco!", Toast.LENGTH_LONG).show();
                         }
@@ -204,7 +206,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = false;
             idChecked = false;
 
-            animais = database.retornarAnimais(idLote);
+            animais = database.returnAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
 
             drawer.closeDrawer(GravityCompat.START);
@@ -215,7 +217,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = true;
             idChecked = false;
 
-            animais = database.retornarAnimais(idLote);
+            animais = database.returnAnimais(idLote);
             animais = database.retornarAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
 
@@ -227,7 +229,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = false;
             idChecked = true;
 
-            animais = database.retornarAnimaisPorId(idLote);
+            animais = database.returnAnimaisPorId(idLote);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por identificação!", Toast.LENGTH_SHORT).show();

@@ -10,6 +10,7 @@ import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface AnotacaoComportamentoDao {
     AnotacaoComportamento returnAnotacao(int idAnotacao);
 
     @Query("SELECT * FROM tb_anotacaoComportamento WHERE animalId = :animalId")
-    List<AnotacaoComportamento> returnAllAnotacoesAnimal(int animalId);
+    ArrayList<AnotacaoComportamento> returnAllAnotacoesAnimal(int animalId);
 }

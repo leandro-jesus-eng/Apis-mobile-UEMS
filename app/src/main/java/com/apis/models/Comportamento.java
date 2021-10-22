@@ -26,7 +26,7 @@ public class Comportamento implements Serializable {
     public int getId() { return id; }
     public String getNome(){return nome;}
 
-    public String getTipo(){ return tipo;}
+    public TipoComportamento getTipo(){ return tipo;}
 
     @Override
     public boolean equals(Object o){

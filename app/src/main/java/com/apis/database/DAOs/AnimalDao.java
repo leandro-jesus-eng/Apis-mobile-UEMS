@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import com.apis.models.Animal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -26,9 +27,9 @@ public interface AnimalDao {
     Animal returnAnimal(int loteId, int animalId);
 
     @Query("SELECT * FROM tb_animal WHERE idLote = :loteId")
-    List<Animal> returnAnimaisLote(int loteId);
+    ArrayList<Animal> returnAnimaisLote(int loteId);
 
     @Query("SELECT * FROM tb_animal")
-    List<Animal> returnAllAnimais();
+    ArrayList<Animal> returnAllAnimais();
 
 }

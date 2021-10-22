@@ -18,6 +18,7 @@ import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
 import com.apis.database.DbController;
 import com.apis.models.Animal;
+import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
@@ -27,11 +28,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
-    private ArrayList<Lote> lotes;
-    private Context context;
+    final private ArrayList<Lote> lotes;
+    final private Context context;
 
     public LoteAdapter(ArrayList lotes, Context context){
         this.lotes = lotes;
@@ -79,20 +81,20 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                                 FileControl fileControl = new FileControl(context);
                                 fileControl.deleteLoteFile(context, lote.getId());
 
-                                if(database.excluir(lote.getId(), "Lote")) {
-
-                                    // remove animais desse lote
-                                    ArrayList<Animal> animaisLote = database.retornarAnimais(lote.getId());
-                                    for(Animal animal: animaisLote) {
-                                        database.excluir(animal.getId(), "Animal");
+                                try {
+                                    database.excluirLote(lotes.get(lote.getId()));
+                                    ArrayList<Animal> animaisLote = database.returnAnimais(lote.getId());
+                                    for (Animal animal : animaisLote) {
+                                        database.excluirAnimal(animal);
                                     }
 
                                     removerLote(lote);
 
                                     Toast.makeText(context, "Excluído!", Toast.LENGTH_LONG).show();
-                                }else{
+                                } catch (Throwable throwable) {
                                     Toast.makeText(context, "Erro ao excluir!", Toast.LENGTH_LONG).show();
                                 }
+
                             }
                         })
                         .setNegativeButton("Cancelar", null)
@@ -100,39 +102,6 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                         .show();
             }
         });
-
-        //Action botão EXPORTAR
-       /* holder.btnExportarDados.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //Tela de compartilhamento
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-
-                File files[] = context.getExternalFilesDirs(null);
-                File fileWithinMyDir = null;
-                String fileName = FileControl.getNameOfLoteCSV(lote);
-
-                if(files.length > 0) {
-                    fileWithinMyDir = new File( files[0] , fileName);
-                } else {
-                    Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
-                }
-
-                if(fileWithinMyDir.exists()) {
-                    intentShareFile.setType("application/pdf");
-                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" +fileName));
-
-                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                            "Dados Lote : " + lote.getNome());
-
-                    context.startActivity(Intent.createChooser(intentShareFile, "Enviar para"));
-                } else {
-                    Toast.makeText(context, "Não existem dados para este lote!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });*/
-
 
         holder.btnExportarDados.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -160,13 +129,13 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 }
 
                 boolean existeDados = false;
-                DbController dbController = new DbController(context);
-                ArrayList<Animal> listAnimais = dbController.retornarAnimais(lote.getId());
+                DbController database = new DbController(context);
+                ArrayList<Animal> listAnimais = database.returnAnimais(lote.getId());
                 try {
                     FileOutputStream out = new FileOutputStream(f, true);
                     for(Animal animal : listAnimais) {
-                        ArrayList<Comportamento> listComp = dbController.retornarComportamento(animal.getId());
-                        for (Comportamento comportamento : listComp) {
+                        List<AnotacaoComportamento> listComp = database.returnAnotacoesComportamento(animal.getId());
+                        for (AnotacaoComportamento comportamento : listComp) {
                            out.write(comportamento.toString().getBytes());
                            out.write('\n');
                             existeDados = true;

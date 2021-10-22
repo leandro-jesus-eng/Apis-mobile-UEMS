@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,8 +26,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.apis.features.comportamentosPersonalizados_list.ListaPreferencias;
 import com.apis.R;
 import com.apis.database.DbController;
 import com.apis.features.others.IntroActivity;
@@ -36,7 +33,6 @@ import com.apis.features.others.SettingsActivity;
 import com.apis.models.Lote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -64,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
         //Botão flutuante
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,8 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
-        DbController database = new DbController(this);
-        ArrayList<Lote> lotes = database.retornarLotes();
+        ArrayList<Lote> lotes = database.returnAllLotes();
 
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
         ImageView alertImg  = (ImageView) findViewById(R.id.alertImgLotes);
@@ -112,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText txtNomeLote = (EditText) promptView.findViewById(R.id.textNomeAnimal);
-        final EditText txtExperimento = (EditText) promptView.findViewById(R.id.textExperimento);
+        final EditText txtNomeLote =  promptView.findViewById(R.id.textNomeAnimal);
+        final EditText txtExperimento = promptView.findViewById(R.id.textExperimento);
 
         txtNomeLote.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -145,10 +139,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             } else {
                                 ////Salva no BD
-                                if (!database.adicionarLote(nomeLote, nomeExperimento)) {
+                                Lote novoLote = new Lote(0 ,nomeLote, nomeExperimento);
+                                try {
+                                    database.insertLote(novoLote);
+                                    configurarLista();
+                                }catch (Throwable throwable){
                                     Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                                 }
-                                configurarLista();
+
                             }
                         }else{
                             Toast.makeText(getApplicationContext(), "O lote não pode ter um nome em branco!", Toast.LENGTH_LONG).show();
@@ -258,8 +256,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.startActivity(intent);
 
         }else if (id == R.id.nav_preferencias) {
-            Intent intent = new Intent(this, ListaPreferencias.class);
-            this.startActivity(intent);
+            //Intent intent = new Intent(this, ListaPreferencias.class);
+            //this.startActivity(intent);
 
         }else if (id == R.id.nav_intro) {
             Intent intent = new Intent(this, IntroActivity.class);
@@ -278,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(database.apagarTudo()){
+                            if(database.excluirTudo()){
                                 Toast.makeText(getBaseContext(), "Feito!", Toast.LENGTH_LONG).show();
 
                                 finish();

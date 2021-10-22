@@ -14,7 +14,7 @@ public class FormularioComportamento implements Serializable {
     final private int id;
 
     @ColumnInfo(name = "dataCriacao")
-    final private Date dataCriacao;
+    final private String dataCriacao;
 
     @ColumnInfo(name = "tiposComportamento")
     final private ArrayList<TipoComportamento> tiposComportamento;
@@ -23,14 +23,14 @@ public class FormularioComportamento implements Serializable {
     final private boolean formularioPadrao;
 
     public FormularioComportamento(
-            int id, Date dataCriacao, ArrayList<TipoComportamento> tiposComportamento, boolean formularioPadrao){
+            int id, String dataCriacao, ArrayList<TipoComportamento> tiposComportamento, boolean formularioPadrao){
         this.id = id;
         this.dataCriacao = dataCriacao;
         this.tiposComportamento = tiposComportamento;
         this.formularioPadrao = formularioPadrao;
     }
     public int getId() { return id; }
-    public Date getDataCriacao() { return dataCriacao; }
+    public String getDataCriacao() { return dataCriacao; }
     public ArrayList<TipoComportamento> getTiposComportamento() { return tiposComportamento; }
     public boolean getPadrao() { return formularioPadrao; }
 

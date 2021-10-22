@@ -75,10 +75,11 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 DbController database = new DbController(view.getContext());
-                                if(database.excluir(animal.getId(), "Animal")) {
+                                try {
+                                    database.excluirAnimal(animal);
                                     removerAnimal(animal);
                                     Toast.makeText(context, "Excluído!", Toast.LENGTH_LONG).show();
-                                }else{
+                                }catch (Throwable t){
                                     Toast.makeText(context, "Erro ao excluir!", Toast.LENGTH_LONG).show();
                                 }
                             }

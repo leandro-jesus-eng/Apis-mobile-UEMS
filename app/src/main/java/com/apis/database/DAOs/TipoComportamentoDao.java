@@ -7,6 +7,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.apis.models.TipoComportamento;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -25,6 +27,6 @@ public interface TipoComportamentoDao {
     TipoComportamento returnTipo(int idTipo);
 
     @Query("SELECT * FROM tb_tipoComportamento")
-    List<TipoComportamento> returnAllTipos();
+    ArrayList<TipoComportamento> returnAllTipos();
 
 }

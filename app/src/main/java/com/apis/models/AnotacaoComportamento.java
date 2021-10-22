@@ -18,8 +18,11 @@ public class AnotacaoComportamento implements Serializable {
     @ColumnInfo(name = "animalId")
     final private int idAnimal;
 
-    @ColumnInfo(name = "dataHora")
-    final private String dataHora;
+    @ColumnInfo(name = "hora")
+    final private String hora;
+
+    @ColumnInfo(name = "data")
+    final private String data;
 
     @ColumnInfo(name = "obs")
     final private String obs;
@@ -27,11 +30,12 @@ public class AnotacaoComportamento implements Serializable {
     @ColumnInfo(name = "comportamento")
     final private Comportamento comportamento;
 
-    public AnotacaoComportamento(int id, String nomeAnimal, int idAnimal, String dataHora, String obs, Comportamento comportamento){
+    public AnotacaoComportamento(int id, String nomeAnimal, int idAnimal, String data, String hora, String obs, Comportamento comportamento){
         this.id = id;
         this.nomeAnimal = nomeAnimal;
         this.idAnimal = idAnimal;
-        this.dataHora = dataHora;
+        this.data = data;
+        this.hora = hora;
         this.obs = obs;
         this.comportamento = comportamento;
     }
@@ -39,7 +43,7 @@ public class AnotacaoComportamento implements Serializable {
     public int getId() { return id; }
     public String getNomeAnimal() { return nomeAnimal; }
     public int getIdAnimal() { return idAnimal; }
-    public String getDataHora() { return dataHora; }
+    public String getDataHora() { return data+" "+hora; }
     public String getObs() { return obs; }
     public Comportamento getComportamento() { return comportamento; }
 

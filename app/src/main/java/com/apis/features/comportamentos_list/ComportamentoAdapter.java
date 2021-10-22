@@ -9,13 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
+import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 
 import java.util.ArrayList;
 
 public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoViewHolder>{
 
-    private ArrayList<Comportamento> comportamentos;
+    private ArrayList<AnotacaoComportamento> comportamentos;
     private Context context;
 
 
@@ -37,11 +38,10 @@ public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoView
     @Override
     public void onBindViewHolder(ComportamentoViewHolder holder, final int position)
     {
-        holder.data.setText(comportamentos.get(position).getData());
-        holder.hora.setText(comportamentos.get(position).getHora());
+        holder.dataHora.setText(comportamentos.get(position).getDataHora());
         holder.info.setText("Obs: " +comportamentos.get(position).getObs());
 
-        final Comportamento comportamento = comportamentos.get(position);
+        final AnotacaoComportamento comportamento = comportamentos.get(position);
 
     }
 

@@ -183,7 +183,7 @@ public class FileControl {
     public void deleteLoteFile(Context context, int idLote){
 
         DbController database = new DbController(context);
-        Lote lote = database.retornarLote(idLote);
+        Lote lote = database.returnLote(idLote);
 
         File files[] = context.getExternalFilesDirs(null);
         File f = null;

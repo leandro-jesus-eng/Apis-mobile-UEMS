@@ -19,30 +19,28 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.apis.features.comportamentosPersonalizados_list.PreferenciaAdapter;
 import com.apis.R;
 import com.apis.database.DbController;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
+import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class AdicionarComportamento extends AppCompatActivity {
 
@@ -71,7 +69,6 @@ public class AdicionarComportamento extends AppCompatActivity {
         pegarDadosActivityPassada();
         pegarUltimaAtualizacao();
         configurarListaComportamentos();
-        configurarListaPreferencias();
 
         getSupportActionBar().setTitle(nomeAnimal);
 
@@ -102,8 +99,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         DbController database = new DbController(this);
         database.exportarDados(idLote, idAnimal);
-        Lote lote = database.retornarLote(idLote);
-        Animal animal = database.retornarAnimal(idLote, idAnimal);
+        Lote lote = database.returnLote(idLote);
+        Animal animal = database.returnAnimal(idLote, idAnimal);
 
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
 
@@ -131,7 +128,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerComportamento);
 
-        ArrayList<Comportamento> comportamentos =  database.retornarComportamento(idAnimal);
+        ArrayList<AnotacaoComportamento> comportamentos =  database.returnAnotacoesComportamento(idAnimal);
 
         Collections.reverse(comportamentos);
 
@@ -141,20 +138,6 @@ public class AdicionarComportamento extends AppCompatActivity {
         recyclerView.setLayoutManager(layout);
     }
 
-    public void configurarListaPreferencias(){
-
-        RecyclerView recyclerViewComp = (RecyclerView) findViewById(R.id.recyclerComportamentoPersonalizado);
-
-        DbController database = new DbController(this);
-        ArrayList<Preferencia> preferencias = database.retornarPreferencia();
-
-
-        recyclerViewComp.setAdapter(new PreferenciaAdapter(preferencias, false, this));
-        LinearLayoutManager layoutComp = new LinearLayoutManager(this);
-
-        recyclerViewComp.setLayoutManager(layoutComp);
-    }
-
     private void pegarDadosActivityPassada(){
 
         if (getIntent().hasExtra("animal_nome") && getIntent().hasExtra("animal_id") && getIntent().hasExtra("lote_id")){
@@ -162,7 +145,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             idAnimal = getIntent().getIntExtra("animal_id", 9999);
             idLote = getIntent().getIntExtra("lote_id", 9999);
 
-            nomeLote = database.retornarNomeLote(idLote);
+            nomeLote = database.returnNomeLote(idLote);
 
         }
 
@@ -170,7 +153,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     private void pegarUltimaAtualizacao() {
         TextView atualizadoEm = (TextView) findViewById(R.id.atualizadoEm);
-        String lastUpdate = database.pegarUltimoUpdateAnimal(idAnimal);
+        ArrayList<Animal> animais = database.returnAnimais(idLote);
+        String lastUpdate = database.getLastUpdateAnimal(animais.get(idAnimal));
 
         //Verifica se irá mandar notificações
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -239,32 +223,6 @@ public class AdicionarComportamento extends AppCompatActivity {
                 break;
         }
 
-
-        //Pega os dados personalizados
-
-        FileControl fc = new FileControl(getApplicationContext());
-        ArrayList<String> comportamentosPersonalizados = fc.returnValues();//Pega os checkboxes marcados pelo usuário (ficam em um arquivo temporário)
-        ArrayList<Preferencia> prefs = database.retornarPreferencia();//Pega a lista de comportamentos personalizados definido pelo usuário
-
-        ArrayList<String> comportamentosFinal = new ArrayList<String>();
-
-        //Ordena os dados dos checkboxes nas 'colunas'
-        for (int j=0;j<prefs.size();j++) {
-            for (int i=0;i<comportamentosPersonalizados.size();i++) {
-                if(prefs.get(j).getNome().equals(comportamentosPersonalizados.get(i))){
-                    comportamentosFinal.add(comportamentosPersonalizados.get(i));
-                }
-            }
-            comportamentosFinal.add(";");
-        }
-
-        for (int i=0;i<comportamentosFinal.size();i++) {
-            comportamento += comportamentosFinal.get(i);
-        }
-
-        comportamento = comportamento.substring (0, comportamento.length() - 1);//Remove o ; sobressalente (?)
-
-
         EditText txtObs = (EditText) findViewById(R.id.textObs);
         obS = txtObs.getText().toString();
         ///Fim Pega os dados
@@ -292,8 +250,10 @@ public class AdicionarComportamento extends AppCompatActivity {
 
                         ////Salva no BD
                         DbController database = new DbController(getBaseContext());
-                        if (database.adicionarComportamento(idAnimal, nomeAnimal, dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS)) {
+                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), obS , null);
+                        try {
 
+                            database.insertAnotacaoComportamento(newAnotacao);
                             //Trata o horário
                             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                             boolean usarNtp = sharedPreferences.getBoolean("datetime_web", false);
@@ -325,10 +285,9 @@ public class AdicionarComportamento extends AppCompatActivity {
                             fc.deleteTmpFile();
 
                             finish();
-                        }else {
+                        }catch (Throwable throwable){
                             Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 })
                 .setNegativeButton("Cancelar",
@@ -350,7 +309,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
 
         DbController database = new DbController(getApplicationContext());
-        Lote lote = database.retornarLote(idLote);
+        Lote lote = database.returnLote(idLote);
 
         try {
                 try {

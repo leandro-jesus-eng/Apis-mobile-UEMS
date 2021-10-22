@@ -9,6 +9,7 @@ import androidx.room.Query;
 import com.apis.models.Animal;
 import com.apis.models.Lote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -27,5 +28,5 @@ public interface LoteDao {
     Lote returnLote(int loteId);
 
     @Query("SELECT * FROM tb_lote")
-    List<Lote> returnAllLotes();
+    ArrayList<Lote> returnAllLotes();
 }

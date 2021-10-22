@@ -1,10 +1,7 @@
 package com.apis.database;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.widget.Toast;
-
 import com.apis.database.DAOs.AnimalDao;
 import com.apis.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.database.DAOs.ComportamentoDao;
@@ -18,14 +15,12 @@ import com.apis.models.FileControl;
 import com.apis.models.FormularioComportamento;
 import com.apis.models.Lote;
 import com.apis.models.TipoComportamento;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class DbController {
@@ -49,7 +44,7 @@ public class DbController {
     }
 
     //Animais
-    public List<Animal> returnAnimais(int idLote){
+    public ArrayList<Animal> returnAnimais(int idLote){
         return animalDao.returnAnimaisLote(idLote);
     }
 
@@ -60,8 +55,9 @@ public class DbController {
     public void insertAnimal(Animal animalNovo){
         animalDao.insertAnimal(animalNovo);
     }
+
     public boolean animalExiste(String nomeAnimal){
-        List<Animal> result = animalDao.returnAllAnimais();
+        ArrayList<Animal> result = animalDao.returnAllAnimais();
 
         for(Animal animal : result){
             if(animal.getNome().equals(nomeAnimal)){
@@ -71,7 +67,7 @@ public class DbController {
         return false;
     }
 
-    public List<Animal> returnAnimaisPorId(int idLote){
+    public ArrayList<Animal> returnAnimaisPorId(int idLote){
         List<Animal> result = animalDao.returnAnimaisLote(idLote);
         ArrayList<Animal> animais = new ArrayList<>();
         ArrayList<String> nomes = new ArrayList<>();
@@ -83,9 +79,9 @@ public class DbController {
         }
         Collections.sort(ids);
         for(int i=0; i < ids.size(); i++){
-            animais.add(new Animal(ids.get(i), nomes.get(i), idLote));
+            animais.add(new Animal(nomes.get(i), idLote));
         }
-        //TODO Adicionar setUpdateAnimais
+        setUpdateAnimais(animais);
         return animais;
     }
 
@@ -100,7 +96,7 @@ public class DbController {
         for(Animal animal : animais){
             String dataHora;
 
-            List<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(animal.getId());
+            ArrayList<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(animal.getId());
 
             dataHora = result.get(result.size() - 1).getDataHora();
 
@@ -112,6 +108,11 @@ public class DbController {
         }
     }
 
+    public String getLastUpdateAnimal(Animal animal){
+        return animal.getLastUpdate();
+    }
+
+
     //Lotes
     public void insertLote(Lote lote){
         loteDao.insertLote(lote);
@@ -121,12 +122,12 @@ public class DbController {
         return loteDao.returnLote(idLote);
     }
 
-    public List<Lote> returnAllLotes(){
+    public ArrayList<Lote> returnAllLotes(){
         return loteDao.returnAllLotes();
     }
 
     public boolean loteExiste(String nomeLote, String experimento){
-        List<Lote> result = loteDao.returnAllLotes();
+        ArrayList<Lote> result = loteDao.returnAllLotes();
 
         for(Lote lote : result){
             if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento) ){
@@ -147,7 +148,7 @@ public class DbController {
         anotacaoComportamentoDao.insertAnotacao(anotacao);
 
     }
-    public List<AnotacaoComportamento> returnAnotacoesComportamento(int animalId){
+    public ArrayList<AnotacaoComportamento> returnAnotacoesComportamento(int animalId){
         return anotacaoComportamentoDao.returnAllAnotacoesAnimal(animalId);
 
     }
@@ -208,7 +209,7 @@ public class DbController {
             Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
         }
 
-        List<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(idAnimal);
+        ArrayList<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(idAnimal);
 
         for(int i = 0; i < result.size(); i++ ){
             int id_animal = result.get(i).getIdAnimal();
