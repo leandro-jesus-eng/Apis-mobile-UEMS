@@ -14,24 +14,23 @@ public class FormularioComportamento implements Serializable {
     final private int id;
 
     @ColumnInfo(name = "dataCriacao")
-    final private String dataCriacao;
-
-    @ColumnInfo(name = "tiposComportamento")
-    final private ArrayList<TipoComportamento> tiposComportamento;
+    final private Date dataCriacao;
 
     @ColumnInfo(name = "formularioPadrao")
     final private boolean formularioPadrao;
 
-    public FormularioComportamento(
-            int id, String dataCriacao, ArrayList<TipoComportamento> tiposComportamento, boolean formularioPadrao){
+    @ColumnInfo(name = "loteId")
+    final private int loteId;
+
+
+    public FormularioComportamento(int id, Date dataCriacao, boolean formularioPadrao, int loteId){
         this.id = id;
         this.dataCriacao = dataCriacao;
-        this.tiposComportamento = tiposComportamento;
         this.formularioPadrao = formularioPadrao;
+        this.loteId = loteId;
     }
     public int getId() { return id; }
-    public String getDataCriacao() { return dataCriacao; }
-    public ArrayList<TipoComportamento> getTiposComportamento() { return tiposComportamento; }
+    public Date getDataCriacao() { return dataCriacao; }
     public boolean getPadrao() { return formularioPadrao; }
-
+    public int getLoteId() { return loteId; }
 }

@@ -23,5 +23,5 @@ public interface ComportamentoDao {
     void deleteAllComportamentos();
 
     @Query("SELECT * FROM tb_anotacaoComportamento WHERE id = :idComportamento")
-    Comportamento returnComportamento(int idComportamento);
+    Comportamento getComportamento(int idComportamento);
 }

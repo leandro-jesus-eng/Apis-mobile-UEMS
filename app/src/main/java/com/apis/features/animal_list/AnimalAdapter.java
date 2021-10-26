@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.R;
-import com.apis.database.DbController;
+import com.apis.database.DbRepository;
 import com.apis.models.Animal;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
                         .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DbController database = new DbController(view.getContext());
+                                DbRepository database = new DbRepository(view.getContext());
                                 try {
                                     database.excluirAnimal(animal);
                                     removerAnimal(animal);

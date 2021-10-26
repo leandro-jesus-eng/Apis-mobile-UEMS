@@ -15,18 +15,15 @@ public class TipoComportamento implements Serializable {
     @ColumnInfo(name = "descricao")
     final private String descricao;
 
-    @ColumnInfo(name = "comportamentos")
-    final private ArrayList<Comportamento> comportamentos;
+    final private int idFormularioComportamento;
 
-    public TipoComportamento(int id, String descricao, ArrayList<Comportamento> comportamentos){
+    public TipoComportamento(int id, String descricao, int idFormularioComportamento){
         this.id = id;
         this.descricao = descricao;
-        this.comportamentos = comportamentos;
+        this.idFormularioComportamento = idFormularioComportamento;
     }
 
     public int getId() { return id;}
     public String getDescricao() { return descricao; }
-    public ArrayList<Comportamento> getComportamentos() { return comportamentos; }
-
-
+    public int getIdFormularioComportamento() { return idFormularioComportamento; }
 }

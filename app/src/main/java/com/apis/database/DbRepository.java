@@ -2,12 +2,19 @@ package com.apis.database;
 
 import android.content.Context;
 import android.widget.Toast;
+
 import com.apis.database.DAOs.AnimalDao;
 import com.apis.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.database.DAOs.ComportamentoDao;
 import com.apis.database.DAOs.FormularioComportamentoDao;
 import com.apis.database.DAOs.LoteDao;
+import com.apis.database.DAOs.RelationsDao;
 import com.apis.database.DAOs.TipoComportamentoDao;
+import com.apis.database.relations.AnimalWithAnotacao;
+import com.apis.database.relations.FormularioWithTipoComportamento;
+import com.apis.database.relations.LoteAndFormulario;
+import com.apis.database.relations.LoteWithAnimal;
+import com.apis.database.relations.TipoComportamentoWithComportamento;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
@@ -21,9 +28,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class DbController {
+public class DbRepository {
 
     final private Context context;
     final private AnimalDao animalDao;
@@ -32,8 +40,9 @@ public class DbController {
     final private TipoComportamentoDao tipoComportamentoDao;
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
+    final private RelationsDao relationsDao;
 
-    public DbController(Context ctx){
+    public DbRepository(Context ctx){
         context = ctx;
         animalDao = Database.getInstance(ctx).animalDao();
         loteDao = Database.getInstance(ctx).loteDao();
@@ -41,15 +50,44 @@ public class DbController {
         tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
         anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
         comportamentoDao = Database.getInstance(ctx).comportamentoDao();
+        relationsDao = Database.getInstance(ctx).relationsDao();
     }
 
-    //Animais
-    public ArrayList<Animal> returnAnimais(int idLote){
-        return animalDao.returnAnimaisLote(idLote);
+    //RELATIONS
+
+    //Retorna Anotações de um animal
+    public List<AnimalWithAnotacao> getAnimalWithAnotacao(int idAnimal){
+        return relationsDao.getAnimalWithAnotacao(idAnimal);
     }
 
-    public Animal returnAnimal(int idLote, int animalId){
-        return animalDao.returnAnimal(idLote, animalId);
+    //Retorna Comportamentos de um Tipo
+    public List<TipoComportamentoWithComportamento> getTipoComportametnoWithComportamento(int idTipo){
+        return relationsDao.getTipoComportamentoWithComportamento(idTipo);
+    }
+
+    //Retorna tipos de um Formulario
+    public List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int idFormulario){
+        return relationsDao.getFormularioWithTipoComportamento(idFormulario);
+    }
+
+    //Retorna animais de um Lote
+    public List<LoteWithAnimal> getLoteWithAnimal(int idLote){
+        return relationsDao.getLoteWithAnimal(idLote);
+    }
+
+    //Retorna formulario de um Lote
+    public List<LoteAndFormulario> getLoteAndFormulario(int idLote){
+        return relationsDao.getLoteAndFormulario(idLote);
+    }
+
+    //ANIMAIS
+
+    public ArrayList<Animal> getAnimais(int idLote){
+        return animalDao.getAnimaisLote(idLote);
+    }
+
+    public Animal getAnimal(int idLote, int animalId){
+        return animalDao.getAnimal(idLote, animalId);
     }
 
     public void insertAnimal(Animal animalNovo){
@@ -57,7 +95,7 @@ public class DbController {
     }
 
     public boolean animalExiste(String nomeAnimal){
-        ArrayList<Animal> result = animalDao.returnAllAnimais();
+        ArrayList<Animal> result = animalDao.getAllAnimais();
 
         for(Animal animal : result){
             if(animal.getNome().equals(nomeAnimal)){
@@ -67,8 +105,8 @@ public class DbController {
         return false;
     }
 
-    public ArrayList<Animal> returnAnimaisPorId(int idLote){
-        List<Animal> result = animalDao.returnAnimaisLote(idLote);
+    public ArrayList<Animal> getAnimaisPorId(int idLote){
+        List<Animal> result = animalDao.getAnimaisLote(idLote);
         ArrayList<Animal> animais = new ArrayList<>();
         ArrayList<String> nomes = new ArrayList<>();
         ArrayList<Integer> ids = new ArrayList<>();
@@ -79,13 +117,13 @@ public class DbController {
         }
         Collections.sort(ids);
         for(int i=0; i < ids.size(); i++){
-            animais.add(new Animal(nomes.get(i), idLote));
+            animais.add(new Animal(0, nomes.get(i), idLote));
         }
         setUpdateAnimais(animais);
         return animais;
     }
 
-    public ArrayList<Animal> retornarAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
+    public ArrayList<Animal> getAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
         setUpdateAnimais(animais);
         Collections.sort(animais);
 
@@ -96,9 +134,10 @@ public class DbController {
         for(Animal animal : animais){
             String dataHora;
 
-            ArrayList<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(animal.getId());
+            List<AnimalWithAnotacao> result = relationsDao.getAnimalWithAnotacao(animal.getId());
+            List<AnotacaoComportamento> anotacoes = result.get(0).anotacaoComportamentos;
 
-            dataHora = result.get(result.size() - 1).getDataHora();
+            dataHora = anotacoes.get(result.size() - 1).getData_hora();
 
             if(dataHora == null){
                 animal.setLastUpdate("Sem anotação!");
@@ -112,22 +151,21 @@ public class DbController {
         return animal.getLastUpdate();
     }
 
-
     //Lotes
     public void insertLote(Lote lote){
         loteDao.insertLote(lote);
     }
 
-    public Lote returnLote(int idLote){
-        return loteDao.returnLote(idLote);
+    public Lote getLote(int idLote){
+        return loteDao.getLote(idLote);
     }
 
-    public ArrayList<Lote> returnAllLotes(){
-        return loteDao.returnAllLotes();
+    public ArrayList<Lote> getAllLotes(){
+        return loteDao.getAllLotes();
     }
 
     public boolean loteExiste(String nomeLote, String experimento){
-        ArrayList<Lote> result = loteDao.returnAllLotes();
+        ArrayList<Lote> result = loteDao.getAllLotes();
 
         for(Lote lote : result){
             if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento) ){
@@ -136,9 +174,8 @@ public class DbController {
         }
         return false;
     }
-
-    public String returnNomeLote(int idLote){
-        Lote result = loteDao.returnLote(idLote);
+    public String getNomeLote(int idLote){
+        Lote result = loteDao.getLote(idLote);
 
         return result.getNome();
     }
@@ -146,29 +183,45 @@ public class DbController {
     //Comportamentos e afins
     public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
         anotacaoComportamentoDao.insertAnotacao(anotacao);
-
     }
-    public ArrayList<AnotacaoComportamento> returnAnotacoesComportamento(int animalId){
-        return anotacaoComportamentoDao.returnAllAnotacoesAnimal(animalId);
 
+    public ArrayList<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
+        return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
+    }
+
+    public void insertComportamento(Comportamento comportamento){
+        comportamentoDao.insertComportamento(comportamento);
+    }
+
+    public void insertTipoComportamento(TipoComportamento tipoComportamento){
+        tipoComportamentoDao.insertTipo(tipoComportamento);
+    }
+
+    public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
+        formularioComportamentoDao.insertFormulario(formularioComportamento);
     }
 
     //Excluir
     public void excluirAnimal(Animal animal){
         animalDao.deleteAnimal(animal);
     }
+
     public void excluirLote(Lote lote){
         loteDao.deleteLote(lote);
     }
+
     public void excluirTipoComportamento(TipoComportamento tipoComportamento){
         tipoComportamentoDao.deleteTipo(tipoComportamento);
     }
+
     public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
         anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
     }
+
     public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
         formularioComportamentoDao.deleteFormulario(formularioComportamento);
     }
+
     public void excluirComportamento(Comportamento comportamento){
         comportamentoDao.deleteComportamento(comportamento);
     }
@@ -195,8 +248,8 @@ public class DbController {
     //Exportar dados
     public boolean exportarDados(int idLote, int idAnimal){
 
-        Lote lote = loteDao.returnLote(idLote);
-        Animal animal = animalDao.returnAnimal(idLote, idAnimal);
+        Lote lote = loteDao.getLote(idLote);
+        Animal animal = animalDao.getAnimal(idLote, idAnimal);
 
         //Antes de fazer a consulta
         //Apaga o arquivo de dados do animal, se houver
@@ -209,14 +262,15 @@ public class DbController {
             Toast.makeText(context, "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
         }
 
-        ArrayList<AnotacaoComportamento> result = anotacaoComportamentoDao.returnAllAnotacoesAnimal(idAnimal);
+        List<AnimalWithAnotacao> result = relationsDao.getAnimalWithAnotacao(animal.getId());
+        List<AnotacaoComportamento> anotacoes = result.get(0).anotacaoComportamentos;
 
-        for(int i = 0; i < result.size(); i++ ){
-            int id_animal = result.get(i).getIdAnimal();
-            String nome_animal = result.get(i).getNomeAnimal();
-            String dataHora = result.get(i).getDataHora();
-            String comportamento = result.get(i).getComportamento().getNome();
-            String obs = result.get(i).getObs();
+        for(int i = 0; i < anotacoes.size(); i++ ){
+            int id_animal = anotacoes.get(i).getIdAnimal();
+            String nome_animal = anotacoes.get(i).getNomeAnimal();
+            String dataHora = anotacoes.get(i).getData_hora();
+            String comportamento = anotacoes.get(i).getNomeComportamento();
+            String obs = anotacoes.get(i).getObs();
 
             String conteudo = id_animal+";"+nome_animal+";"+dataHora+";"+comportamento+";"+obs;
 

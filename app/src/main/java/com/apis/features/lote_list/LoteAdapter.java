@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
-import com.apis.database.DbController;
+import com.apis.database.DbRepository;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
 
@@ -75,7 +74,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                DbController database = new DbController(view.getContext());
+                                DbRepository database = new DbRepository(view.getContext());
 
                                 //Apaga arquivo
                                 FileControl fileControl = new FileControl(context);
@@ -83,7 +82,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
                                 try {
                                     database.excluirLote(lotes.get(lote.getId()));
-                                    ArrayList<Animal> animaisLote = database.returnAnimais(lote.getId());
+                                    ArrayList<Animal> animaisLote = database.getAnimais(lote.getId());
                                     for (Animal animal : animaisLote) {
                                         database.excluirAnimal(animal);
                                     }
@@ -129,12 +128,12 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 }
 
                 boolean existeDados = false;
-                DbController database = new DbController(context);
-                ArrayList<Animal> listAnimais = database.returnAnimais(lote.getId());
+                DbRepository database = new DbRepository(context);
+                ArrayList<Animal> listAnimais = database.getAnimais(lote.getId());
                 try {
                     FileOutputStream out = new FileOutputStream(f, true);
                     for(Animal animal : listAnimais) {
-                        List<AnotacaoComportamento> listComp = database.returnAnotacoesComportamento(animal.getId());
+                        List<AnotacaoComportamento> listComp = database.getAnotacoesComportamento(animal.getId());
                         for (AnotacaoComportamento comportamento : listComp) {
                            out.write(comportamento.toString().getBytes());
                            out.write('\n');

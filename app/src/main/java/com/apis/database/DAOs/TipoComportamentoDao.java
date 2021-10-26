@@ -24,9 +24,9 @@ public interface TipoComportamentoDao {
     void deleteAllTipos();
 
     @Query("SELECT * FROM tb_tipoComportamento WHERE id = :idTipo")
-    TipoComportamento returnTipo(int idTipo);
+    TipoComportamento getTipo(int idTipo);
 
     @Query("SELECT * FROM tb_tipoComportamento")
-    ArrayList<TipoComportamento> returnAllTipos();
+    ArrayList<TipoComportamento> getAllTipos();
 
 }

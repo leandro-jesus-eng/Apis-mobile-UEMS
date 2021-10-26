@@ -26,11 +26,10 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbController;
+import com.apis.database.DbRepository;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FileControl;
 import com.apis.models.Lote;
@@ -40,7 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class AdicionarComportamento extends AppCompatActivity {
 
@@ -53,7 +51,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String obS = "";
 
     private DateTime dateTime = new DateTime();
-    DbController database = new DbController(this);
+    DbRepository database = new DbRepository(this);
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -97,10 +95,10 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     public void exportarDados() {
 
-        DbController database = new DbController(this);
+        DbRepository database = new DbRepository(this);
         database.exportarDados(idLote, idAnimal);
         Lote lote = database.returnLote(idLote);
-        Animal animal = database.returnAnimal(idLote, idAnimal);
+        Animal animal = database.getAnimal(idLote, idAnimal);
 
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
 
@@ -128,7 +126,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerComportamento);
 
-        ArrayList<AnotacaoComportamento> comportamentos =  database.returnAnotacoesComportamento(idAnimal);
+        ArrayList<AnotacaoComportamento> comportamentos =  database.getAnotacoesComportamento(idAnimal);
 
         Collections.reverse(comportamentos);
 
@@ -145,7 +143,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             idAnimal = getIntent().getIntExtra("animal_id", 9999);
             idLote = getIntent().getIntExtra("lote_id", 9999);
 
-            nomeLote = database.returnNomeLote(idLote);
+            nomeLote = database.getNomeLote(idLote);
 
         }
 
@@ -153,7 +151,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     private void pegarUltimaAtualizacao() {
         TextView atualizadoEm = (TextView) findViewById(R.id.atualizadoEm);
-        ArrayList<Animal> animais = database.returnAnimais(idLote);
+        ArrayList<Animal> animais = database.getAnimais(idLote);
         String lastUpdate = database.getLastUpdateAnimal(animais.get(idAnimal));
 
         //Verifica se irá mandar notificações
@@ -249,7 +247,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ////Salva no BD
-                        DbController database = new DbController(getBaseContext());
+                        DbRepository database = new DbRepository(getBaseContext());
                         AnotacaoComportamento newAnotacao = new AnotacaoComportamento(0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), obS , null);
                         try {
 
@@ -308,7 +306,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
 
-        DbController database = new DbController(getApplicationContext());
+        DbRepository database = new DbRepository(getApplicationContext());
         Lote lote = database.returnLote(idLote);
 
         try {

@@ -27,7 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbController;
+import com.apis.database.DbRepository;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
 import com.apis.models.Lote;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     String CHANNEL_ID = "main.notifications";
 
-    DbController database = new DbController(this);
+    DbRepository database = new DbRepository(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
-        ArrayList<Lote> lotes = database.returnAllLotes();
+        ArrayList<Lote> lotes = database.getAllLotes();
 
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
         ImageView alertImg  = (ImageView) findViewById(R.id.alertImgLotes);
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         if(camposValidos){
 
-                            DbController database = new DbController(getBaseContext());
+                            DbRepository database = new DbRepository(getBaseContext());
                             boolean loteJaExiste = false;
                             if(database.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
                                 loteJaExiste = true;

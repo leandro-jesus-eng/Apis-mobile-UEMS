@@ -8,6 +8,7 @@ import com.apis.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.database.DAOs.ComportamentoDao;
 import com.apis.database.DAOs.FormularioComportamentoDao;
 import com.apis.database.DAOs.LoteDao;
+import com.apis.database.DAOs.RelationsDao;
 import com.apis.database.DAOs.TipoComportamentoDao;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
@@ -32,6 +33,7 @@ abstract public class Database extends RoomDatabase {
     public abstract ComportamentoDao comportamentoDao();
     public abstract FormularioComportamentoDao formularioComportamentoDao();
     public abstract TipoComportamentoDao tipoComportamentoDao();
+    public abstract RelationsDao relationsDao();
 
     private static Database database;
     final private static String DATABASE_NAME = "Apis.db";

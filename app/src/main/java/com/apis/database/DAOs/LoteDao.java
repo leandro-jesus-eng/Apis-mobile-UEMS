@@ -25,8 +25,8 @@ public interface LoteDao {
     void deleteAllLotes();
 
     @Query("SELECT * FROM tb_lote WHERE id = :loteId")
-    Lote returnLote(int loteId);
+    Lote getLote(int loteId);
 
     @Query("SELECT * FROM tb_lote")
-    ArrayList<Lote> returnAllLotes();
+    ArrayList<Lote> getAllLotes();
 }

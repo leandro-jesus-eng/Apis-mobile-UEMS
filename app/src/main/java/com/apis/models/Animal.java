@@ -18,8 +18,8 @@ public class Animal implements Serializable, Comparable<Animal> {
     @ColumnInfo(name = "nome")
     final private String nome;
 
-    @ColumnInfo(name = "idLote")
-    final private int LoteId;
+    @ColumnInfo(name = "loteId")
+    final private int loteId;
 
     @ColumnInfo(name = "lastUpdate")
     private String lastUpdate;
@@ -27,12 +27,18 @@ public class Animal implements Serializable, Comparable<Animal> {
     public Animal(int id, String nome, int LoteId){
         this.id = id;
         this.nome = nome;
-        this.LoteId = LoteId;
+        this.loteId = LoteId;
     }
 
     public int getId(){ return this.id; }
     public String getNome(){ return this.nome; }
-    public int getLoteId(){ return this.LoteId; }
+    public int getLoteId(){ return this.loteId; }
+    public String getLastUpdate(){
+        return this.lastUpdate;
+    }
+    public void setLastUpdate(String data){
+        this.lastUpdate = data;
+    }
 
     @Override
     public boolean equals(Object o){
@@ -42,14 +48,6 @@ public class Animal implements Serializable, Comparable<Animal> {
     @Override
     public int hashCode(){
         return this.id;
-    }
-
-    public String getLastUpdate(){
-        return this.lastUpdate;
-    }
-
-    public void setLastUpdate(String data){
-        this.lastUpdate = data;
     }
 
     @Override

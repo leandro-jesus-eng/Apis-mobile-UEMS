@@ -1,20 +1,17 @@
 package com.apis.models;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.apis.database.DbController;
+import com.apis.database.DbRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.ContentHandler;
 import java.util.ArrayList;
 
 public class FileControl {
@@ -182,8 +179,8 @@ public class FileControl {
 
     public void deleteLoteFile(Context context, int idLote){
 
-        DbController database = new DbController(context);
-        Lote lote = database.returnLote(idLote);
+        DbRepository database = new DbRepository(context);
+        Lote lote = database.getLote(idLote);
 
         File files[] = context.getExternalFilesDirs(null);
         File f = null;

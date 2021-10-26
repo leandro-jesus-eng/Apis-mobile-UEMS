@@ -14,19 +14,18 @@ public class Comportamento implements Serializable {
     @ColumnInfo(name = "nome")
     final private String nome;
 
-    @ColumnInfo(name = "tipo")
-    final private TipoComportamento tipo;
+    @ColumnInfo(name = "descricaoTipo")
+    final private String descricaoTipo;
 
-    public Comportamento(int id, String nome, TipoComportamento tipo){
+    public Comportamento(int id, String nome, String descricaoTipo){
        this.id = id;
        this.nome = nome;
-       this.tipo = tipo;
+       this.descricaoTipo = descricaoTipo;
     }
 
     public int getId() { return id; }
     public String getNome(){return nome;}
-
-    public TipoComportamento getTipo(){ return tipo;}
+    public String getDescricaoTipo() { return descricaoTipo; }
 
     @Override
     public boolean equals(Object o){

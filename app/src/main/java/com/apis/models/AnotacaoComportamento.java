@@ -18,33 +18,29 @@ public class AnotacaoComportamento implements Serializable {
     @ColumnInfo(name = "animalId")
     final private int idAnimal;
 
-    @ColumnInfo(name = "hora")
-    final private String hora;
+    @ColumnInfo(name = "data_hora")
+    final private String data_hora;
 
-    @ColumnInfo(name = "data")
-    final private String data;
+    @ColumnInfo(name = "nomeComportamento")
+    final private String nomeComportamento;
 
     @ColumnInfo(name = "obs")
     final private String obs;
 
-    @ColumnInfo(name = "comportamento")
-    final private Comportamento comportamento;
-
-    public AnotacaoComportamento(int id, String nomeAnimal, int idAnimal, String data, String hora, String obs, Comportamento comportamento){
+    public AnotacaoComportamento(int id, String nomeAnimal, int idAnimal, String data_hora, String nomeComportamento, String obs){
         this.id = id;
         this.nomeAnimal = nomeAnimal;
         this.idAnimal = idAnimal;
-        this.data = data;
-        this.hora = hora;
+        this.data_hora = data_hora;
+        this.nomeComportamento = nomeComportamento;
         this.obs = obs;
-        this.comportamento = comportamento;
     }
 
     public int getId() { return id; }
     public String getNomeAnimal() { return nomeAnimal; }
     public int getIdAnimal() { return idAnimal; }
-    public String getDataHora() { return data+" "+hora; }
+    public String getData_hora() { return data_hora; }
+    public String getNomeComportamento() { return nomeComportamento; }
     public String getObs() { return obs; }
-    public Comportamento getComportamento() { return comportamento; }
 
 }

@@ -27,8 +27,8 @@ public interface AnotacaoComportamentoDao {
     void deleteAllAnotacoes();
 
     @Query("SELECT * FROM tb_anotacaoComportamento WHERE id = :idAnotacao")
-    AnotacaoComportamento returnAnotacao(int idAnotacao);
+    AnotacaoComportamento getAnotacao(int idAnotacao);
 
     @Query("SELECT * FROM tb_anotacaoComportamento WHERE animalId = :animalId")
-    ArrayList<AnotacaoComportamento> returnAllAnotacoesAnimal(int animalId);
+    ArrayList<AnotacaoComportamento> getAllAnotacoesAnimal(int animalId);
 }

@@ -23,13 +23,13 @@ public interface AnimalDao {
     @Query("DELETE FROM tb_animal")
     void deleteAllAnimais();
 
-    @Query("SELECT * FROM tb_animal WHERE idLote = :loteId AND id = :animalId")
-    Animal returnAnimal(int loteId, int animalId);
+    @Query("SELECT * FROM tb_animal WHERE loteId = :loteId AND id = :animalId")
+    Animal getAnimal(int loteId, int animalId);
 
-    @Query("SELECT * FROM tb_animal WHERE idLote = :loteId")
-    ArrayList<Animal> returnAnimaisLote(int loteId);
+    @Query("SELECT * FROM tb_animal WHERE loteId = :loteId")
+    ArrayList<Animal> getAnimaisLote(int loteId);
 
     @Query("SELECT * FROM tb_animal")
-    ArrayList<Animal> returnAllAnimais();
+    ArrayList<Animal> getAllAnimais();
 
 }
