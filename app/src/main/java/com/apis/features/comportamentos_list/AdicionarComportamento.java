@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
+import com.apis.database.relations.AnimalWithAnotacao;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
@@ -39,6 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class AdicionarComportamento extends AppCompatActivity {
 
@@ -97,7 +99,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         DbRepository database = new DbRepository(this);
         database.exportarDados(idLote, idAnimal);
-        Lote lote = database.returnLote(idLote);
+        Lote lote = database.getLote(idLote);
         Animal animal = database.getAnimal(idLote, idAnimal);
 
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
@@ -126,7 +128,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerComportamento);
 
-        ArrayList<AnotacaoComportamento> comportamentos =  database.getAnotacoesComportamento(idAnimal);
+        List<AnotacaoComportamento> comportamentos = database.getAnimalWithAnotacao(idAnimal).get(0).anotacaoComportamentos;
 
         Collections.reverse(comportamentos);
 
@@ -151,8 +153,13 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     private void pegarUltimaAtualizacao() {
         TextView atualizadoEm = (TextView) findViewById(R.id.atualizadoEm);
-        ArrayList<Animal> animais = database.getAnimais(idLote);
-        String lastUpdate = database.getLastUpdateAnimal(animais.get(idAnimal));
+        List<Animal> animais = database.getAnimais(idLote);
+        String lastUpdate = "";
+        for (Animal animal : animais){
+            if(animal.getId() == idAnimal){
+                lastUpdate = database.getLastUpdateAnimal(animal);
+            }
+        }
 
         //Verifica se irá mandar notificações
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -247,8 +254,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ////Salva no BD
-                        DbRepository database = new DbRepository(getBaseContext());
-                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), obS , null);
+                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
                         try {
 
                             database.insertAnotacaoComportamento(newAnotacao);
@@ -307,7 +313,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
 
         DbRepository database = new DbRepository(getApplicationContext());
-        Lote lote = database.returnLote(idLote);
+        Lote lote = database.getLote(idLote);
 
         try {
                 try {

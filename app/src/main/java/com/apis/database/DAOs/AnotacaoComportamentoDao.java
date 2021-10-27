@@ -30,5 +30,5 @@ public interface AnotacaoComportamentoDao {
     AnotacaoComportamento getAnotacao(int idAnotacao);
 
     @Query("SELECT * FROM tb_anotacaoComportamento WHERE animalId = :animalId")
-    ArrayList<AnotacaoComportamento> getAllAnotacoesAnimal(int animalId);
+    List<AnotacaoComportamento> getAllAnotacoesAnimal(int animalId);
 }

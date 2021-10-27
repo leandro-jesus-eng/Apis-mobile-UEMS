@@ -31,10 +31,10 @@ import java.util.List;
 
 public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
-    final private ArrayList<Lote> lotes;
+    final private List<Lote> lotes;
     final private Context context;
 
-    public LoteAdapter(ArrayList lotes, Context context){
+    public LoteAdapter(List lotes, Context context){
         this.lotes = lotes;
         this.context = context;
     }
@@ -81,8 +81,8 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                                 fileControl.deleteLoteFile(context, lote.getId());
 
                                 try {
-                                    database.excluirLote(lotes.get(lote.getId()));
-                                    ArrayList<Animal> animaisLote = database.getAnimais(lote.getId());
+                                    database.excluirLote(lotes.get(position));
+                                    List<Animal> animaisLote = database.getAnimais(lote.getId());
                                     for (Animal animal : animaisLote) {
                                         database.excluirAnimal(animal);
                                     }
@@ -129,7 +129,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
                 boolean existeDados = false;
                 DbRepository database = new DbRepository(context);
-                ArrayList<Animal> listAnimais = database.getAnimais(lote.getId());
+                List<Animal> listAnimais = database.getAnimais(lote.getId());
                 try {
                     FileOutputStream out = new FileOutputStream(f, true);
                     for(Animal animal : listAnimais) {
@@ -170,8 +170,8 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ListaAnimais.class);
-                intent.putExtra("lote_nome", lotes.get(position).getNome());
-                intent.putExtra("lote_id", lotes.get(position).getId());
+                intent.putExtra("lote_nome", lotes.get(holder.getAdapterPosition()).getNome());
+                intent.putExtra("lote_id", lotes.get(holder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });

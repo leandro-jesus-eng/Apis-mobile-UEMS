@@ -14,7 +14,7 @@ public class LoteWithAnimal {
     public Lote lote;
     @Relation(
             parentColumn = "id",
-            entityColumn = "idLote"
+            entityColumn = "loteId"
     )
     public List<Animal> animais;
 }

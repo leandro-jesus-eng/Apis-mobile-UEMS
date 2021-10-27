@@ -14,7 +14,7 @@ public class FormularioComportamento implements Serializable {
     final private int id;
 
     @ColumnInfo(name = "dataCriacao")
-    final private Date dataCriacao;
+    final private String dataCriacao;
 
     @ColumnInfo(name = "formularioPadrao")
     final private boolean formularioPadrao;
@@ -22,15 +22,15 @@ public class FormularioComportamento implements Serializable {
     @ColumnInfo(name = "loteId")
     final private int loteId;
 
-
-    public FormularioComportamento(int id, Date dataCriacao, boolean formularioPadrao, int loteId){
+    public FormularioComportamento(int id, String dataCriacao, boolean formularioPadrao, int loteId){
         this.id = id;
         this.dataCriacao = dataCriacao;
         this.formularioPadrao = formularioPadrao;
         this.loteId = loteId;
     }
+
     public int getId() { return id; }
-    public Date getDataCriacao() { return dataCriacao; }
-    public boolean getPadrao() { return formularioPadrao; }
+    public String getDataCriacao() { return dataCriacao; }
+    public boolean isFormularioPadrao() { return formularioPadrao; }
     public int getLoteId() { return loteId; }
 }

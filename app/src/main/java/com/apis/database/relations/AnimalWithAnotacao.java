@@ -15,7 +15,7 @@ public class AnimalWithAnotacao {
     public Animal animal;
     @Relation(
             parentColumn = "id",
-            entityColumn = "idAnimal"
+            entityColumn = "animalId"
     )
     public List<AnotacaoComportamento> anotacaoComportamentos;
 }

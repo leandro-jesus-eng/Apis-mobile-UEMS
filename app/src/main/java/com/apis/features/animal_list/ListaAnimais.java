@@ -29,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class ListaAnimais extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -40,7 +41,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     static boolean ordAscChecked= false;
     static boolean ordDscChecked= false;
 
-    ArrayList<Animal> animais= new ArrayList<>();
+    List<Animal> animais= new ArrayList<>();
 
     DrawerLayout drawer;
     DbRepository database = new DbRepository(this);
@@ -109,7 +110,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         }else {
             //Ordenação por anotação mais antiga padrão
             animais = database.getAnimais(idLote);
-            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            //animais = database.getAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
         }
 
@@ -156,7 +157,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
                                 Toast.makeText(getApplicationContext(), "O animal com esse nome já existe!", Toast.LENGTH_LONG).show();
                             } else {
                                 ////Salva no BD
-                                Animal animal = new Animal(0, nomeAnimal, idLote);
+                                Animal animal = new Animal(0, nomeAnimal, idLote, "Sem anotação!");
                                 try {
                                     database.insertAnimal(animal);
                                     finish();

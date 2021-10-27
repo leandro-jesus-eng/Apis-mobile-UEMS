@@ -27,9 +27,9 @@ public interface AnimalDao {
     Animal getAnimal(int loteId, int animalId);
 
     @Query("SELECT * FROM tb_animal WHERE loteId = :loteId")
-    ArrayList<Animal> getAnimaisLote(int loteId);
+    List<Animal> getAnimaisLote(int loteId);
 
     @Query("SELECT * FROM tb_animal")
-    ArrayList<Animal> getAllAnimais();
+    List<Animal> getAllAnimais();
 
 }

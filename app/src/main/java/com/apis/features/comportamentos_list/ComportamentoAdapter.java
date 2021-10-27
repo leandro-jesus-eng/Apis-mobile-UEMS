@@ -13,14 +13,15 @@ import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoViewHolder>{
 
-    private ArrayList<AnotacaoComportamento> comportamentos;
+    private List<AnotacaoComportamento> comportamentos;
     private Context context;
 
 
-    public ComportamentoAdapter(ArrayList comportamentos, Context context){
+    public ComportamentoAdapter(List comportamentos, Context context){
         this.comportamentos = comportamentos;
         this.context = context;
     }
@@ -29,20 +30,19 @@ public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoView
     @NonNull
     @Override
     public ComportamentoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(context).inflate(R.layout.item_comportamento, parent, false);
         ComportamentoViewHolder comportamentoViewHolder = new ComportamentoViewHolder(view);
         return comportamentoViewHolder;
+
     }
 
     @Override
-    public void onBindViewHolder(ComportamentoViewHolder holder, final int position)
-    {
-        holder.dataHora.setText(comportamentos.get(position).getDataHora());
+    public void onBindViewHolder(ComportamentoViewHolder holder, final int position) {
+
+        holder.dataHora.setText(comportamentos.get(position).getData() +" "+comportamentos.get(position).getHora());
         holder.info.setText("Obs: " +comportamentos.get(position).getObs());
 
         final AnotacaoComportamento comportamento = comportamentos.get(position);
-
     }
 
     @Override

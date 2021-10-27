@@ -27,6 +27,6 @@ public interface TipoComportamentoDao {
     TipoComportamento getTipo(int idTipo);
 
     @Query("SELECT * FROM tb_tipoComportamento")
-    ArrayList<TipoComportamento> getAllTipos();
+    List<TipoComportamento> getAllTipos();
 
 }

@@ -34,15 +34,15 @@ import com.apis.models.Lote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private String nomeLote;
     private String nomeExperimento;
+    DbRepository database;
 
     String CHANNEL_ID = "main.notifications";
-
-    DbRepository database = new DbRepository(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
         });
-
+        database = new DbRepository(this);
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
-        ArrayList<Lote> lotes = database.getAllLotes();
+        List<Lote> lotes = database.getAllLotes();
 
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
         ImageView alertImg  = (ImageView) findViewById(R.id.alertImgLotes);
@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         if(camposValidos){
 
-                            DbRepository database = new DbRepository(getBaseContext());
                             boolean loteJaExiste = false;
                             if(database.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
                                 loteJaExiste = true;
@@ -142,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Lote novoLote = new Lote(0 ,nomeLote, nomeExperimento);
                                 try {
                                     database.insertLote(novoLote);
-                                    configurarLista();
+                                    finish();
+                                    startActivity(getIntent());
                                 }catch (Throwable throwable){
                                     Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                                 }

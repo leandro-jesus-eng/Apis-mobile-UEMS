@@ -24,10 +24,11 @@ public class Animal implements Serializable, Comparable<Animal> {
     @ColumnInfo(name = "lastUpdate")
     private String lastUpdate;
 
-    public Animal(int id, String nome, int LoteId){
+    public Animal(int id, String nome, int loteId, String lastUpdate){
         this.id = id;
         this.nome = nome;
-        this.loteId = LoteId;
+        this.loteId = loteId;
+        this.lastUpdate = lastUpdate;
     }
 
     public int getId(){ return this.id; }

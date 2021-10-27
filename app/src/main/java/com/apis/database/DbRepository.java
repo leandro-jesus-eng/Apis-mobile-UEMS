@@ -82,7 +82,7 @@ public class DbRepository {
 
     //ANIMAIS
 
-    public ArrayList<Animal> getAnimais(int idLote){
+    public List<Animal> getAnimais(int idLote){
         return animalDao.getAnimaisLote(idLote);
     }
 
@@ -95,7 +95,7 @@ public class DbRepository {
     }
 
     public boolean animalExiste(String nomeAnimal){
-        ArrayList<Animal> result = animalDao.getAllAnimais();
+        List<Animal> result = animalDao.getAllAnimais();
 
         for(Animal animal : result){
             if(animal.getNome().equals(nomeAnimal)){
@@ -105,7 +105,7 @@ public class DbRepository {
         return false;
     }
 
-    public ArrayList<Animal> getAnimaisPorId(int idLote){
+    public List<Animal> getAnimaisPorId(int idLote){
         List<Animal> result = animalDao.getAnimaisLote(idLote);
         ArrayList<Animal> animais = new ArrayList<>();
         ArrayList<String> nomes = new ArrayList<>();
@@ -117,27 +117,27 @@ public class DbRepository {
         }
         Collections.sort(ids);
         for(int i=0; i < ids.size(); i++){
-            animais.add(new Animal(0, nomes.get(i), idLote));
+            animais.add(new Animal(0, nomes.get(i), idLote, "Sem anotação!"));
         }
         setUpdateAnimais(animais);
         return animais;
     }
 
-    public ArrayList<Animal> getAnimaisPorOrdemDeAnotacao(ArrayList<Animal> animais){
+    public List<Animal> getAnimaisPorOrdemDeAnotacao(List<Animal> animais){
         setUpdateAnimais(animais);
         Collections.sort(animais);
 
         return animais;
     }
 
-    public void setUpdateAnimais(ArrayList<Animal> animais){
+    public void setUpdateAnimais(List<Animal> animais){
         for(Animal animal : animais){
             String dataHora;
 
             List<AnimalWithAnotacao> result = relationsDao.getAnimalWithAnotacao(animal.getId());
             List<AnotacaoComportamento> anotacoes = result.get(0).anotacaoComportamentos;
 
-            dataHora = anotacoes.get(result.size() - 1).getData_hora();
+            dataHora = anotacoes.get(result.size() - 1).getData() + " " +anotacoes.get(result.size() - 1).getHora();
 
             if(dataHora == null){
                 animal.setLastUpdate("Sem anotação!");
@@ -151,7 +151,7 @@ public class DbRepository {
         return animal.getLastUpdate();
     }
 
-    //Lotes
+    //LOTES
     public void insertLote(Lote lote){
         loteDao.insertLote(lote);
     }
@@ -160,12 +160,12 @@ public class DbRepository {
         return loteDao.getLote(idLote);
     }
 
-    public ArrayList<Lote> getAllLotes(){
+    public List<Lote> getAllLotes(){
         return loteDao.getAllLotes();
     }
 
     public boolean loteExiste(String nomeLote, String experimento){
-        ArrayList<Lote> result = loteDao.getAllLotes();
+        List<Lote> result = loteDao.getAllLotes();
 
         for(Lote lote : result){
             if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento) ){
@@ -180,12 +180,12 @@ public class DbRepository {
         return result.getNome();
     }
 
-    //Comportamentos e afins
+    //COMPORTAMENTOS E AFINS
     public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
         anotacaoComportamentoDao.insertAnotacao(anotacao);
     }
 
-    public ArrayList<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
+    public List<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
         return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
     }
 
@@ -268,7 +268,7 @@ public class DbRepository {
         for(int i = 0; i < anotacoes.size(); i++ ){
             int id_animal = anotacoes.get(i).getIdAnimal();
             String nome_animal = anotacoes.get(i).getNomeAnimal();
-            String dataHora = anotacoes.get(i).getData_hora();
+            String dataHora = anotacoes.get(i).getData() +" "+anotacoes.get(i).getHora();
             String comportamento = anotacoes.get(i).getNomeComportamento();
             String obs = anotacoes.get(i).getObs();
 

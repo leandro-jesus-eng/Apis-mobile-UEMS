@@ -28,5 +28,5 @@ public interface LoteDao {
     Lote getLote(int loteId);
 
     @Query("SELECT * FROM tb_lote")
-    ArrayList<Lote> getAllLotes();
+    List<Lote> getAllLotes();
 }

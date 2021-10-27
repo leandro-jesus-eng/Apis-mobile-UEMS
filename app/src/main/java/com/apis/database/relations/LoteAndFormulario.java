@@ -15,7 +15,7 @@ public class LoteAndFormulario {
     public Lote lote;
     @Relation(
             parentColumn = "id",
-            entityColumn = "idLote"
+            entityColumn = "loteId"
     )
     public FormularioComportamento formularioComportamento;
 }

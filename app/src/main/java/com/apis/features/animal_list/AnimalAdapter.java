@@ -21,14 +21,15 @@ import com.apis.database.DbRepository;
 import com.apis.models.Animal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
 
-    private ArrayList<Animal> animais;
+    private List<Animal> animais;
     private Context context;
 
 
-    public AnimalAdapter(ArrayList animais, Context context){
+    public AnimalAdapter(List animais, Context context){
         this.animais = animais;
         this.context = context;
     }

@@ -24,6 +24,6 @@ public interface FormularioComportamentoDao {
     void deleteAllFormularios();
 
     @Query("SELECT * FROM tb_formularioComportamento WHERE id = :idFormulario")
-    Comportamento getFormulario(int idFormulario);
+    FormularioComportamento getFormulario(int idFormulario);
 
 }
