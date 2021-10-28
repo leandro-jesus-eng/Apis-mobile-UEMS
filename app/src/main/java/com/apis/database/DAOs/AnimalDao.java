@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.apis.models.Animal;
 
@@ -31,5 +32,9 @@ public interface AnimalDao {
 
     @Query("SELECT * FROM tb_animal")
     List<Animal> getAllAnimais();
+
+    @Query("UPDATE tb_animal SET lastUpdate = :lastUpdate WHERE id = :animalId")
+    void setLastUpdate(int animalId, String lastUpdate);
+
 
 }

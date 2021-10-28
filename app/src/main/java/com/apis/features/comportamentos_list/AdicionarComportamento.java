@@ -254,7 +254,8 @@ public class AdicionarComportamento extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ////Salva no BD
-                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
+                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(
+                                0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
                         try {
 
                             database.insertAnotacaoComportamento(newAnotacao);
@@ -265,6 +266,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                             String horaDefinida = dateTime.pegarHora();
                             String dataDefinida = dateTime.pegarData();
 
+                            database.setLastUpdateAnimal(idAnimal, dataDefinida+" "+horaDefinida);
                             salvarTxt(idAnimal, nomeAnimal, dataDefinida, horaDefinida, comportamento, obS);
 
                             //Verifica se o usuário quer receber a notificação
@@ -312,7 +314,6 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
 
-        DbRepository database = new DbRepository(getApplicationContext());
         Lote lote = database.getLote(idLote);
 
         try {

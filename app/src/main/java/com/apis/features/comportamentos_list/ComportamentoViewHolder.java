@@ -11,13 +11,15 @@ import com.apis.R;
 public class ComportamentoViewHolder extends RecyclerView.ViewHolder {
 
     final ConstraintLayout itemLista;
-    final TextView dataHora;
+    final TextView data;
+    final TextView hora;
     final TextView info;
 
     public ComportamentoViewHolder(View view) {
         super(view);
         itemLista = (ConstraintLayout) view.findViewById(R.id.itemListaComportamento);
-        dataHora = (TextView) view.findViewById(R.id.lbl_dataC);
+        data = (TextView) view.findViewById(R.id.lbl_dataC);
+        hora = view.findViewById(R.id.lbl_horaC);
         info = (TextView) view.findViewById(R.id.lbl_infoC);
     }
 

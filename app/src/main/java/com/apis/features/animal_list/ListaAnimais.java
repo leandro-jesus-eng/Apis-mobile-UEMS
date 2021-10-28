@@ -2,6 +2,7 @@ package com.apis.features.animal_list;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -78,6 +80,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         pegarDadosActivityPassada();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
@@ -99,6 +102,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void configurarLista(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
@@ -110,7 +114,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         }else {
             //Ordenação por anotação mais antiga padrão
             animais = database.getAnimais(idLote);
-            //animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
         }
 
@@ -184,6 +188,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);

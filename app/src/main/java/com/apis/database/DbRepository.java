@@ -1,7 +1,10 @@
 package com.apis.database;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.apis.database.DAOs.AnimalDao;
 import com.apis.database.DAOs.AnotacaoComportamentoDao;
@@ -28,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -105,46 +109,25 @@ public class DbRepository {
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<Animal> getAnimaisPorId(int idLote){
-        List<Animal> result = animalDao.getAnimaisLote(idLote);
-        ArrayList<Animal> animais = new ArrayList<>();
-        ArrayList<String> nomes = new ArrayList<>();
-        ArrayList<Integer> ids = new ArrayList<>();
+        List<Animal> animais = animalDao.getAnimaisLote(idLote);
 
-        for(Animal animal : result){
-            nomes.add(animal.getNome());
-            ids.add(animal.getId());
-        }
-        Collections.sort(ids);
-        for(int i=0; i < ids.size(); i++){
-            animais.add(new Animal(0, nomes.get(i), idLote, "Sem anotação!"));
-        }
-        setUpdateAnimais(animais);
+        Comparator<Animal> compareById = Comparator.comparing(Animal::getId);
+
+        Collections.sort(animais, compareById);
+
         return animais;
     }
 
     public List<Animal> getAnimaisPorOrdemDeAnotacao(List<Animal> animais){
-        setUpdateAnimais(animais);
         Collections.sort(animais);
-
         return animais;
     }
 
-    public void setUpdateAnimais(List<Animal> animais){
-        for(Animal animal : animais){
-            String dataHora;
+    public void setLastUpdateAnimal(int animalId, String lastUpdate){
+        animalDao.setLastUpdate(animalId, lastUpdate);
 
-            List<AnimalWithAnotacao> result = relationsDao.getAnimalWithAnotacao(animal.getId());
-            List<AnotacaoComportamento> anotacoes = result.get(0).anotacaoComportamentos;
-
-            dataHora = anotacoes.get(result.size() - 1).getData() + " " +anotacoes.get(result.size() - 1).getHora();
-
-            if(dataHora == null){
-                animal.setLastUpdate("Sem anotação!");
-            }else{
-                animal.setLastUpdate(dataHora);
-            }
-        }
     }
 
     public String getLastUpdateAnimal(Animal animal){

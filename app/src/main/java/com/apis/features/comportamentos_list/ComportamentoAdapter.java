@@ -39,10 +39,10 @@ public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoView
     @Override
     public void onBindViewHolder(ComportamentoViewHolder holder, final int position) {
 
-        holder.dataHora.setText(comportamentos.get(position).getData() +" "+comportamentos.get(position).getHora());
+        holder.hora.setText(comportamentos.get(position).getHora());
+        holder.data.setText(comportamentos.get(position).getData() );
         holder.info.setText("Obs: " +comportamentos.get(position).getObs());
 
-        final AnotacaoComportamento comportamento = comportamentos.get(position);
     }
 
     @Override
