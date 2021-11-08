@@ -33,6 +33,9 @@
     <string name="title_activity_adicionar_lote">Adicionar lote</string>
     <string name="title_activity_lista_animais">Lista de animais</string>
 
+    <!-- Edição de comportamentos -->
+    <string name="title_activity_edicao_comportamentos_padrao">Definir comportamentos padrão</string>
+
     <!-- Settings -->
     <string name="title_activity_settings">Configurações</string>
     <string-array name="settings_list_preference_titles">
@@ -90,6 +93,16 @@
     <string name="voltar_lista_de_lotes">Voltar à lista de lotes</string>
     <string name="voltar">Voltar</string>
     <string name="ordena_o_da_lista">Ordenação da lista</string>
+    <string name="title_activity_edicao_comportamento_padrao">EdicaoComportamentoPadraoActivity
+    </string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 
 </resources>

@@ -46,42 +46,48 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            >
 
             <RadioButton
                 android:id="@+id/radioPastej"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_pastejando" />
+                android:text="@string/lbl_pastejando"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioOP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_op" />
+                android:text="@string/lbl_op"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioOD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_od" />
+                android:text="@string/lbl_od"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioRumPe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_rumpe" />
+                android:text="@string/lbl_rumpe"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioRumDeit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_rumdei" />
+                android:text="@string/lbl_rumdei"
+                android:clickable="false"/>
 
         </RadioGroup>
 
@@ -94,7 +100,8 @@
             android:layout_marginTop="16dp"
             android:text="@string/comportamento_repro"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnGroupFisio" />
+            app:layout_constraintTop_toBottomOf="@+id/btnGroupFisio"
+            />
 
         <RadioGroup
             android:id="@+id/btnGroupRepro"
@@ -111,21 +118,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_acmonta" />
+                android:text="@string/lbl_acmonta"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioMontaOutra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_montaoutra" />
+                android:text="@string/lbl_montaoutra"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioInqueta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_inquieta" />
+                android:text="@string/lbl_inquieta"
+                android:clickable="false"/>
         </RadioGroup>
 
         <TextView
@@ -154,14 +164,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_sol" />
+                android:text="@string/lbl_sol"
+                android:clickable="false"/>
 
             <RadioButton
                 android:id="@+id/radioSombra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/lbl_sombra" />
+                android:text="@string/lbl_sombra"
+                android:clickable="false"/>
 
         </RadioGroup>
 
@@ -205,70 +217,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textObs" />
-
-        <ImageView
-            android:id="@+id/fundoCinza"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recyclerComportamento"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSalvar"
-            app:srcCompat="@color/gray" />
-
-        <TextView
-            android:id="@+id/lbl_comportamentos_reg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
-            android:text="Registros"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
-
-        <TextView
-            android:id="@+id/atualizadoEm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/transparent"
-            android:text="Atualizado às 13:48 04/01/2020"
-            android:textColor="@color/colorAccent"
-            android:textSize="12sp"
-            android:textStyle="normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_comportamentos_reg" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerComportamento"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@color/transparent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/atualizadoEm"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/btnExportarDados"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:text="Exportar"
-            app:layout_constraintEnd_toEndOf="@+id/fundoCinza"
-            app:layout_constraintTop_toTopOf="@+id/fundoCinza" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

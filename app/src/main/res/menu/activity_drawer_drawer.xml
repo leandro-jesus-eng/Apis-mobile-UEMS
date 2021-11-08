@@ -15,7 +15,7 @@
     <item android:title="Dados">
         <menu>
             <item
-                android:id="@+id/nav_preferencias"
+                android:id="@+id/nav_edicao_comportamentos"
                 android:icon="@drawable/prefs"
                 android:title="Comportamentos" />
             <item

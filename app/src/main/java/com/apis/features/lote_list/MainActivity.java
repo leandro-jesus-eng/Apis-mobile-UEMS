@@ -28,12 +28,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
+import com.apis.features.edicaoComportamento.EdicaoComportamentoPadrao;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
 import com.apis.models.Lote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -255,9 +256,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this, SettingsActivity.class);
             this.startActivity(intent);
 
-        }else if (id == R.id.nav_preferencias) {
-            //Intent intent = new Intent(this, ListaPreferencias.class);
-            //this.startActivity(intent);
+        }else if (id == R.id.nav_edicao_comportamentos) {
+            Intent intent = new Intent(this, EdicaoComportamentoPadrao.class);
+            this.startActivity(intent);
 
         }else if (id == R.id.nav_intro) {
             Intent intent = new Intent(this, IntroActivity.class);

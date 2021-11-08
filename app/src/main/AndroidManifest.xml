@@ -20,17 +20,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".features.others.IntroActivity"></activity>
+        <activity android:name=".features.others.IntroActivity" />
         <activity
             android:name=".features.others.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.comportamentosPersonalizados_list.ListaPreferencias" />
         <activity
             android:name=".features.others.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -46,8 +46,11 @@
         <activity
             android:name=".features.lote_list.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".features.edicaoComportamento.EdicaoComportamentoPadrao"
+            android:label="Definir comportamentos padrão"
+            android:theme="@style/AppTheme.NoActionBar" />
         <receiver
             android:name=".features.others.AlarmReceiver"
             android:process=":remote" />
