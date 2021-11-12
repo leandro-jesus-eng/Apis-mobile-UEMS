@@ -1,6 +1,7 @@
 package com.apis.features.edicaoComportamento;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import com.apis.R;
 import com.apis.features.animal_list.AnimalAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EditComportamentoPadrao extends AppCompatActivity {
@@ -28,24 +30,13 @@ public class EditComportamentoPadrao extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edicao_comportamento_padrao);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_edit_comportamento);
         Toolbar toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        List<String> lista = new ArrayList<>();
-        lista.add("Ola");
-        lista.add("Tudo bom?");
-        _adapter = new EditComportamentoAdapter(lista, this);
-        adapter = _adapter;
-
-        recyclerView.setAdapter(adapter);
-        LinearLayoutManager layout = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layout);
-
+        setRecycler();
+        
         text = findViewById(R.id.lbl_adicionar_comportamento);
 
         text.setOnClickListener(new View.OnClickListener() {
@@ -55,9 +46,19 @@ public class EditComportamentoPadrao extends AppCompatActivity {
                 lista.add("Ola");
                 lista.add("Tudo bom?");
                 adapter.submitList(lista);
+                getLayoutInflater();
             }
         });
 
+    }
+    private void setRecycler(){
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_edit_comportamento);
+        _adapter = new EditComportamentoAdapter(Collections.emptyList(), this);
+        adapter = _adapter;
+
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layout);
     }
 
     private void saveData(){

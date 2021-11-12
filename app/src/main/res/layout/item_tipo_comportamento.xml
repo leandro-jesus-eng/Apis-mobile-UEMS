@@ -33,9 +33,8 @@
             android:id="@+id/imgAddComportamento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/nomeTipo"
+            android:layout_below="@id/linearLayout"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/ic_baseline_add_24" />
@@ -44,11 +43,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgAddComportamento"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_margin="5dp"
+            android:layout_below="@id/nomeTipo"
             android:orientation="vertical" />
 
 

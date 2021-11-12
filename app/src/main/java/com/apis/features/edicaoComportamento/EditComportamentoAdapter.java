@@ -1,25 +1,15 @@
 package com.apis.features.edicaoComportamento;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
-import com.apis.database.DbRepository;
-import com.apis.features.animal_list.AnimalViewHolder;
-import com.apis.features.comportamentos_list.AdicionarComportamento;
-import com.apis.models.Animal;
 
 import java.util.List;
 
@@ -54,12 +44,19 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         holder.btnAdicionarComportamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RadioButton botao = new RadioButton(holder.linearLayout.getContext());
-                ViewGroup.LayoutParams lparams =
-                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                botao.setLayoutParams(lparams);
-                botao.setText("test");
-                holder.linearLayout.addView(botao);
+                final View comportamento = LayoutInflater.from(context).inflate(
+                        R.layout.item_comportamento_edit, holder.linearLayout, false
+                );
+                ImageButton deleteComportamento = (ImageButton) comportamento.findViewById(R.id.imgAddTipo);
+                holder.linearLayout.addView(comportamento);
+
+                deleteComportamento.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.linearLayout.removeView(comportamento);
+                    }
+                });
+
             }
         });
 
