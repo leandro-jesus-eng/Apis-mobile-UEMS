@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
+import com.apis.database.DbRepository;
 import com.apis.features.animal_list.AnimalAdapter;
+import com.apis.models.Comportamento;
+import com.apis.models.DateTime;
+import com.apis.models.FormularioComportamento;
+import com.apis.models.TipoComportamento;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,9 +30,14 @@ import java.util.List;
 
 public class EditComportamentoPadrao extends AppCompatActivity {
 
-    TextView text;
     EditComportamentoAdapter _adapter;
     EditComportamentoAdapter adapter;
+    DbRepository database;
+    static Boolean padrao = true;
+    List<TipoComportamento> lista = new ArrayList<>();
+
+    TextView textAdicionarTipo;
+    ImageButton imgAdicionarTipo;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,25 +47,23 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        setRecycler();
-        
-        text = findViewById(R.id.lbl_adicionar_comportamento);
+        textAdicionarTipo = findViewById(R.id.lbl_tipo_adicionar_comportamento);
+        imgAdicionarTipo = findViewById(R.id.imgAddTipo);
 
-        text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<String> lista = new ArrayList<>();
-                lista.add("Ola");
-                lista.add("Tudo bom?");
-                adapter.submitList(lista);
-                getLayoutInflater();
-            }
-        });
+        setRecycler();
+        setAddTipoClickListener();
+
+        if(padrao){
+            setPatternData();
+        }else{
+            setData();
+        }
+
 
     }
     private void setRecycler(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_edit_comportamento);
-        _adapter = new EditComportamentoAdapter(Collections.emptyList(), this);
+        _adapter = new EditComportamentoAdapter( this);
         adapter = _adapter;
 
         recyclerView.setAdapter(adapter);
@@ -61,30 +71,43 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         recyclerView.setLayoutManager(layout);
     }
 
-    private void saveData(){
+    private void setAddTipoClickListener(){
+        textAdicionarTipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.submitItem(new TipoComportamento(0, "", 0));
+            }
+        });
+
+        imgAdicionarTipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.submitItem(new TipoComportamento(0, "", 0));
+            }
+        });
 
     }
 
-    private void excluirComportamento(){
+    private void setPatternData(){
+        DateTime dateTime = new DateTime();
+        String dataCriacao = dateTime.pegarData() +" "+ dateTime.pegarHora();
 
-    }
-    private void updateComportamento(){
+        //FormularioComportamento formularioComportamento= new FormularioComportamento(0, dataCriacao, true, 0);
+        lista.add(new TipoComportamento(0, "Fisiológico", 0));
+        lista.add(new TipoComportamento(0, "Reprodutivo", 0));
+        lista.add(new TipoComportamento(0, "Uso da Sombra", 0));
 
-    }
-    private void adicionarComportamento(){
-
-    }
-
-    private void excluirTipo(){
-
-    }
-    private void adicionarTipo(){
-
-    }
-    private void updateTipo(){
-
+        adapter.submitList(lista);
     }
 
+    private void setData(){
+        adapter.submitList(lista);
+    }
+
+     public void saveData(View view){
+         padrao = false;
+         lista = adapter.getTipos();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

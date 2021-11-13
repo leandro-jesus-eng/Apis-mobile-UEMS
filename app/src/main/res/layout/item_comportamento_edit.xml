@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    >
 
     <RadioButton
         android:id="@+id/check"
@@ -11,18 +13,28 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:clickable="false"
-        android:text="@string/lbl_pastejando"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edNomeComportamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Adicione um comportamento"
+        app:layout_constraintBottom_toBottomOf="@+id/check"
+        app:layout_constraintStart_toEndOf="@+id/check"
+        android:inputType="textPersonName"
+        android:textSize="16sp"
+        android:maxLines="1"/>
 
     <ImageButton
         android:id="@+id/imgAddTipo"
         android:layout_width="31dp"
         android:layout_height="27dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/trash"
-        app:layout_constraintStart_toEndOf="@id/check"
+        app:layout_constraintStart_toEndOf="@+id/edNomeComportamento"
         app:layout_constraintTop_toTopOf="@+id/check" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

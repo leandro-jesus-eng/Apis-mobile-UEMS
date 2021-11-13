@@ -1,6 +1,8 @@
 package com.apis.features.edicaoComportamento;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +12,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
+import com.apis.models.TipoComportamento;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportamentoViewHolder> {
 
-    private List<String> tipos;
+    private List<TipoComportamento> tipos = new ArrayList<>();
+    private String textoAtual;
 
     private Context context;
 
-    public EditComportamentoAdapter(List tipos, Context context){
-        this.tipos = tipos;
+    public EditComportamentoAdapter(Context context){
         this.context = context;
     }
 
-    public void submitList(List<String> tiposNome){
-        tipos.addAll(tiposNome);
+    public List<TipoComportamento> getTipos() {
+        return tipos;
+    }
+
+    public void submitList(List<TipoComportamento> listTipos){
+        tipos.addAll(listTipos);
+        notifyDataSetChanged();
+    }
+    public void submitItem(TipoComportamento tipo){
+        tipos.add(tipo);
         notifyDataSetChanged();
     }
 
@@ -39,7 +51,28 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
     @Override
     public void onBindViewHolder(final EditComportamentoViewHolder holder, final int position){
-        holder.nomeTipo.setText(tipos.get(holder.getAdapterPosition()));
+        if(!holder.edNomeTipo.equals("")){
+            holder.edNomeTipo.setText(tipos.get(holder.getAdapterPosition()).getDescricao());
+        }
+        textoAtual = holder.edNomeTipo.getText().toString();
+
+        holder.edNomeTipo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                textoAtual = editable.toString();
+            }
+        });
+        tipos.get(holder.getAdapterPosition()).setDescricao(textoAtual);
 
         holder.btnAdicionarComportamento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +92,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
             }
         });
+
 
         holder.btnExcluirTipo.setOnClickListener(new View.OnClickListener() {
             @Override

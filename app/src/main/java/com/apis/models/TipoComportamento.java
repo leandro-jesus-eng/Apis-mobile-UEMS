@@ -13,7 +13,7 @@ public class TipoComportamento implements Serializable {
     final private int id;
 
     @ColumnInfo(name = "descricao")
-    final private String descricao;
+    private String descricao;
 
     final private int idFormularioComportamento;
 
@@ -26,4 +26,7 @@ public class TipoComportamento implements Serializable {
     public int getId() { return id;}
     public String getDescricao() { return descricao; }
     public int getIdFormularioComportamento() { return idFormularioComportamento; }
+    public void setDescricao(String novaDescricao){
+        this.descricao = novaDescricao;
+    }
 }
