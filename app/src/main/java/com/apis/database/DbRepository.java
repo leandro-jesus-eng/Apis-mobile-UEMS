@@ -172,12 +172,20 @@ public class DbRepository {
         return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
     }
 
+    public List<Comportamento> getAllComportamentos(){
+        return comportamentoDao.getAllComportamentos();
+    }
+
     public void insertComportamento(Comportamento comportamento){
         comportamentoDao.insertComportamento(comportamento);
     }
 
     public void insertTipoComportamento(TipoComportamento tipoComportamento){
         tipoComportamentoDao.insertTipo(tipoComportamento);
+    }
+
+    public void updateTipo(TipoComportamento tipoComportamento){
+        tipoComportamentoDao.updateTipo(tipoComportamento);
     }
 
     public List<TipoComportamento> getAllTipos(){

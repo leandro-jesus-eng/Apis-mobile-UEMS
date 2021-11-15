@@ -24,6 +24,9 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     private List<TipoComportamento> tipos = new ArrayList<>();
     private List<Comportamento> comportamentos = new ArrayList<>();
 
+    private List<TipoComportamento> tiposExcluidos = new ArrayList<>();
+    private List<Comportamento> comportamentosExcluidos = new ArrayList<>();
+
     private Context context;
 
     private DbRepository database = new DbRepository(context);
@@ -38,12 +41,26 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     public List<Comportamento> getComportamentos() {
         return this.comportamentos;
     }
+    public List<Comportamento> getComportamentosExcluidos() {
+        return this.comportamentosExcluidos;
+    }
+    public List<TipoComportamento> getTiposExcluidos() {
+        return this.tiposExcluidos;
+    }
 
-    public void submitList(List<TipoComportamento> listTipos){
+
+    public void submitTipoList(List<TipoComportamento> listTipos){
         tipos.clear();
         tipos.addAll(listTipos);
         notifyDataSetChanged();
     }
+
+    public void submitComportamentoList(List<Comportamento> listComportamentos){
+        comportamentos.clear();
+        comportamentos.addAll(listComportamentos);
+        notifyDataSetChanged();
+    }
+
     public void submitItem(TipoComportamento tipo){
         tipos.add(tipo);
         notifyDataSetChanged();
@@ -62,7 +79,13 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         if(!holder.edNomeTipo.equals("")){
             holder.edNomeTipo.setText(tipos.get(holder.getAdapterPosition()).getDescricao());
         }
-        /*
+
+        for (Comportamento comportamento : comportamentos) {
+            if (comportamento.getIdTipo() == tipos.get(holder.getAdapterPosition()).getId()) {
+                createComportamento(holder, holder.getAdapterPosition(), false);
+            }
+        }
+
         holder.edNomeTipo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -76,31 +99,14 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
             @Override
             public void afterTextChanged(Editable editable) {
-                textoAtual = editable.toString();
+               tipos.get(holder.getAdapterPosition()).setDescricao(editable.toString());
             }
         });
-
-         */
 
         holder.btnAdicionarComportamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final View comportamento = LayoutInflater.from(context).inflate(
-                        R.layout.item_comportamento_edit, holder.linearLayout, false
-                );
-
-                comportamentos.add(new Comportamento(0, "", tipos.get(holder.getAdapterPosition()).getId()));
-
-                ImageButton deleteComportamento = (ImageButton) comportamento.findViewById(R.id.imgAddTipo);
-                holder.linearLayout.addView(comportamento);
-
-                deleteComportamento.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        holder.linearLayout.removeView(comportamento);
-                    }
-                });
-
+                createComportamento(holder, holder.getAdapterPosition(), true);
             }
         });
 
@@ -108,13 +114,33 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         holder.btnExcluirTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database.excluirTipoComportamento(tipos.get(holder.getAdapterPosition()));
+                tiposExcluidos.add(tipos.get(holder.getAdapterPosition()));
                 tipos.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
             }
         });
     }
 
+    public void createComportamento(EditComportamentoViewHolder holder, int position, boolean novo){
+        View comportamento = LayoutInflater.from(context).inflate(
+                R.layout.item_comportamento_edit, holder.linearLayout, false
+        );
+
+        if(novo){
+            comportamentos.add(new Comportamento(0, "", tipos.get(position).getId()));
+        }
+
+        ImageButton deleteComportamento = (ImageButton) comportamento.findViewById(R.id.imgAddTipo);
+        holder.linearLayout.addView(comportamento);
+
+        deleteComportamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.linearLayout.removeView(comportamento);
+
+            }
+        });
+    }
     @Override
     public int getItemCount() {
         return tipos.size();

@@ -22,4 +22,7 @@ public interface ComportamentoDao {
     @Query("DELETE FROM tb_comportamento")
     void deleteAllComportamentos();
 
+    @Query("SELECT * FROM tb_comportamento")
+    List<Comportamento> getAllComportamentos();
+
 }

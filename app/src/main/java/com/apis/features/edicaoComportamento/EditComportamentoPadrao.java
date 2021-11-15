@@ -35,6 +35,7 @@ public class EditComportamentoPadrao extends AppCompatActivity {
     DbRepository database;
 
     List<TipoComportamento> listaTipos = new ArrayList<>();
+    List<TipoComportamento> listaTiposBackup = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
     FormularioComportamento formularioComportamento;
 
@@ -102,39 +103,64 @@ public class EditComportamentoPadrao extends AppCompatActivity {
 
     private void createPatternData(){
         formularioComportamento = database.getFormularioPadrao(true);
-        insertNewType("Fisiológico");
-        insertNewType("Reprodutivo");
-        insertNewType("Uso da Sombra");
-        insertNewType("Leitura");
+        insertNewType("Fisiológico", 0);
+        insertNewType("Reprodutivo", 0);
+        insertNewType("Uso da Sombra", 0);
     }
 
-    private void insertNewType(String descricao){
+    private void insertNewType(String descricao, int id){
+        boolean exist = false;
+
         for(TipoComportamento tipos :  database.getAllTipos()){
-            if(descricao.equals(tipos.getDescricao())){
-                break;
+            if(descricao.equals(tipos.getDescricao()) || tipos.getId() == id){
+                exist = true;
             }
         }
-        database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
+
+        if(exist){
+            for(TipoComportamento tipoComportamento : database.getAllTipos()){
+                if(tipoComportamento.getId() == id && tipoComportamento.getDescricao() != descricao){
+                    tipoComportamento.setDescricao(descricao);
+                    database.updateTipo(tipoComportamento);
+                }
+            }
+
+        }else{
+            database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
+        }
+
     }
 
     private void setData(){
         listaTipos = database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+        listaComportamentos = database.getAllComportamentos();
 
-        adapter.submitList(listaTipos);
+        adapter.submitTipoList(listaTipos);
+        adapter.submitComportamentoList(listaComportamentos);
     }
 
      public void saveData(View view){
          listaTipos = adapter.getTipos();
          listaComportamentos = adapter.getComportamentos();
+         List<Comportamento> listaComportamentosExcluidos = adapter.getComportamentosExcluidos();
+         List<TipoComportamento> listaTiposComportamentoExcluidos = adapter.getTiposExcluidos();
+
+         for(Comportamento comportamento : listaComportamentosExcluidos){
+             database.excluirComportamento(comportamento);
+         }
+
+         for(TipoComportamento tipoComportamento : listaTiposComportamentoExcluidos){
+             database.excluirTipoComportamento(tipoComportamento);
+         }
 
          for (TipoComportamento tipo : listaTipos) {
-             insertNewType(tipo.getDescricao());
+             insertNewType(tipo.getDescricao(), tipo.getId());
          }
 
          for (Comportamento comportamento : listaComportamentos) {
              database.insertComportamento(comportamento);
          }
-
+         Toast.makeText(getApplicationContext(), "Formulário salvo!", Toast.LENGTH_SHORT).show();
          finish();
     }
 
