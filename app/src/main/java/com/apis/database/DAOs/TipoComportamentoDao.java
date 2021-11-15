@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface TipoComportamentoDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTipo(TipoComportamento tipoComportamento);
 
     @Delete
@@ -26,7 +26,7 @@ public interface TipoComportamentoDao {
     @Query("SELECT * FROM tb_tipoComportamento WHERE id = :idTipo")
     TipoComportamento getTipo(int idTipo);
 
-    @Query("SELECT * FROM tb_tipoComportamento")
+    @Query("SELECT * FROM tb_tipoComportamento ORDER BY id ASC")
     List<TipoComportamento> getAllTipos();
 
 }

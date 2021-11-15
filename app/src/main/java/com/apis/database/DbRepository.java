@@ -65,7 +65,7 @@ public class DbRepository {
     }
 
     //Retorna Comportamentos de um Tipo
-    public List<TipoComportamentoWithComportamento> getTipoComportametnoWithComportamento(int idTipo){
+    public List<TipoComportamentoWithComportamento> getTipoComportamentoWithComportamento(int idTipo){
         return relationsDao.getTipoComportamentoWithComportamento(idTipo);
     }
 
@@ -180,8 +180,17 @@ public class DbRepository {
         tipoComportamentoDao.insertTipo(tipoComportamento);
     }
 
+    public List<TipoComportamento> getAllTipos(){
+        return tipoComportamentoDao.getAllTipos();
+    }
+
+
     public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
         formularioComportamentoDao.insertFormulario(formularioComportamento);
+    }
+
+    public FormularioComportamento getFormularioPadrao(boolean ehPadrao){
+        return formularioComportamentoDao.getFormulario(ehPadrao);
     }
 
     //Excluir

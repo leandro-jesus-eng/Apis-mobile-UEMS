@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface AnimalDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAnimal(Animal animal);
 
     @Delete

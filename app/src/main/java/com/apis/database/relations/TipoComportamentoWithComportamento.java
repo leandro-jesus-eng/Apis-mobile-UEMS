@@ -12,8 +12,8 @@ public class TipoComportamentoWithComportamento {
 
     @Embedded public TipoComportamento tipoComportamento;
     @Relation(
-            parentColumn = "descricao",
-            entityColumn = "descricaoTipo"
+            parentColumn = "id",
+            entityColumn = "idTipo"
     )
     public List<Comportamento> comportamentos;
 }

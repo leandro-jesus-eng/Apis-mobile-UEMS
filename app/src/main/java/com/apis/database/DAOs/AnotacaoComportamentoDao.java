@@ -17,7 +17,7 @@ import java.util.List;
 @Dao
 public interface AnotacaoComportamentoDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAnotacao(AnotacaoComportamento anotacaoComportamento);
 
     @Delete

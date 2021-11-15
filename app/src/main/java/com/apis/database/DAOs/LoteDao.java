@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface LoteDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLote(Lote lote);
 
     @Delete

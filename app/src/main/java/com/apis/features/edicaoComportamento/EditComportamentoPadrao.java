@@ -33,8 +33,10 @@ public class EditComportamentoPadrao extends AppCompatActivity {
     EditComportamentoAdapter _adapter;
     EditComportamentoAdapter adapter;
     DbRepository database;
-    static Boolean padrao = true;
-    List<TipoComportamento> lista = new ArrayList<>();
+
+    List<TipoComportamento> listaTipos = new ArrayList<>();
+    List<Comportamento> listaComportamentos = new ArrayList<>();
+    FormularioComportamento formularioComportamento;
 
     TextView textAdicionarTipo;
     ImageButton imgAdicionarTipo;
@@ -47,19 +49,25 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        database = new DbRepository(getApplicationContext());
+
+        if(database.getFormularioPadrao(true) == null){
+            DateTime dateTime = new DateTime();
+            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+
+            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            createPatternData();
+        }
+
+        formularioComportamento = database.getFormularioPadrao(true);
+
         textAdicionarTipo = findViewById(R.id.lbl_tipo_adicionar_comportamento);
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
 
         setRecycler();
         setAddTipoClickListener();
 
-        if(padrao){
-            setPatternData();
-        }else{
-            setData();
-        }
-
-
+        setData();
     }
     private void setRecycler(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_edit_comportamento);
@@ -75,39 +83,62 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         textAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.submitItem(new TipoComportamento(0, "", 0));
+                database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
+
+                adapter.submitItem(database.getAllTipos().get(database.getAllTipos().size() - 1));
             }
         });
 
         imgAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.submitItem(new TipoComportamento(0, "", 0));
+                database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
+
+                adapter.submitItem(database.getAllTipos().get(database.getAllTipos().size() - 1));
             }
         });
 
     }
 
-    private void setPatternData(){
-        DateTime dateTime = new DateTime();
-        String dataCriacao = dateTime.pegarData() +" "+ dateTime.pegarHora();
+    private void createPatternData(){
+        formularioComportamento = database.getFormularioPadrao(true);
+        insertNewType("Fisiológico");
+        insertNewType("Reprodutivo");
+        insertNewType("Uso da Sombra");
+        insertNewType("Leitura");
+    }
 
-        //FormularioComportamento formularioComportamento= new FormularioComportamento(0, dataCriacao, true, 0);
-        lista.add(new TipoComportamento(0, "Fisiológico", 0));
-        lista.add(new TipoComportamento(0, "Reprodutivo", 0));
-        lista.add(new TipoComportamento(0, "Uso da Sombra", 0));
-
-        adapter.submitList(lista);
+    private void insertNewType(String descricao){
+        for(TipoComportamento tipos :  database.getAllTipos()){
+            if(descricao.equals(tipos.getDescricao())){
+                break;
+            }
+        }
+        database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
     }
 
     private void setData(){
-        adapter.submitList(lista);
+        listaTipos = database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+
+        adapter.submitList(listaTipos);
     }
 
      public void saveData(View view){
-         padrao = false;
-         lista = adapter.getTipos();
+         listaTipos = adapter.getTipos();
+         listaComportamentos = adapter.getComportamentos();
+
+         for (TipoComportamento tipo : listaTipos) {
+             insertNewType(tipo.getDescricao());
+         }
+
+         for (Comportamento comportamento : listaComportamentos) {
+             database.insertComportamento(comportamento);
+         }
+
+         finish();
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

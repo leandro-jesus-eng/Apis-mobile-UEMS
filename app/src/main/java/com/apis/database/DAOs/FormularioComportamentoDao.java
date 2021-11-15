@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface FormularioComportamentoDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFormulario(FormularioComportamento formularioComportamento);
 
     @Delete
@@ -25,5 +25,8 @@ public interface FormularioComportamentoDao {
 
     @Query("SELECT * FROM tb_formularioComportamento WHERE id = :idFormulario")
     FormularioComportamento getFormulario(int idFormulario);
+
+    @Query("SELECT * FROM tb_formularioComportamento WHERE formularioPadrao = :ehPadrao")
+    FormularioComportamento getFormulario(boolean ehPadrao);
 
 }

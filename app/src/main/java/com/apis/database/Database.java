@@ -24,7 +24,7 @@ import com.apis.models.TipoComportamento;
         TipoComportamento.class,
         Comportamento.class,
         AnotacaoComportamento.class,
-}, version = 1, exportSchema = false)
+}, version = 2, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
     public abstract AnimalDao animalDao();

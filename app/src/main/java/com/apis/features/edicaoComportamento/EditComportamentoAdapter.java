@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
+import com.apis.database.DbRepository;
+import com.apis.models.Comportamento;
 import com.apis.models.TipoComportamento;
 
 import java.util.ArrayList;
@@ -20,19 +22,25 @@ import java.util.List;
 public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportamentoViewHolder> {
 
     private List<TipoComportamento> tipos = new ArrayList<>();
-    private String textoAtual;
+    private List<Comportamento> comportamentos = new ArrayList<>();
 
     private Context context;
+
+    private DbRepository database = new DbRepository(context);
 
     public EditComportamentoAdapter(Context context){
         this.context = context;
     }
 
     public List<TipoComportamento> getTipos() {
-        return tipos;
+        return this.tipos;
+    }
+    public List<Comportamento> getComportamentos() {
+        return this.comportamentos;
     }
 
     public void submitList(List<TipoComportamento> listTipos){
+        tipos.clear();
         tipos.addAll(listTipos);
         notifyDataSetChanged();
     }
@@ -54,8 +62,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         if(!holder.edNomeTipo.equals("")){
             holder.edNomeTipo.setText(tipos.get(holder.getAdapterPosition()).getDescricao());
         }
-        textoAtual = holder.edNomeTipo.getText().toString();
-
+        /*
         holder.edNomeTipo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -72,7 +79,8 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
                 textoAtual = editable.toString();
             }
         });
-        tipos.get(holder.getAdapterPosition()).setDescricao(textoAtual);
+
+         */
 
         holder.btnAdicionarComportamento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +88,9 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
                 final View comportamento = LayoutInflater.from(context).inflate(
                         R.layout.item_comportamento_edit, holder.linearLayout, false
                 );
+
+                comportamentos.add(new Comportamento(0, "", tipos.get(holder.getAdapterPosition()).getId()));
+
                 ImageButton deleteComportamento = (ImageButton) comportamento.findViewById(R.id.imgAddTipo);
                 holder.linearLayout.addView(comportamento);
 
@@ -97,6 +108,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         holder.btnExcluirTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                database.excluirTipoComportamento(tipos.get(holder.getAdapterPosition()));
                 tipos.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
             }

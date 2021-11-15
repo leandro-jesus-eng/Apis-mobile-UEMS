@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface ComportamentoDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertComportamento(Comportamento comportamento);
 
     @Delete
