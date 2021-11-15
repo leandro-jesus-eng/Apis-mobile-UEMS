@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -82,7 +83,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
         for (Comportamento comportamento : comportamentos) {
             if (comportamento.getIdTipo() == tipos.get(holder.getAdapterPosition()).getId()) {
-                createComportamento(holder, holder.getAdapterPosition(), false);
+                createComportamento(holder, holder.getAdapterPosition(), false, comportamento.getNome());
             }
         }
 
@@ -106,7 +107,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         holder.btnAdicionarComportamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createComportamento(holder, holder.getAdapterPosition(), true);
+                createComportamento(holder, holder.getAdapterPosition(), true, "");
             }
         });
 
@@ -121,14 +122,36 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         });
     }
 
-    public void createComportamento(EditComportamentoViewHolder holder, int position, boolean novo){
+    public void createComportamento(
+            EditComportamentoViewHolder holder, int position, boolean novo, String nome){
+
         View comportamento = LayoutInflater.from(context).inflate(
                 R.layout.item_comportamento_edit, holder.linearLayout, false
         );
+        EditText edNomeComportamento = comportamento.findViewById(R.id.edNomeComportamento);
 
         if(novo){
             comportamentos.add(new Comportamento(0, "", tipos.get(position).getId()));
+        }else {
+            edNomeComportamento.setText(nome);
         }
+
+        edNomeComportamento.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                comportamentos.get(holder.getAdapterPosition()).setNome(editable.toString());
+            }
+        });
 
         ImageButton deleteComportamento = (ImageButton) comportamento.findViewById(R.id.imgAddTipo);
         holder.linearLayout.addView(comportamento);

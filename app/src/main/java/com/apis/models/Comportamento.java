@@ -12,7 +12,7 @@ public class Comportamento implements Serializable {
     final private int id;
 
     @ColumnInfo(name = "nome")
-    final private String nome;
+    private String nome;
 
     @ColumnInfo(name = "idTipo")
     final private int idTipo;
@@ -26,6 +26,7 @@ public class Comportamento implements Serializable {
     public int getId() { return id; }
     public String getNome(){return nome;}
     public int getIdTipo() { return idTipo; }
+    public void setNome(String nome){this.nome = nome;}
 
     @Override
     public boolean equals(Object o){

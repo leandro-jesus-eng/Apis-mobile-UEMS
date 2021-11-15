@@ -106,6 +106,28 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         insertNewType("Fisiológico", 0);
         insertNewType("Reprodutivo", 0);
         insertNewType("Uso da Sombra", 0);
+
+        for(TipoComportamento tipoComportamento : database.getAllTipos()){
+            switch (tipoComportamento.getDescricao()){
+                case "Fisiológico":
+                    insertNewComportamento("Pastejando", 0, tipoComportamento.getId());
+                    insertNewComportamento("Ociosa em pé", 0, tipoComportamento.getId());
+                    insertNewComportamento("Ociosa deitada", 0, tipoComportamento.getId());
+                    insertNewComportamento("Ruminando em pé", 0, tipoComportamento.getId());
+                    insertNewComportamento("Ruminando em deitada", 0, tipoComportamento.getId());
+                    break;
+                case "Reprodutivo":
+                    insertNewComportamento("Aceita de monta", 0, tipoComportamento.getId());
+                    insertNewComportamento("Monta outra", 0, tipoComportamento.getId());
+                    insertNewComportamento("Inquieta", 0, tipoComportamento.getId());
+                    break;
+                case "Uso da Sombra":
+                    insertNewComportamento("Sol", 0, tipoComportamento.getId());
+                    insertNewComportamento("Sombra", 0, tipoComportamento.getId());
+
+                    break;
+            }
+        }
     }
 
     private void insertNewType(String descricao, int id){
@@ -127,6 +149,28 @@ public class EditComportamentoPadrao extends AppCompatActivity {
 
         }else{
             database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
+        }
+
+    }
+
+    private void insertNewComportamento(String nome, int id, int tipoId){
+        boolean exist = false;
+
+        for(Comportamento comportamento :  database.getAllComportamentos()){
+            if(nome.equals(comportamento.getNome()) || comportamento.getId() == id){
+                exist = true;
+            }
+        }
+
+        if(exist){
+            for(Comportamento comportamento : database.getAllComportamentos()){
+                if(comportamento.getId() == id && comportamento.getNome() != nome){
+                    comportamento.setNome(nome);
+                    database.updateComportamento(comportamento);
+                }
+            }
+        }else{
+            database.insertComportamento(new Comportamento(id, nome, tipoId));
         }
 
     }

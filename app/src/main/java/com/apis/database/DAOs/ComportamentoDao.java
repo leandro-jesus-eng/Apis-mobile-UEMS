@@ -5,6 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
+
 import com.apis.models.Comportamento;
 import com.apis.models.TipoComportamento;
 
@@ -24,5 +26,8 @@ public interface ComportamentoDao {
 
     @Query("SELECT * FROM tb_comportamento")
     List<Comportamento> getAllComportamentos();
+
+    @Update
+    void updateComportamento(Comportamento comportamento);
 
 }

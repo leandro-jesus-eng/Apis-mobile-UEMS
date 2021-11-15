@@ -184,6 +184,10 @@ public class DbRepository {
         tipoComportamentoDao.insertTipo(tipoComportamento);
     }
 
+    public void updateComportamento(Comportamento comportamento){
+        comportamentoDao.updateComportamento(comportamento);
+    }
+
     public void updateTipo(TipoComportamento tipoComportamento){
         tipoComportamentoDao.updateTipo(tipoComportamento);
     }
