@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +30,6 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     private List<Comportamento> comportamentosExcluidos = new ArrayList<>();
 
     private Context context;
-
-    private DbRepository database = new DbRepository(context);
 
     public EditComportamentoAdapter(Context context){
         this.context = context;
@@ -137,6 +136,8 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         }
 
         edNomeComportamento.addTextChangedListener(new TextWatcher() {
+            Comportamento comportamento = findComportamentoByName(
+                    edNomeComportamento.getText().toString());
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -149,7 +150,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
             @Override
             public void afterTextChanged(Editable editable) {
-                comportamentos.get(holder.getAdapterPosition()).setNome(editable.toString());
+                comportamento.setNome(editable.toString());
             }
         });
 
@@ -160,9 +161,22 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
             @Override
             public void onClick(View view) {
                 holder.linearLayout.removeView(comportamento);
-
+                comportamentosExcluidos.add(
+                        findComportamentoByName(edNomeComportamento.getText().toString()));
+                comportamentos.remove(
+                        findComportamentoByName(edNomeComportamento.getText().toString()));
             }
         });
+    }
+
+    private Comportamento findComportamentoByName(String nome){
+
+        for(Comportamento comportamento : comportamentos){
+            if(comportamento.getNome().equals(nome)){
+                return comportamento;
+            }
+        }
+        return null;
     }
     @Override
     public int getItemCount() {
