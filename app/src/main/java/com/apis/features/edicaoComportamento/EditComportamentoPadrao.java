@@ -35,7 +35,6 @@ public class EditComportamentoPadrao extends AppCompatActivity {
     DbRepository database;
 
     List<TipoComportamento> listaTipos = new ArrayList<>();
-    List<TipoComportamento> listaTiposBackup = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
     FormularioComportamento formularioComportamento;
 

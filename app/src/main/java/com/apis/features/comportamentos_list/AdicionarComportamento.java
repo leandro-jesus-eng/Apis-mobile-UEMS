@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +33,13 @@ import com.apis.database.relations.AnimalWithAnotacao;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
+import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FileControl;
+import com.apis.models.FormularioComportamento;
 import com.apis.models.Lote;
+import com.apis.models.TipoComportamento;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,6 +61,8 @@ public class AdicionarComportamento extends AppCompatActivity {
     private DateTime dateTime = new DateTime();
     DbRepository database = new DbRepository(this);
 
+    LinearLayout layout;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +74,14 @@ public class AdicionarComportamento extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        layout = findViewById(R.id.linearLayoutAddComp);
         pegarDadosActivityPassada();
         pegarUltimaAtualizacao();
         configurarListaComportamentos();
+        setList();
 
         getSupportActionBar().setTitle(nomeAnimal);
+
 
         //Arquivo de comportamentos temporarios
         FileControl fc = new FileControl(getApplicationContext());
@@ -80,7 +91,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         Button btnSalvar = (Button) findViewById(R.id.btnSalvar);
         btnSalvar.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                salvarDados();
+                //salvarDados();
             }
         });
 
@@ -91,8 +102,43 @@ public class AdicionarComportamento extends AppCompatActivity {
                 exportarDados();
             }
         });
+    }
 
+    private void setList(){
+        FormularioComportamento formularioComportamento = database.getFormularioPadrao(true);
+        List<Comportamento> comportamentos = database.getAllComportamentos();
+        List<TipoComportamento> tiposComportamento =
+                database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
+        for(TipoComportamento tipoComportamento : tiposComportamento) {
+            createTextView(tipoComportamento.getDescricao());
+
+            for(Comportamento comportamento : comportamentos){
+                if(comportamento.getIdTipo() == tipoComportamento.getId()){
+                    createCheckListView(comportamento.getNome());
+                }
+            }
+        }
+    }
+
+    private void createTextView(String texto){
+        TextView textTipoComportamento = new TextView(this);
+        textTipoComportamento.setText(texto);
+        textTipoComportamento.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        layout.addView(textTipoComportamento);
+    }
+
+    private void createCheckListView(String texto){
+        RadioButton checkComportamento = new RadioButton(this);
+        checkComportamento.setText(texto);
+        checkComportamento.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        layout.addView(checkComportamento);
     }
 
     public void exportarDados() {
@@ -173,7 +219,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         }
 
     }
-
+    /*
     public void salvarDados(){
 
         ///Pega os dados
@@ -309,7 +355,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         alert.show();
 
     }
-
+*/
     public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){
 
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
