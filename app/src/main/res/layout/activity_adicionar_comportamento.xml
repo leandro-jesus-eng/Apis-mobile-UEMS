@@ -47,23 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/linearLayoutAddComp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="It uses 96 bateries">
-
-                </TextView>
-            </LinearLayout>
-
             <!--
             <TextView
                 android:id="@+id/lbl_adicionar_comportamento"
@@ -226,47 +209,61 @@
                 android:text="@string/lbl_observacoes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnGroupSombra" />
+-->
+            <LinearLayout
+                android:id="@+id/linearLayoutAddComp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/btnSalvar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.151">
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/textObs"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="64dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:ems="10"
+                android:hint="Observações"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
-    -->
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutAddComp" />
+
             <Button
                 android:id="@+id/btnSalvar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:text="@string/btn_salvar"
                 android:textColorLink="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutAddComp" />
+                app:layout_constraintTop_toBottomOf="@id/textObs" />
 
             <ImageView
                 android:id="@+id/fundoCinza"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="@+id/recyclerComportamento"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnSalvar"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@color/gray" />
 
             <TextView
@@ -274,13 +271,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="32dp"
                 android:text="Registros"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
+                tools:layout_editor_absoluteY="96dp"
+                app:layout_constraintTop_toTopOf="@id/fundoCinza"/>
 
             <TextView
                 android:id="@+id/atualizadoEm"

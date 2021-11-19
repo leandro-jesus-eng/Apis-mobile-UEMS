@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -54,11 +55,10 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String nomeLote;
     private int idAnimal;
     private int idLote;
-
     private String comportamento = "";
     private String obS = "";
-
     private DateTime dateTime = new DateTime();
+    private List<CheckBox> listComportamentoView = new ArrayList();
     DbRepository database = new DbRepository(this);
 
     LinearLayout layout;
@@ -91,7 +91,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         Button btnSalvar = (Button) findViewById(R.id.btnSalvar);
         btnSalvar.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //salvarDados();
+                salvarDados();
             }
         });
 
@@ -132,13 +132,14 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     private void createCheckListView(String texto){
-        RadioButton checkComportamento = new RadioButton(this);
+        CheckBox checkComportamento = new CheckBox(this);
         checkComportamento.setText(texto);
         checkComportamento.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
         layout.addView(checkComportamento);
+        listComportamentoView.add(checkComportamento);
     }
 
     public void exportarDados() {
@@ -219,9 +220,9 @@ public class AdicionarComportamento extends AppCompatActivity {
         }
 
     }
-    /*
-    public void salvarDados(){
 
+    public void salvarDados(){
+        /*
         ///Pega os dados
         RadioGroup btnGroupFisio = (RadioGroup) findViewById(R.id.btnGroupFisio);
         switch (btnGroupFisio.getCheckedRadioButtonId()) {
@@ -272,6 +273,14 @@ public class AdicionarComportamento extends AppCompatActivity {
             default:
                 comportamento +=  ";";
                 break;
+        }
+
+
+         */
+        for (CheckBox viewComportamento : listComportamentoView){
+            if(viewComportamento.isChecked()){
+                comportamento += viewComportamento.getText()+";" ;
+            }
         }
 
         EditText txtObs = (EditText) findViewById(R.id.textObs);
@@ -355,7 +364,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         alert.show();
 
     }
-*/
+
     public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){
 
         String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
