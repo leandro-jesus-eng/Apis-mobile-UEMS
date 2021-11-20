@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.features.edicaoComportamento.EditComportamentoPadrao;
+import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
 import com.apis.models.Lote;
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.startActivity(intent);
 
         }else if (id == R.id.nav_edicao_comportamentos) {
-            Intent intent = new Intent(this, EditComportamentoPadrao.class);
+            Intent intent = new Intent(this, EditComportamento.class);
             this.startActivity(intent);
 
         }else if (id == R.id.nav_intro) {

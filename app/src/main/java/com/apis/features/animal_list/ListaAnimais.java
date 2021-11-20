@@ -2,6 +2,7 @@ package com.apis.features.animal_list;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
 import com.apis.database.DbRepository;
+import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.models.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -225,7 +227,14 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por identificação!", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.voltar){
+            finish();
         }else{
+            Intent intent = new Intent(getApplicationContext(), EditComportamento.class);
+            intent.putExtra("edit_comp_lote", true);
+            intent.putExtra("lote_id", idLote);
+            intent.putExtra("lote_nome", nomeLote);
+            startActivity(intent);
             finish();
         }
         recyclerView.setAdapter(new AnimalAdapter(animais, this));

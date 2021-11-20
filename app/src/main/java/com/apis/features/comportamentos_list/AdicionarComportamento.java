@@ -59,8 +59,8 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String obS = "";
     private DateTime dateTime = new DateTime();
     private List<CheckBox> listComportamentoView = new ArrayList();
-    DbRepository database = new DbRepository(this);
 
+    DbRepository database = new DbRepository(this);
     LinearLayout layout;
 
     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -27,6 +27,16 @@
         </menu>
     </item>
 
+    <item android:title="@string/edi_o_de_comportamentos">
+        <menu>
+            <item
+                android:id="@+id/edit_comportamento_lote"
+                android:orderInCategory="100"
+                android:title= "@string/alterar_comportamentos_deste_lote"/>
+                <!-- android:icon="@drawable/cow_white" -->
+        </menu>
+    </item>
+
     <item android:title="@string/voltar">
         <menu>
             <item
@@ -36,5 +46,4 @@
                 android:icon="@drawable/ic_baseline_arrow_back_24"/>
         </menu>
     </item>
-
 </menu>

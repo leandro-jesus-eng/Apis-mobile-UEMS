@@ -1,5 +1,6 @@
 package com.apis.features.edicaoComportamento;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.animal_list.AnimalAdapter;
+import com.apis.features.animal_list.ListaAnimais;
 import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
 import com.apis.models.FormularioComportamento;
@@ -28,11 +30,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EditComportamentoPadrao extends AppCompatActivity {
+public class EditComportamento extends AppCompatActivity {
 
     EditComportamentoAdapter _adapter;
     EditComportamentoAdapter adapter;
     DbRepository database;
+    int idLote;
+    boolean edit_comp_lote;
+    String nomeLote;
 
     List<TipoComportamento> listaTipos = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
@@ -64,11 +69,23 @@ public class EditComportamentoPadrao extends AppCompatActivity {
         textAdicionarTipo = findViewById(R.id.lbl_tipo_adicionar_comportamento);
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
 
+        if (
+                getIntent().hasExtra("lote_id")
+                && getIntent().hasExtra("edit_comp_lote")
+                && getIntent().hasExtra("lote_nome")){
+
+            idLote = getIntent().getIntExtra("lote_id", 9999);
+            edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
+            nomeLote = getIntent().getStringExtra("lote_nome");
+            Toast.makeText(getApplicationContext(), "Pego do lote", Toast.LENGTH_SHORT).show();
+        }
+
         setRecycler();
         setAddTipoClickListener();
 
         setData();
     }
+
     private void setRecycler(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_edit_comportamento);
         _adapter = new EditComportamentoAdapter( this);
@@ -212,6 +229,12 @@ public class EditComportamentoPadrao extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(edit_comp_lote){
+                    Intent intent = new Intent(getApplicationContext(), ListaAnimais.class);
+                    intent.putExtra("lote_nome", nomeLote);
+                    intent.putExtra("lote_id",idLote);
+                    startActivity(intent);
+                }
                 finish();
                 break;
             default:break;
