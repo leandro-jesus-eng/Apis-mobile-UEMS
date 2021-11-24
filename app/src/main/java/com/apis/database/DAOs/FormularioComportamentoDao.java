@@ -23,10 +23,10 @@ public interface FormularioComportamentoDao {
     @Query("DELETE FROM tb_formularioComportamento")
     void deleteAllFormularios();
 
-    @Query("SELECT * FROM tb_formularioComportamento WHERE id = :idFormulario")
-    FormularioComportamento getFormulario(int idFormulario);
+    @Query("SELECT * FROM tb_formularioComportamento WHERE loteId = :loteId")
+    FormularioComportamento getFormulario(int loteId);
 
     @Query("SELECT * FROM tb_formularioComportamento WHERE formularioPadrao = :ehPadrao")
-    FormularioComportamento getFormulario(boolean ehPadrao);
+    FormularioComportamento getFormularioPadrao(boolean ehPadrao);
 
 }

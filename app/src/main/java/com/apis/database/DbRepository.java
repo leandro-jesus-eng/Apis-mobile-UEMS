@@ -176,6 +176,14 @@ public class DbRepository {
         return comportamentoDao.getAllComportamentos();
     }
 
+    public TipoComportamento getTipo(int id){
+        return tipoComportamentoDao.getTipo(id);
+    }
+
+    public Comportamento getComportamento(int id){
+        return comportamentoDao.getComportamento(id);
+    }
+
     public void insertComportamento(Comportamento comportamento){
         comportamentoDao.insertComportamento(comportamento);
     }
@@ -202,7 +210,11 @@ public class DbRepository {
     }
 
     public FormularioComportamento getFormularioPadrao(boolean ehPadrao){
-        return formularioComportamentoDao.getFormulario(ehPadrao);
+        return formularioComportamentoDao.getFormularioPadrao(ehPadrao);
+    }
+
+    public FormularioComportamento getFormulario(int id){
+        return formularioComportamentoDao.getFormulario(id);
     }
 
     //Excluir

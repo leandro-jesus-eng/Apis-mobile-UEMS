@@ -27,6 +27,9 @@ public interface ComportamentoDao {
     @Query("SELECT * FROM tb_comportamento")
     List<Comportamento> getAllComportamentos();
 
+    @Query("SELECT * FROM tb_comportamento WHERE idTipo =:idTipo")
+    Comportamento getComportamento(int idTipo);
+
     @Update
     void updateComportamento(Comportamento comportamento);
 
