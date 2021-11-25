@@ -57,7 +57,7 @@ public class DbRepository {
         relationsDao = Database.getInstance(ctx).relationsDao();
     }
 
-    //RELATIONS
+    //--RELATIONS---------------------------------------------------------------------------------//
 
     //Retorna Anotações de um animal
     public List<AnimalWithAnotacao> getAnimalWithAnotacao(int idAnimal){
@@ -84,7 +84,7 @@ public class DbRepository {
         return relationsDao.getLoteAndFormulario(idLote);
     }
 
-    //ANIMAIS
+    //--ANIMAIS-----------------------------------------------------------------------------------//
 
     public List<Animal> getAnimais(int idLote){
         return animalDao.getAnimaisLote(idLote);
@@ -134,7 +134,11 @@ public class DbRepository {
         return animal.getLastUpdate();
     }
 
-    //LOTES
+    public void excluirAnimal(Animal animal){
+        animalDao.deleteAnimal(animal);
+    }
+
+    //--LOTES-------------------------------------------------------------------------------------//
     public void insertLote(Lote lote){
         loteDao.insertLote(lote);
     }
@@ -163,22 +167,11 @@ public class DbRepository {
         return result.getNome();
     }
 
-    //COMPORTAMENTOS E AFINS
-    public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
-        anotacaoComportamentoDao.insertAnotacao(anotacao);
+    public void excluirLote(Lote lote){
+        loteDao.deleteLote(lote);
     }
 
-    public List<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
-        return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
-    }
-
-    public List<Comportamento> getAllComportamentos(){
-        return comportamentoDao.getAllComportamentos();
-    }
-
-    public TipoComportamento getTipo(int id){
-        return tipoComportamentoDao.getTipo(id);
-    }
+    //--COMPORTAMENTOS----------------------------------------------------------------------------//
 
     public Comportamento getComportamento(int idTipo){
         return comportamentoDao.getComportamento(idTipo);
@@ -188,12 +181,22 @@ public class DbRepository {
         comportamentoDao.insertComportamento(comportamento);
     }
 
-    public void insertTipoComportamento(TipoComportamento tipoComportamento){
-        tipoComportamentoDao.insertTipo(tipoComportamento);
-    }
-
     public void updateComportamento(Comportamento comportamento){
         comportamentoDao.updateComportamento(comportamento);
+    }
+
+    public void excluirComportamento(Comportamento comportamento){
+        comportamentoDao.deleteComportamento(comportamento);
+    }
+
+    //--TIPO_COMPORTAMENTOS-----------------------------------------------------------------------//
+
+    public TipoComportamento getTipo(int id){
+        return tipoComportamentoDao.getTipo(id);
+    }
+
+    public void insertTipoComportamento(TipoComportamento tipoComportamento){
+        tipoComportamentoDao.insertTipo(tipoComportamento);
     }
 
     public void updateTipo(TipoComportamento tipoComportamento){
@@ -204,6 +207,11 @@ public class DbRepository {
         return tipoComportamentoDao.getAllTipos();
     }
 
+    public void excluirTipoComportamento(TipoComportamento tipoComportamento){
+        tipoComportamentoDao.deleteTipo(tipoComportamento);
+    }
+
+    //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
 
     public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
         formularioComportamentoDao.insertFormulario(formularioComportamento);
@@ -217,42 +225,35 @@ public class DbRepository {
         return formularioComportamentoDao.getFormulario(id);
     }
 
-    //Excluir
-    public void excluirAnimal(Animal animal){
-        animalDao.deleteAnimal(animal);
+    public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
+        formularioComportamentoDao.deleteFormulario(formularioComportamento);
     }
 
-    public void excluirLote(Lote lote){
-        loteDao.deleteLote(lote);
+    //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//
+    public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
+        anotacaoComportamentoDao.insertAnotacao(anotacao);
     }
 
-    public void excluirTipoComportamento(TipoComportamento tipoComportamento){
-        tipoComportamentoDao.deleteTipo(tipoComportamento);
+    public List<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
+        return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
+    }
+
+    public List<Comportamento> getAllComportamentos(){
+        return comportamentoDao.getAllComportamentos();
     }
 
     public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
         anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
     }
 
-    public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
-        formularioComportamentoDao.deleteFormulario(formularioComportamento);
-    }
-
-    public void excluirComportamento(Comportamento comportamento){
-        comportamentoDao.deleteComportamento(comportamento);
-    }
+    //--EXCLUIR_TUDO------------------------------------------------------------------------------//
 
     public boolean excluirTudo() {
         animalDao.deleteAllAnimais();
-
         loteDao.deleteAllLotes();
-
         tipoComportamentoDao.deleteAllTipos();
-
         anotacaoComportamentoDao.deleteAllAnotacoes();
-
         formularioComportamentoDao.deleteAllFormularios();
-
         comportamentoDao.deleteAllComportamentos();
 
         FileControl fc = new FileControl(context);
@@ -261,7 +262,8 @@ public class DbRepository {
         return true;
     }
 
-    //Exportar dados
+    //--EXPORTAR_DADOS----------------------------------------------------------------------------//
+
     public boolean exportarDados(int idLote, int idAnimal){
 
         Lote lote = loteDao.getLote(idLote);
