@@ -63,7 +63,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
     public void submitItem(TipoComportamento tipo){
         tipos.add(tipo);
-        notifyDataSetChanged();
+        notifyItemInserted(getItemCount() - 1);
     }
 
     @NonNull

@@ -105,7 +105,14 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     private void setList(){
-        FormularioComportamento formularioComportamento = database.getFormularioPadrao(true);
+        FormularioComportamento formularioComportamento;
+
+        if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
+            formularioComportamento = database.getFormularioPadrao(true);
+        }else{
+            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
+        }
+
         List<Comportamento> comportamentos = database.getAllComportamentos();
         List<TipoComportamento> tiposComportamento =
                 database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;

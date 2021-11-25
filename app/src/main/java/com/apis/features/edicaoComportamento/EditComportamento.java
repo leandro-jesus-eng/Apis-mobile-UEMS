@@ -2,24 +2,19 @@ package com.apis.features.edicaoComportamento;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.features.animal_list.AnimalAdapter;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.models.Comportamento;
 import com.apis.models.DateTime;
@@ -27,7 +22,6 @@ import com.apis.models.FormularioComportamento;
 import com.apis.models.TipoComportamento;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class EditComportamento extends AppCompatActivity {
@@ -48,7 +42,7 @@ public class EditComportamento extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edicao_comportamento_padrao);
+        setContentView(R.layout.activity_edicao_comportamento);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,10 +52,17 @@ public class EditComportamento extends AppCompatActivity {
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
         database = new DbRepository(getApplicationContext());
 
-        if (
+        if(database.getFormularioPadrao(true) == null){
+            DateTime dateTime = new DateTime();
+            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+
+            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            formularioComportamento = database.getFormularioPadrao(true);
+            createPatternData();
+        }else if (
                 getIntent().hasExtra("lote_id")
-                && getIntent().hasExtra("edit_comp_lote")
-                && getIntent().hasExtra("lote_nome")
+                        && getIntent().hasExtra("edit_comp_lote")
+                        && getIntent().hasExtra("lote_nome")
         ){
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
@@ -78,16 +79,9 @@ public class EditComportamento extends AppCompatActivity {
             }
 
         }else{
-            if(database.getFormularioPadrao(true) == null){
-                DateTime dateTime = new DateTime();
-                String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-
-                database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
-                formularioComportamento = database.getFormularioPadrao(true);
-                createPatternData();
-            }
             formularioComportamento = database.getFormularioPadrao(true);
         }
+
         listaComportamentos = database.getAllComportamentos();
         setRecycler();
         setAddTipoClickListener();
@@ -110,9 +104,11 @@ public class EditComportamento extends AppCompatActivity {
         List<Comportamento> comportamentosPadrao = new ArrayList<>();
 
         for(Comportamento comportamento : database.getAllComportamentos()){
-            if(database.getTipo(comportamento.getIdTipo())
-                    .getIdFormularioComportamento() == database.getFormularioPadrao(true).getId()){
-                comportamentosPadrao.add(comportamento);
+            TipoComportamento tipo = database.getTipo(comportamento.getIdTipo());
+            if(tipo != null) {
+                if (tipo.getIdFormularioComportamento() == database.getFormularioPadrao(true).getId()) {
+                    comportamentosPadrao.add(comportamento);
+                }
             }
         }
 

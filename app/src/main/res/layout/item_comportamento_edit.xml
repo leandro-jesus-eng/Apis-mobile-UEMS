@@ -33,7 +33,7 @@
         android:layout_height="27dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="4dp"
-        android:background="@drawable/trash"
+        android:background="@drawable/ic_baseline_delete_24"
         app:layout_constraintStart_toEndOf="@+id/edNomeComportamento"
         app:layout_constraintTop_toTopOf="@+id/check" />
 

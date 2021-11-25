@@ -49,7 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".features.edicaoComportamento.EditComportamento"
-            android:label="Definir comportamentos padrão"
+            android:label="Definir lista de comportamentos"
             android:theme="@style/AppTheme.NoActionBar" />
         <receiver
             android:name=".features.others.AlarmReceiver"
