@@ -29,6 +29,7 @@ public class EditComportamento extends AppCompatActivity {
     EditComportamentoAdapter _adapter;
     EditComportamentoAdapter adapter;
     DbRepository database;
+
     int idLote;
     boolean edit_comp_lote;
     String nomeLote;
@@ -59,14 +60,14 @@ public class EditComportamento extends AppCompatActivity {
 
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-            idLote = getIntent().getIntExtra("lote_id", 9999);
-            edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
-            nomeLote = getIntent().getStringExtra("lote_nome");
 
             database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
             formularioComportamento = database.getFormularioPadrao(true);
             createPatternData();
 
+            idLote = getIntent().getIntExtra("lote_id", 9999);
+            edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
+            nomeLote = getIntent().getStringExtra("lote_nome");
             database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
             formularioComportamento = database.getFormulario(idLote);
             copyPatternIntoNewFormulario();
@@ -101,45 +102,9 @@ public class EditComportamento extends AppCompatActivity {
             formularioComportamento = database.getFormularioPadrao(true);
         }
 
-        listaComportamentos = database.getAllComportamentos();
         setRecycler();
         setAddTipoClickListener();
         setData();
-    }
-
-    private List<TipoComportamento> getFormularioWithTipo(FormularioComportamento formularioComportamento){
-        return  database.getFormularioWithTipoComportamento(
-                formularioComportamento.getId())
-                .get(0)
-                .tiposComportamento;
-    }
-
-    private void copyPatternIntoNewFormulario(){
-
-        for(TipoComportamento tipo : getFormularioWithTipo(database.getFormularioPadrao(true))){
-            database.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioComportamento.getId()));
-        }
-        List<TipoComportamento> tiposFormularioLote = getFormularioWithTipo(formularioComportamento);
-        List<Comportamento> comportamentosPadrao = new ArrayList<>();
-
-        for(Comportamento comportamento : database.getAllComportamentos()){
-            TipoComportamento tipo = database.getTipo(comportamento.getIdTipo());
-            if(tipo != null) {
-                if (tipo.getIdFormularioComportamento() == database.getFormularioPadrao(true).getId()) {
-                    comportamentosPadrao.add(comportamento);
-                }
-            }
-        }
-
-        for(Comportamento comportamento : comportamentosPadrao){
-            for(TipoComportamento tipoComportamento : tiposFormularioLote){
-                if(database.getTipo(comportamento.getIdTipo()).getDescricao().equals(tipoComportamento.getDescricao())){
-                    database.insertComportamento(new Comportamento(0, comportamento.getNome(), tipoComportamento.getId()));
-                    listaComportamentos.add(database.getComportamento(tipoComportamento.getId()));
-                }
-            }
-
-        }
     }
 
     private void setRecycler(){
@@ -178,7 +143,16 @@ public class EditComportamento extends AppCompatActivity {
 
     private void setData(){
         listaTipos = database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+        List<Comportamento> tempListComp = new ArrayList<>();
 
+        for (Comportamento comportamento : database.getAllComportamentos()) {
+            for (TipoComportamento tipoComportamento : listaTipos) {
+                if(comportamento.getIdTipo() == tipoComportamento.getId()){
+                    tempListComp.add(comportamento);
+                }
+            }
+        }
+        listaComportamentos = tempListComp;
         adapter.submitTipoList(listaTipos);
         adapter.submitComportamentoList(listaComportamentos);
     }
@@ -210,6 +184,72 @@ public class EditComportamento extends AppCompatActivity {
         }
     }
 
+    private void copyPatternIntoNewFormulario(){
+        for(TipoComportamento tipo : getFormularioWithTipo(database.getFormularioPadrao(true))){
+            database.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioComportamento.getId()));
+        }
+        List<TipoComportamento> tiposFormularioLote = getFormularioWithTipo(formularioComportamento);
+        List<Comportamento> comportamentosPadrao = new ArrayList<>();
+
+        for(Comportamento comportamento : database.getAllComportamentos()){
+            TipoComportamento tipo = database.getTipo(comportamento.getIdTipo());
+            if(tipo != null) {
+                if (tipo.getIdFormularioComportamento() == database.getFormularioPadrao(true).getId()) {
+                    comportamentosPadrao.add(comportamento);
+                }
+            }
+        }
+
+        for(Comportamento comportamento : comportamentosPadrao){
+            for(TipoComportamento tipoComportamento : tiposFormularioLote){
+                if(database.getTipo(comportamento.getIdTipo()).getDescricao().equals(tipoComportamento.getDescricao())){
+                    database.insertComportamento(new Comportamento(0, comportamento.getNome(), tipoComportamento.getId()));
+                    listaComportamentos.add(database.getComportamento(tipoComportamento.getId()));
+                }
+            }
+        }
+    }
+
+    public void saveData(View view){
+        listaTipos = adapter.getTipos();
+        listaComportamentos = adapter.getComportamentos();
+        List<Comportamento> listaComportamentosExcluidos = adapter.getComportamentosExcluidos();
+        List<TipoComportamento> listaTiposComportamentoExcluidos = adapter.getTiposExcluidos();
+
+        for(Comportamento comportamento : listaComportamentosExcluidos){
+            database.excluirComportamento(comportamento);
+        }
+
+        for(TipoComportamento tipoComportamento : listaTiposComportamentoExcluidos){
+            database.excluirTipoComportamento(tipoComportamento);
+        }
+
+        for (TipoComportamento tipo : listaTipos) {
+            insertNewType(tipo.getDescricao(), tipo.getId());
+        }
+
+        for (Comportamento comportamento : listaComportamentos) {
+            insertNewComportamento(comportamento.getNome(), comportamento.getId(), comportamento.getIdTipo());
+        }
+
+        Toast.makeText(getApplicationContext(), "Formulário salvo!", Toast.LENGTH_SHORT).show();
+
+        if(edit_comp_lote){
+            Intent intent = new Intent(getApplicationContext(), ListaAnimais.class);
+            intent.putExtra("lote_nome", nomeLote);
+            intent.putExtra("lote_id",idLote);
+            startActivity(intent);
+        }
+        finish();
+    }
+
+    private List<TipoComportamento> getFormularioWithTipo(FormularioComportamento formularioComportamento){
+        return  database.getFormularioWithTipoComportamento(
+                formularioComportamento.getId())
+                .get(0)
+                .tiposComportamento;
+    }
+
     private void insertNewType(String descricao, int id){
         boolean exist = false;
 
@@ -229,7 +269,6 @@ public class EditComportamento extends AppCompatActivity {
         }else{
             database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
         }
-
     }
 
     private void insertNewComportamento(String nome, int id, int tipoId){
@@ -251,40 +290,6 @@ public class EditComportamento extends AppCompatActivity {
         }else{
             database.insertComportamento(new Comportamento(id, nome, tipoId));
         }
-
-    }
-
-     public void saveData(View view){
-         listaTipos = adapter.getTipos();
-         listaComportamentos = adapter.getComportamentos();
-         List<Comportamento> listaComportamentosExcluidos = adapter.getComportamentosExcluidos();
-         List<TipoComportamento> listaTiposComportamentoExcluidos = adapter.getTiposExcluidos();
-
-         for(Comportamento comportamento : listaComportamentosExcluidos){
-             database.excluirComportamento(comportamento);
-         }
-
-         for(TipoComportamento tipoComportamento : listaTiposComportamentoExcluidos){
-             database.excluirTipoComportamento(tipoComportamento);
-         }
-
-         for (TipoComportamento tipo : listaTipos) {
-             insertNewType(tipo.getDescricao(), tipo.getId());
-         }
-
-         for (Comportamento comportamento : listaComportamentos) {
-             insertNewComportamento(comportamento.getNome(), comportamento.getId(), comportamento.getIdTipo());
-         }
-
-         Toast.makeText(getApplicationContext(), "Formulário salvo!", Toast.LENGTH_SHORT).show();
-
-         if(edit_comp_lote){
-             Intent intent = new Intent(getApplicationContext(), ListaAnimais.class);
-             intent.putExtra("lote_nome", nomeLote);
-             intent.putExtra("lote_id",idLote);
-             startActivity(intent);
-         }
-         finish();
     }
 
     @Override

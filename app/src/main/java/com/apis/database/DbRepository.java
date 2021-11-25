@@ -180,8 +180,8 @@ public class DbRepository {
         return tipoComportamentoDao.getTipo(id);
     }
 
-    public Comportamento getComportamento(int id){
-        return comportamentoDao.getComportamento(id);
+    public Comportamento getComportamento(int idTipo){
+        return comportamentoDao.getComportamento(idTipo);
     }
 
     public void insertComportamento(Comportamento comportamento){
