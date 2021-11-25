@@ -131,20 +131,25 @@ public class AdicionarComportamento extends AppCompatActivity {
     private void createTextView(String texto){
         TextView textTipoComportamento = new TextView(this);
         textTipoComportamento.setText(texto);
-        textTipoComportamento.setLayoutParams(new LinearLayout.LayoutParams(
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(32, 5, 5, 5);
+        textTipoComportamento.setLayoutParams(params);
         layout.addView(textTipoComportamento);
     }
 
     private void createCheckListView(String texto){
         CheckBox checkComportamento = new CheckBox(this);
         checkComportamento.setText(texto);
-        checkComportamento.setLayoutParams(new LinearLayout.LayoutParams(
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(32, 5, 5, 1);
+
+        checkComportamento.setLayoutParams(params);
         layout.addView(checkComportamento);
         listComportamentoView.add(checkComportamento);
     }
@@ -229,61 +234,6 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     public void salvarDados(){
-        /*
-        ///Pega os dados
-        RadioGroup btnGroupFisio = (RadioGroup) findViewById(R.id.btnGroupFisio);
-        switch (btnGroupFisio.getCheckedRadioButtonId()) {
-            case R.id.radioPastej:
-                comportamento += "Pastejando;";
-                break;
-            case R.id.radioOP:
-                comportamento +=  "Ociosa em pé;";
-                break;
-            case R.id.radioOD:
-                comportamento +=  "Ociosa deitada;";
-                break;
-            case R.id.radioRumPe:
-                comportamento +=  "Ruminando em pé;";
-                break;
-            case R.id.radioRumDeit:
-                comportamento +=  "Ruminando deitada;";
-                break;
-            default:
-                comportamento +=  ";";
-                break;
-        }
-
-        RadioGroup btnGroupRepro = (RadioGroup) findViewById(R.id.btnGroupRepro);
-        switch (btnGroupRepro.getCheckedRadioButtonId()) {
-            case R.id.radioAcMonta:
-                comportamento += "Aceita monta;";
-                break;
-            case R.id.radioMontaOutra:
-                comportamento += "Monta outra;";
-                break;
-            case R.id.radioInqueta:
-                comportamento += "Inquieta;";
-                break;
-            default:
-                comportamento +=  ";";
-                break;
-        }
-
-        RadioGroup btnGroupSombra = (RadioGroup) findViewById(R.id.btnGroupSombra);
-        switch (btnGroupSombra.getCheckedRadioButtonId()) {
-            case R.id.radioSol:
-                comportamento += "Sol;";
-                break;
-            case R.id.radioSombra:
-                comportamento += "Sombra;";
-                break;
-            default:
-                comportamento +=  ";";
-                break;
-        }
-
-
-         */
         for (CheckBox viewComportamento : listComportamentoView){
             if(viewComportamento.isChecked()){
                 comportamento += viewComportamento.getText()+";" ;

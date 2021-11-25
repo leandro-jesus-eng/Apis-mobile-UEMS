@@ -52,7 +52,26 @@ public class EditComportamento extends AppCompatActivity {
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
         database = new DbRepository(getApplicationContext());
 
-        if(database.getFormularioPadrao(true) == null){
+        if(database.getFormularioPadrao(true) == null &&
+                getIntent().hasExtra("lote_id")
+                && getIntent().hasExtra("edit_comp_lote")
+                && getIntent().hasExtra("lote_nome")){
+
+            DateTime dateTime = new DateTime();
+            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+            idLote = getIntent().getIntExtra("lote_id", 9999);
+            edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
+            nomeLote = getIntent().getStringExtra("lote_nome");
+
+            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            formularioComportamento = database.getFormularioPadrao(true);
+            createPatternData();
+
+            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
+            formularioComportamento = database.getFormulario(idLote);
+            copyPatternIntoNewFormulario();
+        }
+        else if(database.getFormularioPadrao(true) == null){
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
@@ -165,20 +184,20 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private void createPatternData(){
-        insertNewType("Fisiológico", 0);
-        insertNewType("Reprodutivo", 0);
+        insertNewType("Comportamento Fisiológico", 0);
+        insertNewType("Comportamento Reprodutivo", 0);
         insertNewType("Uso da Sombra", 0);
 
         for(TipoComportamento tipoComportamento : database.getAllTipos()){
             switch (tipoComportamento.getDescricao()){
-                case "Fisiológico":
+                case "Comportamento Fisiológico":
                     insertNewComportamento("Pastejando", 0, tipoComportamento.getId());
                     insertNewComportamento("Ociosa em pé", 0, tipoComportamento.getId());
                     insertNewComportamento("Ociosa deitada", 0, tipoComportamento.getId());
                     insertNewComportamento("Ruminando em pé", 0, tipoComportamento.getId());
                     insertNewComportamento("Ruminando em deitada", 0, tipoComportamento.getId());
                     break;
-                case "Reprodutivo":
+                case "Comportamento Reprodutivo":
                     insertNewComportamento("Aceita de monta", 0, tipoComportamento.getId());
                     insertNewComportamento("Monta outra", 0, tipoComportamento.getId());
                     insertNewComportamento("Inquieta", 0, tipoComportamento.getId());
