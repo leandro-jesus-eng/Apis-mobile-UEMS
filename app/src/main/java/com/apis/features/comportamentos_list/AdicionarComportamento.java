@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.database.relations.AnimalWithAnotacao;
+import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
@@ -40,6 +41,7 @@ import com.apis.models.FileControl;
 import com.apis.models.FormularioComportamento;
 import com.apis.models.Lote;
 import com.apis.models.TipoComportamento;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,6 +61,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String obS = "";
     private DateTime dateTime = new DateTime();
     private List<CheckBox> listComportamentoView = new ArrayList();
+    private FloatingActionButton topButton;
 
     DbRepository database = new DbRepository(this);
     LinearLayout layout;
@@ -75,6 +78,8 @@ public class AdicionarComportamento extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         layout = findViewById(R.id.linearLayoutAddComp);
+        topButton = findViewById(R.id.fab);
+
         pegarDadosActivityPassada();
         pegarUltimaAtualizacao();
         configurarListaComportamentos();
@@ -100,6 +105,18 @@ public class AdicionarComportamento extends AppCompatActivity {
         btnExportar.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 exportarDados();
+            }
+        });
+
+        topButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AdicionarCompReprodutivo.class);
+                intent.putExtra("animal_nome", nomeAnimal);
+                intent.putExtra("animal_id", idAnimal);
+                intent.putExtra("lote_id", idLote);
+                startActivity(intent);
+                finish();
             }
         });
     }

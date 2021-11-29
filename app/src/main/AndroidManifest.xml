@@ -51,6 +51,10 @@
             android:name=".features.edicaoComportamento.EditComportamento"
             android:label="Definir lista de comportamentos"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".features.comportamento_reprodutivo.AdicionarCompReprodutivo"
+            android:label="Anotar comportamento reprodutivo"
+            android:theme="@style/AppTheme.NoActionBar" />
         <receiver
             android:name=".features.others.AlarmReceiver"
             android:process=":remote" />
