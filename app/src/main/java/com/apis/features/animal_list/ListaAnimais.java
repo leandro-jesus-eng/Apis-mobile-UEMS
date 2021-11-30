@@ -48,7 +48,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     List<Animal> animais= new ArrayList<>();
 
     DrawerLayout drawer;
-    DbRepository database = new DbRepository(this);
+    DbRepository database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        database = new DbRepository(this);
         drawer = findViewById(R.id.drawerListaAnimais);
         NavigationView navigationView = findViewById(R.id.navViewListaAnimais);
 

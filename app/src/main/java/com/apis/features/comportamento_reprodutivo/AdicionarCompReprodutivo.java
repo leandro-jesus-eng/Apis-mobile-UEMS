@@ -7,9 +7,17 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.apis.R;
+import com.apis.database.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
+import com.apis.features.edicaoComportamento.EditComportamentoAdapter;
+import com.apis.models.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 public class AdicionarCompReprodutivo extends AppCompatActivity {
 
@@ -18,6 +26,9 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     private String nomeLote;
     private int idAnimal;
     private int idLote;
+    private RecyclerView recyclerView;
+    private AdicionarCompReprodutivoAdapter adapter;
+    private DbRepository database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +39,10 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         topButton = findViewById(R.id.fab);
+        recyclerView = findViewById(R.id.recycler_view_rep);
+        database = new DbRepository(this);
 
+        setRecycler();
         pegarDadosActivityPassada();
 
         topButton.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +57,15 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             }
         });
 
+        List<Animal> animais = database.getAnimais(idLote);
+        adapter.submitList(animais);
+    }
+
+    private void setRecycler(){
+        adapter = new AdicionarCompReprodutivoAdapter(this);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layout);
     }
 
     private void pegarDadosActivityPassada(){
