@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,8 +28,12 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     private String nomeLote;
     private int idAnimal;
     private int idLote;
+
     private RecyclerView recyclerView;
     private AdicionarCompReprodutivoAdapter adapter;
+    private Button montandoButton;
+    private Button aceitandoMontaButton;
+
     private DbRepository database;
 
     @Override
@@ -40,10 +46,29 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
 
         topButton = findViewById(R.id.fab);
         recyclerView = findViewById(R.id.recycler_view_rep);
+        montandoButton = findViewById(R.id.estaMontando_btn);
+        aceitandoMontaButton = findViewById(R.id.aceitandoMonta_btn);
+
         database = new DbRepository(this);
 
         setRecycler();
         pegarDadosActivityPassada();
+
+        getSupportActionBar().setTitle(nomeAnimal);
+
+        montandoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        aceitandoMontaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         topButton.setOnClickListener(new View.OnClickListener() {
             @Override

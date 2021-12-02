@@ -106,6 +106,8 @@
     <string name="edi_o_de_comportamentos">Edição de comportamentos</string>
     <string name="alterar_comportamentos_deste_lote">Alterar comportamentos deste lote</string>
     <string name="observa_es">Observações</string>
+    <string name="est_montando">Está montando</string>
+    <string name="est_aceitando_monta">Está aceitando monta</string>
 
 
 </resources>

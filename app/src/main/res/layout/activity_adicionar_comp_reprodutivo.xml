@@ -46,7 +46,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_weight="1" >
 
             <LinearLayout
@@ -55,11 +55,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5">
 
-                <TextView
-                    android:id="@+id/textView1"
+                <Button
+                    android:id="@+id/estaMontando_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="left" />
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:padding="5dp"
+                    android:text="@string/est_montando"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/aceitandoMonta_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:padding="5dp"
+                    android:text="@string/est_aceitando_monta"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -72,7 +86,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_rep"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -89,6 +104,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/cow_white" />
+        app:srcCompat="@drawable/cow_white"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

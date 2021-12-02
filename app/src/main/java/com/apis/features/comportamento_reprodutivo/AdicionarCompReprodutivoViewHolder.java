@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
+import com.google.android.material.card.MaterialCardView;
 
 public class AdicionarCompReprodutivoViewHolder extends RecyclerView.ViewHolder{
 

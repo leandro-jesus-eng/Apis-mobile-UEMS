@@ -179,6 +179,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/plus" />
+        app:srcCompat="@drawable/ic_launcher_notification"
+        app:maxImageSize="50dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
