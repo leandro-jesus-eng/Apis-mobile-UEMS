@@ -2,10 +2,8 @@ package com.apis.features.comportamento_reprodutivo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,11 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
-import com.apis.features.edicaoComportamento.EditComportamentoAdapter;
 import com.apis.models.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
 
 public class AdicionarCompReprodutivo extends AppCompatActivity {
 
@@ -35,6 +30,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     private Button aceitandoMontaButton;
 
     private DbRepository database;
+    static private boolean isMontando = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +47,29 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
 
         database = new DbRepository(this);
 
-        setRecycler();
+
         pegarDadosActivityPassada();
+        setRecycler();
 
         getSupportActionBar().setTitle(nomeAnimal);
 
         montandoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                montandoButton.setBackgroundResource(R.drawable.round_button_on);
+                aceitandoMontaButton.setBackgroundResource(R.drawable.round_button_off);
+                isMontando = true;
+                adapter.isMontando(true);
             }
         });
 
         aceitandoMontaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                aceitandoMontaButton.setBackgroundResource(R.drawable.round_button_on);
+                montandoButton.setBackgroundResource(R.drawable.round_button_off);
+                isMontando = false;
+                adapter.isMontando(false);
             }
         });
 
@@ -82,15 +85,23 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             }
         });
 
-        List<Animal> animais = database.getAnimais(idLote);
-        adapter.submitList(animais);
+        adapter.submitList(database.getAnimais(idLote));
     }
 
     private void setRecycler(){
-        adapter = new AdicionarCompReprodutivoAdapter(this);
+        adapter = new AdicionarCompReprodutivoAdapter(this, isMontando, findVacaEmAnotacao());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
+    }
+
+    private Animal findVacaEmAnotacao(){
+        for(Animal animal : database.getAnimais(idLote)){
+            if(animal.getNome().equals(nomeAnimal)){
+                return animal;
+            }
+        }
+        return null;
     }
 
     private void pegarDadosActivityPassada(){
