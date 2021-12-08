@@ -18,19 +18,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.models.Animal;
+import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
+import com.apis.models.DateTime;
 import com.apis.models.FileControl;
 import com.apis.models.TipoComportamento;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<AdicionarCompReprodutivoViewHolder> {
 
     private List<Animal> animais = new ArrayList<>();
+    private Animal outraVaca;
     private Animal vacaEmAnotacao;
     private Context context;
     private boolean isMontando;
+    private DbRepository database = new DbRepository(context);
 
     public AdicionarCompReprodutivoAdapter(Context context, Boolean isMontando, Animal vacaEmAnotacao){
         this.context = context;
@@ -66,18 +71,20 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
             @Override
             public void onClick(View view) {
                 String dialogText;
+                String comportamentoVacaAnotacao;
+                String comportamentoOutraVaca;
+                outraVaca = animais.get(holder.getAdapterPosition());
                 if(isMontando){
                     dialogText = "A vaca "+vacaEmAnotacao.getNome()
-                            +" montou em "+animais.get(holder.getAdapterPosition()).getNome();
+                            +" montou em "+outraVaca.getNome();
+                    comportamentoVacaAnotacao = "Monta em outra";
+                    comportamentoOutraVaca = "Aceita de monta";
                 }else{
                     dialogText = "A vaca "+vacaEmAnotacao.getNome()
-                            +" aceitou monta de "+animais.get(holder.getAdapterPosition()).getNome();
+                            +" aceitou monta de "+outraVaca.getNome();
+                    comportamentoVacaAnotacao = "Aceita de monta";
+                    comportamentoOutraVaca = "Monta em outra";
                 }
-                Toast.makeText(
-                        context.getApplicationContext(),
-                        animais.get(holder.getAdapterPosition()).getNome(),
-                        Toast.LENGTH_SHORT
-                ).show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Confirmar comportamento")
@@ -85,7 +92,38 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                         .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        DateTime dateTime = new DateTime();
+                                        AnotacaoComportamento anotacaoComportamentoVacaEmAnotacao =
+                                                new AnotacaoComportamento(
+                                                        0,
+                                                        vacaEmAnotacao.getNome(),
+                                                        vacaEmAnotacao.getId(),
+                                                        dateTime.pegarData(),
+                                                        dateTime.pegarHora(),
+                                                        comportamentoVacaAnotacao,
+                                                        ""
 
+                                        );
+                                        AnotacaoComportamento anotacaoComportamentoOutraVaca =
+                                                new AnotacaoComportamento(
+                                                        0,
+                                                        outraVaca.getNome(),
+                                                        outraVaca.getId(),
+                                                        dateTime.pegarData(),
+                                                        dateTime.pegarHora(),
+                                                        comportamentoOutraVaca,
+                                                        ""
+
+                                        );
+
+                                        database.insertAnotacaoComportamento(
+                                                anotacaoComportamentoVacaEmAnotacao
+                                        );
+                                        database.insertAnotacaoComportamento(
+                                                anotacaoComportamentoOutraVaca
+                                        );
+                                        Toast.makeText(context.getApplicationContext(),
+                                                "Salvo!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                         ).setNegativeButton("Cancelar", null)

@@ -24,7 +24,6 @@ public class AnotacaoComportamento implements Serializable {
     @ColumnInfo(name = "hora")
     final private String hora;
 
-
     @ColumnInfo(name = "nomeComportamento")
     final private String nomeComportamento;
 

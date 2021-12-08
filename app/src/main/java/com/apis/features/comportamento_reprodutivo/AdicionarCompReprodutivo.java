@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +17,9 @@ import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.models.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdicionarCompReprodutivo extends AppCompatActivity {
 
     private FloatingActionButton topButton;
@@ -23,6 +27,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     private String nomeLote;
     private int idAnimal;
     private int idLote;
+    private List<Animal> animalList = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private AdicionarCompReprodutivoAdapter adapter;
@@ -47,7 +52,6 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
 
         database = new DbRepository(this);
 
-
         pegarDadosActivityPassada();
         setRecycler();
 
@@ -58,6 +62,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             public void onClick(View view) {
                 montandoButton.setBackgroundResource(R.drawable.round_button_on);
                 aceitandoMontaButton.setBackgroundResource(R.drawable.round_button_off);
+                Toast.makeText(getApplicationContext(), "Montando", Toast.LENGTH_SHORT).show();
                 isMontando = true;
                 adapter.isMontando(true);
             }
@@ -68,6 +73,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             public void onClick(View view) {
                 aceitandoMontaButton.setBackgroundResource(R.drawable.round_button_on);
                 montandoButton.setBackgroundResource(R.drawable.round_button_off);
+                Toast.makeText(getApplicationContext(), "Aceitando monta", Toast.LENGTH_SHORT).show();
                 isMontando = false;
                 adapter.isMontando(false);
             }
@@ -85,7 +91,9 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             }
         });
 
-        adapter.submitList(database.getAnimais(idLote));
+        animalList = database.getAnimais(idLote);
+        animalList.remove(findVacaEmAnotacao());
+        adapter.submitList(animalList);
     }
 
     private void setRecycler(){
