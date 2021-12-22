@@ -3,6 +3,7 @@ package com.apis.features.comportamento_reprodutivo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
 import com.apis.database.DbRepository;
+import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
 import com.apis.models.Comportamento;
@@ -92,36 +94,15 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                         .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        DateTime dateTime = new DateTime();
-                                        AnotacaoComportamento anotacaoComportamentoVacaEmAnotacao =
-                                                new AnotacaoComportamento(
-                                                        0,
-                                                        vacaEmAnotacao.getNome(),
-                                                        vacaEmAnotacao.getId(),
-                                                        dateTime.pegarData(),
-                                                        dateTime.pegarHora(),
-                                                        comportamentoVacaAnotacao,
-                                                        ""
 
-                                        );
-                                        AnotacaoComportamento anotacaoComportamentoOutraVaca =
-                                                new AnotacaoComportamento(
-                                                        0,
-                                                        outraVaca.getNome(),
-                                                        outraVaca.getId(),
-                                                        dateTime.pegarData(),
-                                                        dateTime.pegarHora(),
-                                                        comportamentoOutraVaca,
-                                                        ""
+                                        Intent intent = new Intent(context.getApplicationContext(), AdicionarComportamento.class);
+                                        intent.putExtra("animal_nome", vacaEmAnotacao.getNome());
+                                        intent.putExtra("animal_id", vacaEmAnotacao.getId());
+                                        intent.putExtra("lote_id", vacaEmAnotacao.getLoteId());
+                                        intent.putExtra("anotacao_outra_vaca", comportamentoOutraVaca);
+                                        intent.putExtra("anotacao_vaca", comportamentoVacaAnotacao);
+                                        context.startActivity(intent);
 
-                                        );
-
-                                        database.insertAnotacaoComportamento(
-                                                anotacaoComportamentoVacaEmAnotacao
-                                        );
-                                        database.insertAnotacaoComportamento(
-                                                anotacaoComportamentoOutraVaca
-                                        );
                                         Toast.makeText(context.getApplicationContext(),
                                                 "Salvo!", Toast.LENGTH_SHORT).show();
                                     }

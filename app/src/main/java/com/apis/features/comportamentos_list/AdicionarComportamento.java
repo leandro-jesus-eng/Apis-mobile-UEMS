@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,12 +59,15 @@ public class AdicionarComportamento extends AppCompatActivity {
     private int idAnimal;
     private int idLote;
     private String comportamento = "";
+    private String comportamentoReprodutivo = "";
     private String obS = "";
+    private FormularioComportamento formularioComportamento;
+
     private DateTime dateTime = new DateTime();
-    private List<CheckBox> listComportamentoView = new ArrayList();
+    static private List<CheckBox> listComportamentoView = new ArrayList();
     private FloatingActionButton topButton;
 
-    DbRepository database = new DbRepository(this);
+    DbRepository database;
     LinearLayout layout;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -77,8 +81,10 @@ public class AdicionarComportamento extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        database = new DbRepository(this);
         layout = findViewById(R.id.linearLayoutAddComp);
         topButton = findViewById(R.id.fab);
+
 
         pegarDadosActivityPassada();
         pegarUltimaAtualizacao();
@@ -122,7 +128,6 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     private void setList(){
-        FormularioComportamento formularioComportamento;
 
         if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
             formularioComportamento = database.getFormularioPadrao(true);
@@ -220,12 +225,51 @@ public class AdicionarComportamento extends AppCompatActivity {
             nomeAnimal = getIntent().getStringExtra("animal_nome");
             idAnimal = getIntent().getIntExtra("animal_id", 9999);
             idLote = getIntent().getIntExtra("lote_id", 9999);
-
             nomeLote = database.getNomeLote(idLote);
-
         }
 
+        if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
+            formularioComportamento = database.getFormularioPadrao(true);
+        }else{
+            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
+        }
+
+        if (getIntent().hasExtra("anotacao_vaca")){
+            comportamentoReprodutivo =  getIntent().getStringExtra("anotacao_vaca");
+
+            List<TipoComportamento> tiposComportamento =
+                    database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+
+            List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
+
+            for(TipoComportamento tipoComportamento : tiposComportamento){
+                if(tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+                    tiposComportamentoReprodutivo.add(tipoComportamento);
+                }
+            }
+
+            List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
+
+            for(TipoComportamento tipoComportamento : tiposComportamentoReprodutivo){
+                for(Comportamento comportamento : database.getAllComportamentos()){
+                    if(comportamento.getIdTipo() == tipoComportamento.getId()){
+                        comportamentosReprodutivos.add(comportamento);
+                    }
+                }
+            }
+
+            for(Comportamento comportamento : comportamentosReprodutivos){
+                for(CheckBox checkboxComportamento : listComportamentoView){
+                    if(checkboxComportamento.getText() == comportamento.getNome()){
+                        layout.removeView(checkboxComportamento);
+                    }
+                }
+            }
+
+            createTextView("Ja montou");
+        }
     }
+
 
     private void pegarUltimaAtualizacao() {
         TextView atualizadoEm = (TextView) findViewById(R.id.atualizadoEm);
@@ -255,6 +299,10 @@ public class AdicionarComportamento extends AppCompatActivity {
             if(viewComportamento.isChecked()){
                 comportamento += viewComportamento.getText()+";" ;
             }
+        }
+
+        if(!comportamentoReprodutivo.isEmpty()){
+            comportamento += comportamentoReprodutivo;
         }
 
         EditText txtObs = (EditText) findViewById(R.id.textObs);
