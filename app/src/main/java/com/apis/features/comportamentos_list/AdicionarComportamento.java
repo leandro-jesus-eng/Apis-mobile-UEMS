@@ -65,6 +65,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     private DateTime dateTime = new DateTime();
     static private List<CheckBox> listComportamentoView = new ArrayList();
+    List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
+    List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
     private FloatingActionButton topButton;
 
     DbRepository database;
@@ -140,19 +142,34 @@ public class AdicionarComportamento extends AppCompatActivity {
                 database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
         for(TipoComportamento tipoComportamento : tiposComportamento) {
-            createTextView(tipoComportamento.getDescricao());
+            createTextView(tipoComportamento.getDescricao(), false);
 
             for(Comportamento comportamento : comportamentos){
                 if(comportamento.getIdTipo() == tipoComportamento.getId()){
-                    createCheckListView(comportamento.getNome());
+
+                    if(comportamentoReprodutivo.equals("")){
+                        createCheckListView(comportamento.getNome());
+                    }
+
+                    if(!comportamentoReprodutivo.equals("") &&
+                            !tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+                        createCheckListView(comportamento.getNome());
+                    }
                 }
+            }
+            if(!comportamentoReprodutivo.equals("") && tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+                createTextView("Ja montou", true);
             }
         }
     }
 
-    private void createTextView(String texto){
+    private void createTextView(String texto, Boolean avisoDeAnotacaoReprodutiva){
         TextView textTipoComportamento = new TextView(this);
         textTipoComportamento.setText(texto);
+
+        if(avisoDeAnotacaoReprodutiva){
+            textTipoComportamento.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -240,15 +257,12 @@ public class AdicionarComportamento extends AppCompatActivity {
             List<TipoComportamento> tiposComportamento =
                     database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
-            List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
 
             for(TipoComportamento tipoComportamento : tiposComportamento){
                 if(tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
                     tiposComportamentoReprodutivo.add(tipoComportamento);
                 }
             }
-
-            List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
 
             for(TipoComportamento tipoComportamento : tiposComportamentoReprodutivo){
                 for(Comportamento comportamento : database.getAllComportamentos()){
@@ -257,16 +271,6 @@ public class AdicionarComportamento extends AppCompatActivity {
                     }
                 }
             }
-
-            for(Comportamento comportamento : comportamentosReprodutivos){
-                for(CheckBox checkboxComportamento : listComportamentoView){
-                    if(checkboxComportamento.getText() == comportamento.getNome()){
-                        layout.removeView(checkboxComportamento);
-                    }
-                }
-            }
-
-            createTextView("Ja montou");
         }
     }
 
