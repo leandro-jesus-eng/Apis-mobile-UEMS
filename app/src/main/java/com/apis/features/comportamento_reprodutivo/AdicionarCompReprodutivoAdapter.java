@@ -79,13 +79,13 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                 if(isMontando){
                     dialogText = "A vaca "+vacaEmAnotacao.getNome()
                             +" montou em "+outraVaca.getNome();
-                    comportamentoVacaAnotacao = "Monta em outra";
-                    comportamentoOutraVaca = "Aceita de monta";
+                    comportamentoVacaAnotacao = "Monta na vaca "+outraVaca.getNome()+" - id: "+outraVaca.getId();
+                    comportamentoOutraVaca = "Aceita monta da vaca "+vacaEmAnotacao.getNome()+" - id: "+vacaEmAnotacao.getId();
                 }else{
                     dialogText = "A vaca "+vacaEmAnotacao.getNome()
                             +" aceitou monta de "+outraVaca.getNome();
-                    comportamentoVacaAnotacao = "Aceita de monta";
-                    comportamentoOutraVaca = "Monta em outra";
+                    comportamentoVacaAnotacao = "Aceita monta da vaca "+outraVaca.getNome()+" - id: "+outraVaca.getId();
+                    comportamentoOutraVaca = "Monta na vaca "+vacaEmAnotacao.getNome()+" - id: "+vacaEmAnotacao.getId();
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());

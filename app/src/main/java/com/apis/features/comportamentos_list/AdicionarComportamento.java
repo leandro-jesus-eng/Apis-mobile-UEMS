@@ -59,7 +59,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private int idAnimal;
     private int idLote;
     private String comportamento = "";
-    private String comportamentoReprodutivo = "";
+    static private String comportamentoReprodutivo = "";
     private String obS = "";
     private FormularioComportamento formularioComportamento;
 
@@ -158,7 +158,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                 }
             }
             if(!comportamentoReprodutivo.equals("") && tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
-                createTextView("Ja montou", true);
+                createTextView("*"+comportamentoReprodutivo, true);
             }
         }
     }
@@ -449,7 +449,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
-            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+            case android.R.id.home:
                 finish();
                 break;
             default:break;
