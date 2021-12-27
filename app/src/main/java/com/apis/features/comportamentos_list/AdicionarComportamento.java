@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
@@ -30,8 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.database.relations.AnimalWithAnotacao;
+import com.apis.features.animal_list.ListaAnimais;
 import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
+import com.apis.features.lote_list.MainActivity;
 import com.apis.features.others.AlarmReceiver;
 import com.apis.models.Animal;
 import com.apis.models.AnotacaoComportamento;
@@ -47,7 +46,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,10 +54,12 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     private String nomeAnimal;
     private String nomeLote;
+    private String nomeOutraVaca;
     private int idAnimal;
     private int idLote;
     private String comportamento = "";
-    static private String comportamentoReprodutivo = "";
+    private String comportamentoReprodutivo = "";
+    private String comportamentoOutraVaca = "";
     private String obS = "";
     private FormularioComportamento formularioComportamento;
 
@@ -163,6 +163,16 @@ public class AdicionarComportamento extends AppCompatActivity {
         }
     }
 
+    private Animal findAnimalByName(String nomeAnimal){
+        List<Animal> animais = database.getAnimais(idLote);
+        for(Animal animal : animais){
+            if(animal.getNome().equals(nomeAnimal)){
+                return animal;
+            }
+        }
+        return null;
+    }
+
     private void createTextView(String texto, Boolean avisoDeAnotacaoReprodutiva){
         TextView textTipoComportamento = new TextView(this);
         textTipoComportamento.setText(texto);
@@ -253,6 +263,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         if (getIntent().hasExtra("anotacao_vaca")){
             comportamentoReprodutivo =  getIntent().getStringExtra("anotacao_vaca");
+            nomeOutraVaca = getIntent().getStringExtra("outra_vaca_nome");
+            comportamentoOutraVaca = getIntent().getStringExtra("anotacao_outra_vaca");
 
             List<TipoComportamento> tiposComportamento =
                     database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
@@ -335,11 +347,23 @@ public class AdicionarComportamento extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ////Salva no BD
-                        AnotacaoComportamento newAnotacao = new AnotacaoComportamento(
+                        AnotacaoComportamento anotacaoVaca = new AnotacaoComportamento(
                                 0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
-                        try {
 
-                            database.insertAnotacaoComportamento(newAnotacao);
+                        Animal outra_vaca = findAnimalByName(nomeOutraVaca);
+
+                        try {
+                            AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
+                                    0,
+                                    nomeOutraVaca,
+                                    outra_vaca.getId() ,
+                                    dateTime.pegarData(),
+                                    dateTime.pegarHora(),
+                                    comportamentoOutraVaca,
+                                    "");
+                            database.insertAnotacaoComportamento(anotacaoOutraVaca);
+
+                            database.insertAnotacaoComportamento(anotacaoVaca);
                             //Trata o horário
                             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                             boolean usarNtp = sharedPreferences.getBoolean("datetime_web", false);
@@ -447,7 +471,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();

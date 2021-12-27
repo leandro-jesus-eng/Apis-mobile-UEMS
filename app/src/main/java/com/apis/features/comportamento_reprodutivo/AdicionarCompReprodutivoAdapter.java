@@ -1,5 +1,6 @@
 package com.apis.features.comportamento_reprodutivo;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -99,10 +100,13 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                                         intent.putExtra("animal_nome", vacaEmAnotacao.getNome());
                                         intent.putExtra("animal_id", vacaEmAnotacao.getId());
                                         intent.putExtra("lote_id", vacaEmAnotacao.getLoteId());
+                                        intent.putExtra("outra_vaca_nome", outraVaca.getNome());
+                                        intent.putExtra("outra_vaca_id", outraVaca.getId());
                                         intent.putExtra("anotacao_outra_vaca", comportamentoOutraVaca);
                                         intent.putExtra("anotacao_vaca", comportamentoVacaAnotacao);
                                         context.startActivity(intent);
 
+                                        ((Activity)context).finish();
                                         Toast.makeText(context.getApplicationContext(),
                                                 "Salvo!", Toast.LENGTH_SHORT).show();
                                     }
