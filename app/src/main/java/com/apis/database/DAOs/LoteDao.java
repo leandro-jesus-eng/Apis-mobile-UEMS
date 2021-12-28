@@ -6,10 +6,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.apis.models.Animal;
-import com.apis.models.Lote;
+import com.apis.model.Lote;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao

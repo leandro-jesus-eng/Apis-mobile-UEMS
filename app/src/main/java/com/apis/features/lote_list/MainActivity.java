@@ -31,7 +31,7 @@ import com.apis.database.DbRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
-import com.apis.models.Lote;
+import com.apis.model.Lote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 

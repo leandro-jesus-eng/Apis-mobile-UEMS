@@ -1,4 +1,4 @@
-package com.apis.models;
+package com.apis.model;
 
 import android.content.Context;
 import android.util.Log;

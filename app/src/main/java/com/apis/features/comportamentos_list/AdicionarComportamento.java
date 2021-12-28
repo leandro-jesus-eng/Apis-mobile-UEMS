@@ -28,18 +28,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.features.animal_list.ListaAnimais;
 import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
-import com.apis.features.lote_list.MainActivity;
 import com.apis.features.others.AlarmReceiver;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
-import com.apis.models.DateTime;
-import com.apis.models.FileControl;
-import com.apis.models.FormularioComportamento;
-import com.apis.models.Lote;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Animal;
+import com.apis.model.AnotacaoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.DateTime;
+import com.apis.model.FileControl;
+import com.apis.model.FormularioComportamento;
+import com.apis.model.Lote;
+import com.apis.model.TipoComportamento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -64,7 +62,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private FormularioComportamento formularioComportamento;
 
     private DateTime dateTime = new DateTime();
-    static private List<CheckBox> listComportamentoView = new ArrayList();
+    final private List<CheckBox> listComportamentoView = new ArrayList<>();
     List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
     List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
     private FloatingActionButton topButton;
@@ -311,9 +309,11 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     public void salvarDados(){
+        comportamento = "";
+
         for (CheckBox viewComportamento : listComportamentoView){
             if(viewComportamento.isChecked()){
-                comportamento += viewComportamento.getText()+";" ;
+                comportamento += viewComportamento.getText()+"; " ;
             }
         }
 
@@ -323,8 +323,6 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         EditText txtObs = (EditText) findViewById(R.id.textObs);
         obS = txtObs.getText().toString();
-        ///Fim Pega os dados
-
 
         ///Alerta para confirmação dos dados
         LayoutInflater layoutInflater = LayoutInflater.from(AdicionarComportamento.this);
@@ -350,18 +348,25 @@ public class AdicionarComportamento extends AppCompatActivity {
                         AnotacaoComportamento anotacaoVaca = new AnotacaoComportamento(
                                 0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
 
-                        Animal outra_vaca = findAnimalByName(nomeOutraVaca);
-
                         try {
-                            AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
-                                    0,
-                                    nomeOutraVaca,
-                                    outra_vaca.getId() ,
-                                    dateTime.pegarData(),
-                                    dateTime.pegarHora(),
-                                    comportamentoOutraVaca,
-                                    "");
-                            database.insertAnotacaoComportamento(anotacaoOutraVaca);
+                            if(!comportamentoReprodutivo.isEmpty()){
+                                Animal outra_vaca = findAnimalByName(nomeOutraVaca);
+                                AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
+                                        0,
+                                        nomeOutraVaca,
+                                        outra_vaca.getId() ,
+                                        dateTime.pegarData(),
+                                        dateTime.pegarHora(),
+                                        comportamentoOutraVaca,
+                                        "");
+                                database.insertAnotacaoComportamento(anotacaoOutraVaca);
+
+                                String horaDefinida = dateTime.pegarHora();
+                                String dataDefinida = dateTime.pegarData();
+
+                                database.setLastUpdateAnimal(outra_vaca.getId(), dataDefinida+" "+horaDefinida);
+                                salvarTxt(outra_vaca.getId(), nomeOutraVaca, dataDefinida, horaDefinida, comportamentoOutraVaca, "");
+                            }
 
                             database.insertAnotacaoComportamento(anotacaoVaca);
                             //Trata o horário
@@ -412,7 +417,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
-
+        comportamento = "";
     }
 
     public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){

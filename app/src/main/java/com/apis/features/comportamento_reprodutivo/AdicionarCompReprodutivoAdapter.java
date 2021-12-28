@@ -5,13 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,15 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
-import com.apis.models.DateTime;
-import com.apis.models.FileControl;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Animal;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<AdicionarCompReprodutivoViewHolder> {

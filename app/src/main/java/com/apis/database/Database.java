@@ -10,12 +10,12 @@ import com.apis.database.DAOs.FormularioComportamentoDao;
 import com.apis.database.DAOs.LoteDao;
 import com.apis.database.DAOs.RelationsDao;
 import com.apis.database.DAOs.TipoComportamentoDao;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
-import com.apis.models.FormularioComportamento;
-import com.apis.models.Lote;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Animal;
+import com.apis.model.AnotacaoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.FormularioComportamento;
+import com.apis.model.Lote;
+import com.apis.model.TipoComportamento;
 
 @androidx.room.Database(entities = {
         Animal.class,

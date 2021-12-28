@@ -1,8 +1,4 @@
-package com.apis.models;
-
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
+package com.apis.model;
 
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;

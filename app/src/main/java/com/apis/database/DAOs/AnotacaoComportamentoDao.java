@@ -6,12 +6,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
+import com.apis.model.AnotacaoComportamento;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Dao

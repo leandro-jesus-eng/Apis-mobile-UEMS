@@ -3,8 +3,8 @@ package com.apis.database.relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import com.apis.models.Comportamento;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.TipoComportamento;
 
 import java.util.List;
 

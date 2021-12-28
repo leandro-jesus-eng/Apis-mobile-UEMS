@@ -1,10 +1,9 @@
-package com.apis.models;
+package com.apis.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity(tableName = "tb_anotacaoComportamento")
 public class AnotacaoComportamento implements Serializable {

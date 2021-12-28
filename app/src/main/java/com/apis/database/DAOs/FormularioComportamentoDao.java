@@ -6,10 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.apis.models.Comportamento;
-import com.apis.models.FormularioComportamento;
-
-import java.util.List;
+import com.apis.model.FormularioComportamento;
 
 @Dao
 public interface FormularioComportamentoDao {

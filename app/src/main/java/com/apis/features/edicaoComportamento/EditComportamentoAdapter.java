@@ -8,28 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
-import com.apis.database.DbRepository;
-import com.apis.models.Comportamento;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.TipoComportamento;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportamentoViewHolder> {
 
-    private List<TipoComportamento> tipos = new ArrayList<>();
-    private List<Comportamento> comportamentos = new ArrayList<>();
+    final private List<TipoComportamento> tipos = new ArrayList<>();
+    final private List<Comportamento> comportamentos = new ArrayList<>();
 
-    private List<TipoComportamento> tiposExcluidos = new ArrayList<>();
-    private List<Comportamento> comportamentosExcluidos = new ArrayList<>();
+    final private List<TipoComportamento> tiposExcluidos = new ArrayList<>();
+    final private List<Comportamento> comportamentosExcluidos = new ArrayList<>();
 
-    private Context context;
+    final private Context context;
 
     public EditComportamentoAdapter(Context context){
         this.context = context;
@@ -79,7 +78,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         }
 
         for (Comportamento comportamento : comportamentos) {
-            if (comportamento.getIdTipo() == tipos.get(holder.getAdapterPosition()).getId()) {
+            if (comportamento.getIdTipo() == tipos.get(position).getId()) {
                 createComportamento(holder, holder.getAdapterPosition(), false, comportamento.getNome());
             }
         }
@@ -107,9 +106,27 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         holder.btnExcluirTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TipoComportamento tipoComportamento = tipos.get(holder.getAdapterPosition());
+                List<Comportamento> tempListComportamento = new ArrayList<>();
+
+                for (Comportamento comportamento : comportamentos) {
+                    if (comportamento.getIdTipo() == tipoComportamento.getId()) {
+                        comportamentosExcluidos.add(comportamento);
+                        tempListComportamento.add(comportamento);
+                    }
+                }
+                comportamentos.removeAll(tempListComportamento);
+
+                tiposExcluidos.add(tipoComportamento);
+                tipos.remove(tipoComportamento);
+
+                //notifyItemRemoved(holder.getAdapterPosition());
+                /*
                 tiposExcluidos.add(tipos.get(holder.getAdapterPosition()));
                 tipos.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
+
+                 */
             }
         });
     }

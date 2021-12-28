@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.animal_list.ListaAnimais;
-import com.apis.models.Comportamento;
-import com.apis.models.DateTime;
-import com.apis.models.FormularioComportamento;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.DateTime;
+import com.apis.model.FormularioComportamento;
+import com.apis.model.TipoComportamento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,10 +121,8 @@ public class EditComportamento extends AppCompatActivity {
         textAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
 
-                adapter.submitItem(getFormularioWithTipo(formularioComportamento)
-                        .get(getFormularioWithTipo(formularioComportamento).size() -1));
+                adapter.submitItem(new TipoComportamento(1, "", formularioComportamento.getId()));
 
             }
         });
@@ -132,10 +130,7 @@ public class EditComportamento extends AppCompatActivity {
         imgAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
-
-                adapter.submitItem(getFormularioWithTipo(formularioComportamento)
-                        .get(getFormularioWithTipo(formularioComportamento).size() -1));
+                adapter.submitItem(new TipoComportamento(1, "", formularioComportamento.getId()));
             }
         });
 
@@ -169,7 +164,7 @@ public class EditComportamento extends AppCompatActivity {
                     insertNewComportamento("Ociosa em pé", 0, tipoComportamento.getId());
                     insertNewComportamento("Ociosa deitada", 0, tipoComportamento.getId());
                     insertNewComportamento("Ruminando em pé", 0, tipoComportamento.getId());
-                    insertNewComportamento("Ruminando em deitada", 0, tipoComportamento.getId());
+                    insertNewComportamento("Ruminando deitada", 0, tipoComportamento.getId());
                     break;
                 case "Comportamento Reprodutivo":
                     insertNewComportamento("Aceita de monta", 0, tipoComportamento.getId());

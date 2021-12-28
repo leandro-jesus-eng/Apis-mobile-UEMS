@@ -3,10 +3,9 @@ package com.apis.database.relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Animal;
+import com.apis.model.AnotacaoComportamento;
+
 import java.util.List;
 
 public class AnimalWithAnotacao {

@@ -18,21 +18,19 @@ import com.apis.database.relations.FormularioWithTipoComportamento;
 import com.apis.database.relations.LoteAndFormulario;
 import com.apis.database.relations.LoteWithAnimal;
 import com.apis.database.relations.TipoComportamentoWithComportamento;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
-import com.apis.models.FileControl;
-import com.apis.models.FormularioComportamento;
-import com.apis.models.Lote;
-import com.apis.models.TipoComportamento;
+import com.apis.model.Animal;
+import com.apis.model.AnotacaoComportamento;
+import com.apis.model.Comportamento;
+import com.apis.model.FileControl;
+import com.apis.model.FormularioComportamento;
+import com.apis.model.Lote;
+import com.apis.model.TipoComportamento;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class DbRepository {

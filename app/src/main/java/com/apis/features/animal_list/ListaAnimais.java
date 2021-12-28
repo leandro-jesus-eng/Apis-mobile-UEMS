@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
-import com.apis.models.Animal;
+import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 

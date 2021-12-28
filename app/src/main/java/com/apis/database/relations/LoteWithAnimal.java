@@ -2,9 +2,8 @@ package com.apis.database.relations;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Lote;
+import com.apis.model.Animal;
+import com.apis.model.Lote;
 
 import java.util.List;
 

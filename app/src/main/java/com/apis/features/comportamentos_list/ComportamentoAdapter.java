@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.Comportamento;
+import com.apis.model.AnotacaoComportamento;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoViewHolder>{

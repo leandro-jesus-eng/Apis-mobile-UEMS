@@ -17,16 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.models.Animal;
-import com.apis.models.AnotacaoComportamento;
-import com.apis.models.FileControl;
-import com.apis.models.Lote;
+import com.apis.model.Animal;
+import com.apis.model.AnotacaoComportamento;
+import com.apis.model.FileControl;
+import com.apis.model.Lote;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
