@@ -23,7 +23,7 @@ import java.util.List;
 public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportamentoViewHolder> {
 
     final private List<TipoComportamento> tipos = new ArrayList<>();
-    final private List<Comportamento> comportamentos = new ArrayList<>();
+    private List<Comportamento> comportamentos = new ArrayList<>();
 
     final private List<TipoComportamento> tiposExcluidos = new ArrayList<>();
     final private List<Comportamento> comportamentosExcluidos = new ArrayList<>();
@@ -54,8 +54,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     }
 
     public void submitComportamentoList(List<Comportamento> listComportamentos){
-        comportamentos.clear();
-        comportamentos.addAll(listComportamentos);
+        comportamentos = listComportamentos;
         notifyDataSetChanged();
     }
 
@@ -78,7 +77,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
         }
 
         for (Comportamento comportamento : comportamentos) {
-            if (comportamento.getIdTipo() == tipos.get(position).getId()) {
+            if (comportamento.getIdTipo() == tipos.get(holder.getAdapterPosition()).getId()) {
                 createComportamento(holder, holder.getAdapterPosition(), false, comportamento.getNome());
             }
         }
@@ -115,18 +114,15 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
                         tempListComportamento.add(comportamento);
                     }
                 }
-                comportamentos.removeAll(tempListComportamento);
+
+                if(tempListComportamento.size() > 0){
+                    holder.linearLayout.removeAllViews();
+                    comportamentos.removeAll(tempListComportamento);
+                }
 
                 tiposExcluidos.add(tipoComportamento);
                 tipos.remove(tipoComportamento);
-
-                //notifyItemRemoved(holder.getAdapterPosition());
-                /*
-                tiposExcluidos.add(tipos.get(holder.getAdapterPosition()));
-                tipos.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-
-                 */
             }
         });
     }

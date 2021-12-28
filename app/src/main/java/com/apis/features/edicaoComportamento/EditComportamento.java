@@ -123,7 +123,6 @@ public class EditComportamento extends AppCompatActivity {
             public void onClick(View view) {
 
                 adapter.submitItem(new TipoComportamento(1, "", formularioComportamento.getId()));
-
             }
         });
 
