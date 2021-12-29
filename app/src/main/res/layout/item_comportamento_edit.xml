@@ -29,11 +29,11 @@
 
     <ImageButton
         android:id="@+id/imgAddTipo"
-        android:layout_width="31dp"
-        android:layout_height="27dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="4dp"
-        android:background="@drawable/ic_baseline_delete_24"
+        android:background="@drawable/ic_baseline_close_24"
         app:layout_constraintStart_toEndOf="@+id/edNomeComportamento"
         app:layout_constraintTop_toTopOf="@+id/check" />
 

@@ -68,19 +68,21 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                 String comportamentoOutraVaca;
                 outraVaca = animais.get(holder.getAdapterPosition());
                 if(isMontando){
-                    dialogText = "A vaca "+vacaEmAnotacao.getNome()
-                            +" montou em "+outraVaca.getNome();
-                    comportamentoVacaAnotacao = "Monta na vaca "+outraVaca.getNome()+" - id: "+outraVaca.getId();
-                    comportamentoOutraVaca = "Aceita monta da vaca "+vacaEmAnotacao.getNome()+" - id: "+vacaEmAnotacao.getId();
+                    dialogText = "O bovino "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
+                            +" montou em \n\nVaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
+
+                    comportamentoVacaAnotacao = "Monta na vaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
+                    comportamentoOutraVaca = "Aceita de monta da vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")";
                 }else{
-                    dialogText = "A vaca "+vacaEmAnotacao.getNome()
-                            +" aceitou monta de "+outraVaca.getNome();
-                    comportamentoVacaAnotacao = "Aceita monta da vaca "+outraVaca.getNome()+" - id: "+outraVaca.getId();
-                    comportamentoOutraVaca = "Monta na vaca "+vacaEmAnotacao.getNome()+" - id: "+vacaEmAnotacao.getId();
+                    dialogText = "A vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
+                            +" aceitou monta de \n\nBovino "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
+
+                    comportamentoVacaAnotacao = "Aceita de monta da vaca "+outraVaca.getNome()+" (id:"+outraVaca.getId()+")";
+                    comportamentoOutraVaca = "Monta na vaca "+vacaEmAnotacao.getNome()+" (id:"+vacaEmAnotacao.getId()+")";
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Confirmar comportamento")
+                builder.setTitle("Confirmação de comportamento reprodutivo:")
                         .setMessage(dialogText)
                         .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                     @Override

@@ -38,7 +38,6 @@ import com.apis.model.FileControl;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,7 +65,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     final private List<CheckBox> listComportamentoView = new ArrayList<>();
     List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
     List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
-    private FloatingActionButton topButton;
+    private TextView goToReprodutivo;
 
     DbRepository database;
     LinearLayout layout;
@@ -74,7 +73,6 @@ public class AdicionarComportamento extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_comportamento);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,7 +82,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         database = new DbRepository(this);
         layout = findViewById(R.id.linearLayoutAddComp);
-        topButton = findViewById(R.id.fab);
+        goToReprodutivo = findViewById(R.id.goToReprodutivo_textView);
 
 
         pegarDadosActivityPassada();
@@ -115,7 +113,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             }
         });
 
-        topButton.setOnClickListener(new View.OnClickListener() {
+        goToReprodutivo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AdicionarCompReprodutivo.class);
@@ -181,7 +179,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             }
         }
         if(!comportamentoReprodutivo.equals("") && !temReprodutivo){
-            createTextView("Comportamento Reprodutivo", true);
+            createTextView("Comportamento Reprodutivo", false);
             createTextView("*"+comportamentoReprodutivo, true);
         }
     }
@@ -457,6 +455,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                     File files[] = getBaseContext().getExternalFilesDirs(null);
                     File f = null;
                     if(files.length > 0) {
+                        Toast.makeText(getApplicationContext(), files[0].toString(), Toast.LENGTH_SHORT).show();
                         f = new File( files[0] , FileControl.getNameOfLoteCSV(lote));
                         if (!f.exists()){
                             f.createNewFile();

@@ -2,6 +2,7 @@ package com.apis.features.comportamento_reprodutivo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ import java.util.List;
 
 public class AdicionarCompReprodutivo extends AppCompatActivity {
 
-    private FloatingActionButton topButton;
     private String nomeAnimal;
     private String nomeLote;
     private int idAnimal;
@@ -44,8 +44,9 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         setContentView(R.layout.activity_adicionar_comp_reprodutivo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        topButton = findViewById(R.id.fab);
         recyclerView = findViewById(R.id.recycler_view_rep);
         montandoButton = findViewById(R.id.estaMontando_btn);
         aceitandoMontaButton = findViewById(R.id.aceitandoMonta_btn);
@@ -57,8 +58,6 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         setRecycler();
 
         getSupportActionBar().setTitle(nomeAnimal);
-
-
 
         montandoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,18 +78,6 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Aceitando monta", Toast.LENGTH_SHORT).show();
                 isMontando = false;
                 adapter.isMontando(false);
-            }
-        });
-
-        topButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AdicionarComportamento.class);
-                intent.putExtra("animal_nome", nomeAnimal);
-                intent.putExtra("animal_id", idAnimal);
-                intent.putExtra("lote_id", idLote);
-                startActivity(intent);
-                finish();
             }
         });
 
@@ -121,6 +108,22 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
             idAnimal = getIntent().getIntExtra("animal_id", 9999);
             idLote = getIntent().getIntExtra("lote_id", 9999);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(getApplicationContext(), AdicionarComportamento.class);
+                intent.putExtra("animal_nome", nomeAnimal);
+                intent.putExtra("animal_id", idAnimal);
+                intent.putExtra("lote_id", idLote);
+                startActivity(intent);
+                finish();
+                break;
+            default:break;
+        }
+        return true;
     }
 
 }

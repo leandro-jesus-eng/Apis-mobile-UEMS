@@ -23,10 +23,11 @@
 
         <ImageButton
             android:id="@+id/imgThrash"
-            android:layout_width="31dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:layout_toEndOf="@id/edNomeTipo"
@@ -47,8 +48,11 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_below="@id/edNomeTipo"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical" />
 
 

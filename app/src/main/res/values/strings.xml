@@ -87,9 +87,9 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-    <string name="ordenar_por_id">Ordenar por identificação</string>
-    <string name="ordenar_por_anota_o_mais_recente">Ordenar por anotação mais recente</string>
-    <string name="ordenar_por_anota_o_mais_antiga">Ordenar por anotação mais antiga</string>
+    <string name="ordenar_por_id">Identificação</string>
+    <string name="ordenar_por_anota_o_mais_recente">Anotação mais recente</string>
+    <string name="ordenar_por_anota_o_mais_antiga">Anotação mais antiga</string>
     <string name="voltar_lista_de_lotes">Voltar à lista de lotes</string>
     <string name="voltar">Voltar</string>
     <string name="ordena_o_da_lista">Ordenação da lista</string>
@@ -104,10 +104,10 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="edi_o_de_comportamentos">Edição de comportamentos</string>
-    <string name="alterar_comportamentos_deste_lote">Alterar comportamentos deste lote</string>
+    <string name="alterar_comportamentos_deste_lote">Alterar comportamentos do lote</string>
     <string name="observa_es">Observações</string>
     <string name="est_montando">Está montando</string>
     <string name="est_aceitando_monta">Está aceitando monta</string>
-
+    <string name="reprodutivo">Reprodutivo</string>
 
 </resources>

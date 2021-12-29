@@ -48,7 +48,6 @@
             android:layout_height="wrap_content">
 
             <TextView
-
                 android:id="@+id/addCompTitle_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -172,14 +171,22 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <TextView
+        android:id="@+id/goToReprodutivo_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_launcher_notification"
-        app:maxImageSize="50dp"/>
+        android:text="@string/reprodutivo"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="@drawable/button_ir_para_reprodutivo"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
