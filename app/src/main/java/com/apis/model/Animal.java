@@ -54,20 +54,14 @@ public class Animal implements Serializable, Comparable<Animal> {
     @Override
      public int compareTo(Animal outroAnimal) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm:ss");
-
-            if(this.getLastUpdate().equals("Sem anotação!")){
-
-                Date date1 = dateFormat.parse("10/10/3030 20:20:20");
-                Date date2 = dateFormat.parse(outroAnimal.getLastUpdate());
-
-                if(date1.after(date2)){
-                    return 1;
-                }else if(date1.before(date2)){
-                    return -1;
-                }
-
-            }else{
+            if(this.getLastUpdate().equals("Sem anotação!") && outroAnimal.getLastUpdate().equals("Sem anotação!")){
+                return 0;
+            }else if(this.getLastUpdate().equals("Sem anotação!") && !outroAnimal.getLastUpdate().equals("Sem anotação!")){
+                return 1;
+            }else if(!this.getLastUpdate().equals("Sem anotação!") && outroAnimal.getLastUpdate().equals("Sem anotação!")){
+                return -1;
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm:ss");
                 Date date1 = dateFormat.parse(this.getLastUpdate());
                 Date date2 = dateFormat.parse(outroAnimal.getLastUpdate());
 
@@ -77,7 +71,6 @@ public class Animal implements Serializable, Comparable<Animal> {
                     return 1;
                 }
             }
-
         } catch (ParseException ex) {
 
         }

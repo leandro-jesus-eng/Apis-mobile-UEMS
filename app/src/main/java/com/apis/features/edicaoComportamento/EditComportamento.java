@@ -23,6 +23,7 @@ import com.apis.model.TipoComportamento;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class EditComportamento extends AppCompatActivity {
 
@@ -36,6 +37,7 @@ public class EditComportamento extends AppCompatActivity {
 
     List<TipoComportamento> listaTipos = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
+    List<TipoComportamento> newTypes = new ArrayList<>();
     FormularioComportamento formularioComportamento;
 
     TextView textAdicionarTipo;
@@ -121,18 +123,28 @@ public class EditComportamento extends AppCompatActivity {
         textAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                adapter.submitItem(new TipoComportamento(1, "", formularioComportamento.getId()));
+                submitTypeToAdapter();
             }
         });
 
         imgAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.submitItem(new TipoComportamento(1, "", formularioComportamento.getId()));
+                submitTypeToAdapter();
             }
         });
 
+    }
+
+    private void submitTypeToAdapter(){
+        database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
+
+        List<TipoComportamento> tipos = database.getFormularioWithTipoComportamento(
+                formularioComportamento.getId()).get(0).tiposComportamento;
+        TipoComportamento tipo = tipos.get(tipos.size() - 1);
+
+        adapter.submitItem(tipo);
+        newTypes.add(tipo);
     }
 
     private void setData(){
@@ -296,6 +308,12 @@ public class EditComportamento extends AppCompatActivity {
                     intent.putExtra("lote_id",idLote);
                     startActivity(intent);
                 }
+                if(!newTypes.isEmpty()){
+                    for(TipoComportamento tipo : newTypes){
+                        database.excluirTipoComportamento(tipo);
+                    }
+                }
+                newTypes.clear();
                 finish();
                 break;
             default:break;
