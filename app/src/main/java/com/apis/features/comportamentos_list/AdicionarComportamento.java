@@ -60,6 +60,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String comportamentoOutraVaca = "";
     private String obS = "";
     private FormularioComportamento formularioComportamento;
+    private Boolean temReprodutivo = false;
 
     private DateTime dateTime = new DateTime();
     final private List<CheckBox> listComportamentoView = new ArrayList<>();
@@ -130,7 +131,15 @@ public class AdicionarComportamento extends AppCompatActivity {
     private void setList(){
 
         if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
-            formularioComportamento = database.getFormularioPadrao(true);
+            if(database.getFormularioPadrao(true) == null){
+                DateTime dateTime = new DateTime();
+                String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+                database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+                formularioComportamento = database.getFormularioPadrao(true);
+                createPatternData();
+            }else{
+                formularioComportamento = database.getFormularioPadrao(true);
+            }
         }else{
             formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
         }
@@ -138,6 +147,18 @@ public class AdicionarComportamento extends AppCompatActivity {
         List<Comportamento> comportamentos = database.getAllComportamentos();
         List<TipoComportamento> tiposComportamento =
                 database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+
+        for(TipoComportamento tipoComportamento : tiposComportamento){
+            if(
+                    tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") ||
+                            tipoComportamento.getDescricao().equals("Reprodutivo") ||
+                            tipoComportamento.getDescricao().equals("reprodutivo") ||
+                            tipoComportamento.getDescricao().equals("comportamento reprodutivo")
+            ){
+                temReprodutivo = true;
+                break;
+            }
+        }
 
         for(TipoComportamento tipoComportamento : tiposComportamento) {
             createTextView(tipoComportamento.getDescricao(), false);
@@ -158,6 +179,10 @@ public class AdicionarComportamento extends AppCompatActivity {
             if(!comportamentoReprodutivo.equals("") && tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
                 createTextView("*"+comportamentoReprodutivo, true);
             }
+        }
+        if(!comportamentoReprodutivo.equals("") && !temReprodutivo){
+            createTextView("Comportamento Reprodutivo", true);
+            createTextView("*"+comportamentoReprodutivo, true);
         }
     }
 
@@ -473,6 +498,42 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
         alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
+    }
+
+    private void createPatternData(){
+        database.insertTipoComportamento(
+                new TipoComportamento(0,
+                        "Comportamento Fisiológico",
+                        formularioComportamento.getId()));
+        database.insertTipoComportamento(
+                new TipoComportamento(0,
+                        "Comportamento Reprodutivo",
+                        formularioComportamento.getId()));
+        database.insertTipoComportamento(
+                new TipoComportamento(0,
+                        "Uso da Sombra",
+                        formularioComportamento.getId()));
+
+        for(TipoComportamento tipoComportamento : database.getAllTipos()){
+            switch (tipoComportamento.getDescricao()){
+                case "Comportamento Fisiológico":
+                    database.insertComportamento(new Comportamento(0, "Pastejando", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Ociosa em pé", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Ociosa deitada", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Ruminando em pé", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Ruminando deitada", tipoComportamento.getId()));
+                    break;
+                case "Comportamento Reprodutivo":
+                    database.insertComportamento(new Comportamento(0, "Aceita de monta", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Monta outra", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Inquieta", tipoComportamento.getId()));
+                    break;
+                case "Uso da Sombra":
+                    database.insertComportamento(new Comportamento(0, "Sol", tipoComportamento.getId()));
+                    database.insertComportamento(new Comportamento(0, "Sombra", tipoComportamento.getId()));
+                    break;
+            }
+        }
     }
 
     @Override

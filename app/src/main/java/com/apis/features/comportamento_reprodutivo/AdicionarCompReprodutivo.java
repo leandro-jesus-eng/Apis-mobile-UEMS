@@ -51,6 +51,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         aceitandoMontaButton = findViewById(R.id.aceitandoMonta_btn);
 
         database = new DbRepository(this);
+        isMontando = true;
 
         pegarDadosActivityPassada();
         setRecycler();
