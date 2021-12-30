@@ -135,9 +135,16 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                     FileOutputStream out = new FileOutputStream(f, true);
                     for(Animal animal : listAnimais) {
                         List<AnotacaoComportamento> listComp = database.getAnotacoesComportamento(animal.getId());
-                        for (AnotacaoComportamento comportamento : listComp) {
-                           out.write(comportamento.getNomeComportamento().getBytes());
-                           out.write('\n');
+                        String anotacaoString;
+                        for (AnotacaoComportamento anotacao : listComp) {
+                            anotacaoString =
+                                            anotacao.getIdAnimal() + ";" +
+                                            anotacao.getNomeAnimal() + ";" +
+                                            anotacao.getData() +" "+anotacao.getHora()+";" +
+                                            anotacao.getNomeComportamento() + ";" +
+                                            anotacao.getObs();
+                            out.write(anotacaoString.getBytes());
+                            out.write('\n');
                             existeDados = true;
                         }
                     }
