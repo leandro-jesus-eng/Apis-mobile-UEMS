@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
@@ -132,13 +134,15 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                         List<AnotacaoComportamento> listComp = database.getAnotacoesComportamento(animal.getId());
                         String anotacaoString;
                         for (AnotacaoComportamento anotacao : listComp) {
-                            anotacaoString =
+                             anotacaoString =
                                             anotacao.getIdAnimal() + ";" +
                                             anotacao.getNomeAnimal() + ";" +
                                             anotacao.getData() +" "+anotacao.getHora()+";" +
                                             anotacao.getNomeComportamento() + ";" +
                                             anotacao.getObs();
-                            out.write(anotacaoString.getBytes());
+
+                            ByteBuffer byteBuffer = StandardCharsets.ISO_8859_1.encode(anotacaoString);
+                            out.write(byteBuffer.array());
                             out.write('\n');
                             existeDados = true;
                         }
@@ -158,6 +162,12 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                     intentShareFile.setType("application/pdf");
                     intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" +fileName));
                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Dados Lote : " + lote.getNome());
+                    intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intentShareFile.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intentShareFile.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intentShareFile.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intentShareFile.setFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
                     context.startActivity(Intent.createChooser(intentShareFile, "Enviar para"));
                 } else {

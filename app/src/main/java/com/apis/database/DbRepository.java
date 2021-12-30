@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -297,7 +299,9 @@ public class DbRepository {
                     }
 
                     FileOutputStream out = new FileOutputStream(f, true);
-                    out.write(conteudo.getBytes());
+
+                    ByteBuffer byteBuffer = StandardCharsets.ISO_8859_1.encode(conteudo);
+                    out.write(byteBuffer.array());
                     out.write('\n');
                     out.flush();
                     out.close();
