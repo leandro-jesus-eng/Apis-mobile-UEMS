@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apis.R;
 import com.apis.database.DbRepository;
+import com.apis.features.animal_list.AnimalAdapter;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,6 +40,8 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     private DbRepository database;
     static private boolean isMontando = true;
 
+    private TextView textMsg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,12 +55,14 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view_rep);
         montandoButton = findViewById(R.id.estaMontando_btn);
         aceitandoMontaButton = findViewById(R.id.aceitandoMonta_btn);
+        textMsg = findViewById(R.id.textMsg);
 
         database = new DbRepository(this);
         isMontando = true;
 
         pegarDadosActivityPassada();
         setRecycler();
+        setNoAnimaisMsg();
 
         getSupportActionBar().setTitle(nomeAnimal);
 
@@ -80,10 +87,19 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
                 adapter.isMontando(false);
             }
         });
-
-        animalList = database.getAnimais(idLote);
+        List<Animal> animalList = database.getAnimais(idLote);
         animalList.remove(findVacaEmAnotacao());
         adapter.submitList(animalList);
+    }
+
+    private void setNoAnimaisMsg(){
+        List<Animal> animalList = database.getAnimais(idLote);
+
+        if(animalList.size() == 1){
+            textMsg.setVisibility(View.VISIBLE);
+        }else{
+           textMsg.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setRecycler(){
