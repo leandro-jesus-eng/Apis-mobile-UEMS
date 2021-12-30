@@ -20,8 +20,6 @@
 
     </PreferenceCategory>
 
-    
-
     <PreferenceCategory
         app:key="dados_category"
         app:title="Sobre">
@@ -39,8 +37,6 @@
             app:summary="http://flaticon.com e http://material.io"
             app:title="Ícones e recursos gráficos">
         </Preference>
-
-
 
     </PreferenceCategory>
 

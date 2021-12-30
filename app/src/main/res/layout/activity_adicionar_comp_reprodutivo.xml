@@ -43,8 +43,6 @@
         tools:context=".features.comportamentos_list.AdicionarComportamento"
         tools:showIn="@layout/activity_adicionar_comportamento">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
