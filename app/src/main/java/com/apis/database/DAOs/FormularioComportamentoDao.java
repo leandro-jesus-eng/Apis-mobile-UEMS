@@ -5,7 +5,6 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import com.apis.model.FormularioComportamento;
 
 @Dao
@@ -25,5 +24,4 @@ public interface FormularioComportamentoDao {
 
     @Query("SELECT * FROM tb_formularioComportamento WHERE formularioPadrao = :ehPadrao")
     FormularioComportamento getFormularioPadrao(boolean ehPadrao);
-
 }

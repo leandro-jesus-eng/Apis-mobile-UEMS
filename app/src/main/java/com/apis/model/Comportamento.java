@@ -37,5 +37,4 @@ public class Comportamento implements Serializable {
     public int hashCode(){
         return this.id;
     }
-
 }

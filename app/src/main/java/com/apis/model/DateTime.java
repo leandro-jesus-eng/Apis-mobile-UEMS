@@ -2,7 +2,6 @@ package com.apis.model;
 
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
-
 import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

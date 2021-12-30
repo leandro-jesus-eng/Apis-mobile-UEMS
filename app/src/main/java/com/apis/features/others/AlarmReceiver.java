@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.R;
 
@@ -25,7 +23,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
 
         if (intent.hasExtra("animal_nome") && intent.hasExtra("animal_id") && intent.hasExtra("lote_id")){
             nomeAnimal = intent.getStringExtra("animal_nome");
@@ -56,7 +53,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(idAnimal, builder.build());
 
-
         //Vibra o celular
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
@@ -66,8 +62,5 @@ public class AlarmReceiver extends BroadcastReceiver {
             //deprecated in API 26
             v.vibrate(1000);
         }
-
-
     }
-
 }

@@ -10,23 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.model.Animal;
-
 import java.util.List;
 
 public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
 
     private List<Animal> animais;
     private Context context;
-
 
     public AnimalAdapter(List animais, Context context){
         this.animais = animais;
@@ -110,5 +106,4 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalViewHolder> {
     public int getItemCount() {
         return animais.size();
     }
-
 }

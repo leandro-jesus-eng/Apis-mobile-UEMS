@@ -9,15 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.model.Animal;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,5 +111,4 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
     public int getItemCount() {
         return animais.size();
     }
-
 }

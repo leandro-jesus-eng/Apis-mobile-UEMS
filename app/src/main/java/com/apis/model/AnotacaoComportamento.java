@@ -46,5 +46,4 @@ public class AnotacaoComportamento implements Serializable {
     public String getHora() { return hora; }
     public String getNomeComportamento() { return nomeComportamento; }
     public String getObs() { return obs; }
-
 }

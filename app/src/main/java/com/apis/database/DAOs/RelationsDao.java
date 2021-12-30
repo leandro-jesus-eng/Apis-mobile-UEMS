@@ -3,13 +3,11 @@ package com.apis.database.DAOs;
 import androidx.room.Dao;
 import androidx.room.Query;
 import androidx.room.Transaction;
-
 import com.apis.database.relations.AnimalWithAnotacao;
 import com.apis.database.relations.FormularioWithTipoComportamento;
 import com.apis.database.relations.LoteAndFormulario;
 import com.apis.database.relations.LoteWithAnimal;
 import com.apis.database.relations.TipoComportamentoWithComportamento;
-
 import java.util.List;
 
 @Dao

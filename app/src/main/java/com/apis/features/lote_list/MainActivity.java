@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
         });
+
         database = new DbRepository(this);
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
-
     }
 
     public void configurarLista() {
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(lotes.size() > 0){
             nenhumLote.setVisibility(View.INVISIBLE);
             alertImg.setVisibility(View.INVISIBLE);
-
         }else {
             nenhumLote.setVisibility(View.VISIBLE);
             alertImg.setVisibility(View.VISIBLE);
@@ -166,8 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alert.show();
     }
 
-
-
     final static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.VIBRATE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -185,10 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
             Manifest.permission.WAKE_LOCK,
             Manifest.permission.INTERNET
-
     };
-
-
 
     public void pedirPermissoes() {
 
@@ -227,8 +221,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     1
             );
         }
-
-
     }
 
     private void createNotificationChannel() {
@@ -290,13 +282,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setNegativeButton("Cancelar", null)
                     .create()
                     .show();
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 }

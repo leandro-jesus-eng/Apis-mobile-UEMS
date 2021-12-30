@@ -2,11 +2,8 @@ package com.apis.database;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
-
 import com.apis.database.DAOs.AnimalDao;
 import com.apis.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.database.DAOs.ComportamentoDao;

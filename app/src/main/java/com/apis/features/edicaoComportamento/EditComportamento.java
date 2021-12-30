@@ -7,12 +7,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 import com.apis.database.DbRepository;
 import com.apis.features.animal_list.ListaAnimais;
@@ -20,10 +18,8 @@ import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.TipoComportamento;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class EditComportamento extends AppCompatActivity {
 
@@ -158,6 +154,7 @@ public class EditComportamento extends AppCompatActivity {
                 }
             }
         }
+
         listaComportamentos = tempListComp;
         adapter.submitTipoList(listaTipos);
         adapter.submitComportamentoList(listaComportamentos);

@@ -3,13 +3,9 @@ package com.apis.features.comportamento_reprodutivo;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
-import com.google.android.material.card.MaterialCardView;
 
 public class AdicionarCompReprodutivoViewHolder extends RecyclerView.ViewHolder{
 
@@ -25,5 +21,4 @@ public class AdicionarCompReprodutivoViewHolder extends RecyclerView.ViewHolder{
         idVaca = (TextView) view.findViewById(R.id.vaca_id_rep_textView);
         imgVaca = (ImageView) view.findViewById(R.id.vaca_rep_imageView);
     }
-
 }

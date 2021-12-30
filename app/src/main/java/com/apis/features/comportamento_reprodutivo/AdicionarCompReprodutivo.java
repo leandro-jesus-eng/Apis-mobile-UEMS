@@ -5,32 +5,24 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 import com.apis.database.DbRepository;
-import com.apis.features.animal_list.AnimalAdapter;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.model.Animal;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdicionarCompReprodutivo extends AppCompatActivity {
 
     private String nomeAnimal;
-    private String nomeLote;
     private int idAnimal;
     private int idLote;
-    private List<Animal> animalList = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private AdicionarCompReprodutivoAdapter adapter;
@@ -141,6 +133,5 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         }
         return true;
     }
-
 }
 

@@ -5,9 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import com.apis.model.Animal;
-
 import java.util.List;
 
 @Dao
@@ -33,6 +31,4 @@ public interface AnimalDao {
 
     @Query("UPDATE tb_animal SET lastUpdate = :lastUpdate WHERE id = :animalId")
     void setLastUpdate(int animalId, String lastUpdate);
-
-
 }

@@ -9,13 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
 import com.apis.database.DbRepository;
@@ -23,7 +19,6 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.FileControl;
 import com.apis.model.Lote;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -159,7 +154,6 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 } finally {
                 }
 
-
                if(existeDados && f != null && f.exists()) {
                     intentShareFile.setType("application/pdf");
                     intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" +fileName));
@@ -171,7 +165,6 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 }
             }
         });
-
 
         //Acessar lote
         holder.itemLista.setOnClickListener(new Button.OnClickListener() {

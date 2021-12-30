@@ -3,10 +3,8 @@ package com.apis.features.animal_list;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 
 public class AnimalViewHolder extends RecyclerView.ViewHolder {

@@ -2,12 +2,9 @@ package com.apis.features.lote_list;
 
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 
 public class LoteViewHolder extends RecyclerView.ViewHolder {
@@ -18,7 +15,6 @@ public class LoteViewHolder extends RecyclerView.ViewHolder {
     final ImageButton btnExcluir;
     final ImageButton btnExportarDados;
 
-
     public LoteViewHolder(View view) {
         super(view);
         itemLista = (ConstraintLayout) view.findViewById(R.id.itemListaLote);
@@ -28,5 +24,4 @@ public class LoteViewHolder extends RecyclerView.ViewHolder {
         btnExportarDados = (ImageButton) view.findViewById(R.id.btnExportarDados);
 
     }
-
 }

@@ -4,13 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 import com.apis.model.AnotacaoComportamento;
-
 import java.util.List;
 
 public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoViewHolder>{
@@ -18,12 +15,10 @@ public class ComportamentoAdapter extends RecyclerView.Adapter<ComportamentoView
     private List<AnotacaoComportamento> comportamentos;
     private Context context;
 
-
     public ComportamentoAdapter(List comportamentos, Context context){
         this.comportamentos = comportamentos;
         this.context = context;
     }
-
 
     @NonNull
     @Override

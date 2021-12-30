@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,7 +39,6 @@ import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -93,7 +91,6 @@ public class AdicionarComportamento extends AppCompatActivity {
         setList();
 
         getSupportActionBar().setTitle(nomeAnimal);
-
 
         //Arquivo de comportamentos temporarios
         FileControl fc = new FileControl(getApplicationContext());

@@ -3,11 +3,9 @@ package com.apis.features.others;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 
 import com.apis.R;
 
@@ -31,7 +29,6 @@ public class SettingsActivity extends AppCompatActivity  {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
@@ -43,9 +40,9 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+            case android.R.id.home:
                 finish();
                 break;
             default:break;

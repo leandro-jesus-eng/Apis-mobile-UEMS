@@ -3,7 +3,6 @@ package com.apis.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,10 +71,7 @@ public class Animal implements Serializable, Comparable<Animal> {
                 }
             }
         } catch (ParseException ex) {
-
         }
         return 0;
     }
-
-
 }

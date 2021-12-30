@@ -8,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.R;
 import com.apis.model.Comportamento;
 import com.apis.model.TipoComportamento;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportamentoViewHolder> {
@@ -184,5 +180,4 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     public int getItemCount() {
         return tipos.size();
     }
-
 }
