@@ -170,12 +170,20 @@ public class AdicionarComportamento extends AppCompatActivity {
                     }
 
                     if(!comportamentoReprodutivo.equals("") &&
-                            !tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+                            (!tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") &&
+                                    !tipoComportamento.getDescricao().equals("Reprodutivo") &&
+                                    !tipoComportamento.getDescricao().equals("reprodutivo") &&
+                                    !tipoComportamento.getDescricao().equals("comportamento reprodutivo"))
+                    ){
                         createCheckListView(comportamento.getNome());
                     }
                 }
             }
-            if(!comportamentoReprodutivo.equals("") && tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+            if(!comportamentoReprodutivo.equals("") &&
+                    (tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") ||
+                    tipoComportamento.getDescricao().equals("Reprodutivo") ||
+                    tipoComportamento.getDescricao().equals("reprodutivo") ||
+                    tipoComportamento.getDescricao().equals("comportamento reprodutivo"))){
                 createTextView("*"+comportamentoReprodutivo, true);
             }
         }
