@@ -164,29 +164,22 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:text="Exportar"
-                app:layout_constraintEnd_toEndOf="@+id/fundoCinza"
-                app:layout_constraintTop_toTopOf="@+id/fundoCinza" />
+                app:layout_constraintEnd_toEndOf="@id/fundoCinza"
+                app:layout_constraintTop_toTopOf="@id/fundoCinza" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/goToReprodutivo_textView"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:text="@string/reprodutivo"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:paddingTop="10dp"
-        android:paddingBottom="12dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:background="@drawable/button_ir_para_reprodutivo"/>
-
+        android:src="@drawable/cow_red"
+        android:contentDescription="@string/reprodutivo"
+        app:maxImageSize="55dp"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

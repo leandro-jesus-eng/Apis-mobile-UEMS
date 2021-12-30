@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import com.apis.model.FileControl;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,7 +67,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     final private List<CheckBox> listComportamentoView = new ArrayList<>();
     List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
     List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
-    private TextView goToReprodutivo;
+    private FloatingActionButton goToReprodutivo;
 
     DbRepository database;
     LinearLayout layout;
@@ -82,7 +84,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         database = new DbRepository(this);
         layout = findViewById(R.id.linearLayoutAddComp);
-        goToReprodutivo = findViewById(R.id.goToReprodutivo_textView);
+        goToReprodutivo = findViewById(R.id.fab);
 
 
         pegarDadosActivityPassada();
@@ -132,8 +134,10 @@ public class AdicionarComportamento extends AppCompatActivity {
             if(database.getFormularioPadrao(true) == null){
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+
                 database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
                 formularioComportamento = database.getFormularioPadrao(true);
+
                 createPatternData();
             }else{
                 formularioComportamento = database.getFormularioPadrao(true);
@@ -332,14 +336,14 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     public void salvarDados(){
-        comportamento = "";
+        //comportamento = "";
 
         for (CheckBox viewComportamento : listComportamentoView){
             if(viewComportamento.isChecked()){
                 comportamento += viewComportamento.getText()+"; " ;
             }
         }
-
+        String c = comportamento;
         if(!comportamentoReprodutivo.isEmpty()){
             comportamento += comportamentoReprodutivo;
         }
@@ -440,7 +444,6 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
-        comportamento = "";
     }
 
     public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){
@@ -452,10 +455,10 @@ public class AdicionarComportamento extends AppCompatActivity {
         try {
                 try {
 
-                    File files[] = getBaseContext().getExternalFilesDirs(null);
+                     File files[] = getBaseContext().getExternalFilesDirs(null);
+
                     File f = null;
                     if(files.length > 0) {
-                        Toast.makeText(getApplicationContext(), files[0].toString(), Toast.LENGTH_SHORT).show();
                         f = new File( files[0] , FileControl.getNameOfLoteCSV(lote));
                         if (!f.exists()){
                             f.createNewFile();

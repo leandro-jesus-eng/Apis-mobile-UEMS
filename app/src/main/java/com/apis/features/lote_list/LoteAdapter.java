@@ -136,7 +136,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                     for(Animal animal : listAnimais) {
                         List<AnotacaoComportamento> listComp = database.getAnotacoesComportamento(animal.getId());
                         for (AnotacaoComportamento comportamento : listComp) {
-                           out.write(comportamento.toString().getBytes());
+                           out.write(comportamento.getNomeComportamento().getBytes());
                            out.write('\n');
                             existeDados = true;
                         }
