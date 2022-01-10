@@ -26,15 +26,15 @@
 
         <Preference
             app:key="github"
-            app:summary="http://github.com/joaocou/apis/"
+            app:summary="https://github.com/leandro-jesus-eng/Apis-mobile-UEMS"
             app:title="GitHub">
                 <intent android:action="android.intent.action.VIEW"
-                    android:data="http://github.com/joaocou/apis/" />
+                    android:data="https://github.com/leandro-jesus-eng/Apis-mobile-UEMS" />
         </Preference>
 
         <Preference
             app:key="icons"
-            app:summary="http://flaticon.com e http://material.io"
+            app:summary="https://www.flaticon.com/br/ e https://material.io/"
             app:title="Ícones e recursos gráficos">
         </Preference>
 

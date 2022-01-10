@@ -2,6 +2,7 @@ package com.apis.database;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import com.apis.database.DAOs.AnimalDao;
@@ -271,7 +272,6 @@ public class DbRepository {
         //Apaga o arquivo de dados do animal, se houver
 
         File files[] = context.getExternalFilesDirs(null);
-
         File f = null;
         if(files.length > 0) {
             f = new File( files[0] , FileControl.getNameOfAnimalCSV(lote, animal));

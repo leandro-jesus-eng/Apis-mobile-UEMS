@@ -1,6 +1,7 @@
 package com.apis.model;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 import com.apis.database.DbRepository;
@@ -32,7 +33,6 @@ public class FileControl {
     private File getMarkedOptionsFile () throws IOException {
 
         File files[] = context.getExternalFilesDirs(null);
-
         File f = null;
         if(files.length > 0) {
             f = new File( files[0] , "marked_options.tmp");

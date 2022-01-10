@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.startActivity(intent);
 
         }else if (id == R.id.nav_github) {
-            String url = "http://github.com/joaocou/apis";
+            String url = "https://github.com/leandro-jesus-eng/Apis-mobile-UEMS";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
