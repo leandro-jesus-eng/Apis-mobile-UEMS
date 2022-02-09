@@ -76,9 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
-        new FirestoreRepository(getApplicationContext()).insertLote(
-                new Lote(0, "teste", "teste2")
-        );
     }
 
     public void configurarLista() {

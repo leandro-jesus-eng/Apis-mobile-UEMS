@@ -49,11 +49,7 @@ public class FirestoreRepository {
     }
 
     public void insertLote(Lote lote){
-        Map mappedLote = objectMapper.mapLoteToFirestore(
-                lote.getId(),
-                lote.getNome(),
-                lote.getExperimento()
-        );
+        Map<String, Object> mappedLote = objectMapper.mapLoteToFirestore(lote);
         try {
             firebaseFirestore.collection("Apis_data/shared_configuration/Lote").add(mappedLote);
         } catch (Exception e){
