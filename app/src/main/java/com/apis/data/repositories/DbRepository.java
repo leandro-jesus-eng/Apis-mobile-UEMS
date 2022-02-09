@@ -1,22 +1,23 @@
-package com.apis.database;
+package com.apis.data.repositories;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
-import com.apis.database.DAOs.AnimalDao;
-import com.apis.database.DAOs.AnotacaoComportamentoDao;
-import com.apis.database.DAOs.ComportamentoDao;
-import com.apis.database.DAOs.FormularioComportamentoDao;
-import com.apis.database.DAOs.LoteDao;
-import com.apis.database.DAOs.RelationsDao;
-import com.apis.database.DAOs.TipoComportamentoDao;
-import com.apis.database.relations.AnimalWithAnotacao;
-import com.apis.database.relations.FormularioWithTipoComportamento;
-import com.apis.database.relations.LoteAndFormulario;
-import com.apis.database.relations.LoteWithAnimal;
-import com.apis.database.relations.TipoComportamentoWithComportamento;
+
+import com.apis.data.database.DAOs.AnimalDao;
+import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
+import com.apis.data.database.DAOs.ComportamentoDao;
+import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.LoteDao;
+import com.apis.data.database.DAOs.RelationsDao;
+import com.apis.data.database.DAOs.TipoComportamentoDao;
+import com.apis.data.database.Database;
+import com.apis.data.database.relations.AnimalWithAnotacao;
+import com.apis.data.database.relations.FormularioWithTipoComportamento;
+import com.apis.data.database.relations.LoteAndFormulario;
+import com.apis.data.database.relations.LoteWithAnimal;
+import com.apis.data.database.relations.TipoComportamentoWithComportamento;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;

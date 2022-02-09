@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.FileControl;

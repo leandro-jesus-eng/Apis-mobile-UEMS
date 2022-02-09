@@ -1,4 +1,4 @@
-package com.apis.database.DAOs;
+package com.apis.data.database.DAOs;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

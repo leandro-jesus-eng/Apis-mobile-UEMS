@@ -23,7 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

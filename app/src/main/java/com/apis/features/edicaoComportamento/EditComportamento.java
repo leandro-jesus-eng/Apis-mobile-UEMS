@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;

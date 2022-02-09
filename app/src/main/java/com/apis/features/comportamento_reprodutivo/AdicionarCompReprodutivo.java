@@ -12,10 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
 import com.apis.model.Animal;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class AdicionarCompReprodutivo extends AppCompatActivity {

@@ -1,11 +1,13 @@
-package com.apis.database.relations;
+package com.apis.data.database.relations;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.Animal;
 import com.apis.model.Lote;
 
-public class LoteAndFormulario {
+import java.util.List;
+
+public class LoteWithAnimal {
 
     @Embedded
     public Lote lote;
@@ -13,5 +15,5 @@ public class LoteAndFormulario {
             parentColumn = "id",
             entityColumn = "loteId"
     )
-    public FormularioComportamento formularioComportamento;
+    public List<Animal> animais;
 }

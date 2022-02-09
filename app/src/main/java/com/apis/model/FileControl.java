@@ -1,10 +1,9 @@
 package com.apis.model;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

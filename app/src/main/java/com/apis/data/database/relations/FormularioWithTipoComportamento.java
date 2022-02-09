@@ -1,4 +1,4 @@
-package com.apis.database.relations;
+package com.apis.data.database.relations;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;

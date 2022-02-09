@@ -1,15 +1,16 @@
-package com.apis.database;
+package com.apis.data.database;
 
 import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.apis.database.DAOs.AnimalDao;
-import com.apis.database.DAOs.AnotacaoComportamentoDao;
-import com.apis.database.DAOs.ComportamentoDao;
-import com.apis.database.DAOs.FormularioComportamentoDao;
-import com.apis.database.DAOs.LoteDao;
-import com.apis.database.DAOs.RelationsDao;
-import com.apis.database.DAOs.TipoComportamentoDao;
+
+import com.apis.data.database.DAOs.AnimalDao;
+import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
+import com.apis.data.database.DAOs.ComportamentoDao;
+import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.LoteDao;
+import com.apis.data.database.DAOs.RelationsDao;
+import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;

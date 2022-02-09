@@ -27,7 +27,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
-import com.apis.database.DbRepository;
+import com.apis.data.repositories.DbRepository;
+import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
+        new FirestoreRepository(getApplicationContext()).insertLote(
+                new Lote(0, "teste", "teste2")
+        );
     }
 
     public void configurarLista() {
