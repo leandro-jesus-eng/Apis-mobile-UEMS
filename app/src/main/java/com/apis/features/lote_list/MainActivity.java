@@ -78,11 +78,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
-
-        Lote lote = database.getAllLotes().get(0);
+        /*
+        Lote lote = database.getAllLotes().get(1);
         TipoComportamento tipo = database.getAllTipos().get(0);
         Animal animal = database.getAnimais(lote.getId()).get(0);
-        new FirestoreRepository(getApplicationContext())
+        new FirestoreRepository()
             .updateRemote(
                     lote,
                     animal,
@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     database.getFormularioPadrao(true),
                     database.getAnotacoesComportamento(animal.getId()).get(0)
             );
-
+         */
+        new FirestoreRepository(this).setupRemoteChangeListener();
     }
 
     public void configurarLista() {

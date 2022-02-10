@@ -9,16 +9,16 @@ import java.io.Serializable;
 public class FormularioComportamento implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "dataCriacao")
-    final private String dataCriacao;
+    private String dataCriacao;
 
     @ColumnInfo(name = "formularioPadrao")
-    final private boolean formularioPadrao;
+    private boolean formularioPadrao;
 
     @ColumnInfo(name = "loteId")
-    final private int loteId;
+    private int loteId;
 
     public FormularioComportamento(int id, String dataCriacao, boolean formularioPadrao, int loteId){
         this.id = id;
@@ -27,8 +27,15 @@ public class FormularioComportamento implements Serializable {
         this.loteId = loteId;
     }
 
+    public FormularioComportamento(){}
+
     public int getId() { return id; }
     public String getDataCriacao() { return dataCriacao; }
     public boolean isFormularioPadrao() { return formularioPadrao; }
     public int getLoteId() { return loteId; }
+
+    public void setId(int id) { this.id = id; }
+    public void setDataCriacao(String dataCriacao) { this.dataCriacao = dataCriacao; }
+    public void setFormularioPadrao(boolean formularioPadrao) { this.formularioPadrao = formularioPadrao; }
+    public void setLoteId(int loteId) { this.loteId = loteId; }
 }

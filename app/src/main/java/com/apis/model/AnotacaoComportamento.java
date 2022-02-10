@@ -9,25 +9,25 @@ import java.io.Serializable;
 public class AnotacaoComportamento implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "animalNome")
-    final private String nomeAnimal;
+    private String nomeAnimal;
 
     @ColumnInfo(name = "animalId")
-    final private int idAnimal;
+    private int idAnimal;
 
     @ColumnInfo(name = "data")
-    final private String data;
+    private String data;
 
     @ColumnInfo(name = "hora")
-    final private String hora;
+    private String hora;
 
     @ColumnInfo(name = "nomeComportamento")
-    final private String nomeComportamento;
+    private String nomeComportamento;
 
     @ColumnInfo(name = "obs")
-    final private String obs;
+    private String obs;
 
     public AnotacaoComportamento(int id, String nomeAnimal, int idAnimal, String data, String hora, String nomeComportamento, String obs){
         this.id = id;
@@ -39,6 +39,8 @@ public class AnotacaoComportamento implements Serializable {
         this.obs = obs;
     }
 
+    public AnotacaoComportamento(){}
+
     public int getId() { return id; }
     public String getNomeAnimal() { return nomeAnimal; }
     public int getIdAnimal() { return idAnimal; }
@@ -46,4 +48,12 @@ public class AnotacaoComportamento implements Serializable {
     public String getHora() { return hora; }
     public String getNomeComportamento() { return nomeComportamento; }
     public String getObs() { return obs; }
+
+    public void setId(int id) { this.id = id; }
+    public void setNomeAnimal(String nomeAnimal) { this.nomeAnimal = nomeAnimal; }
+    public void setIdAnimal(int idAnimal) { this.idAnimal = idAnimal; }
+    public void setData(String data) { this.data = data; }
+    public void setHora(String hora) { this.hora = hora; }
+    public void setNomeComportamento(String nomeComportamento) { this.nomeComportamento = nomeComportamento; }
+    public void setObs(String obs) { this.obs = obs; }
 }

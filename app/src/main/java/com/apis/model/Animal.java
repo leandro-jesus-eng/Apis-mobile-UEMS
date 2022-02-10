@@ -12,13 +12,13 @@ import java.util.Date;
 public class Animal implements Serializable, Comparable<Animal> {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "nome")
-    final private String nome;
+    private String nome;
 
     @ColumnInfo(name = "loteId")
-    final private int loteId;
+    private int loteId;
 
     @ColumnInfo(name = "lastUpdate")
     private String lastUpdate;
@@ -29,6 +29,7 @@ public class Animal implements Serializable, Comparable<Animal> {
         this.loteId = loteId;
         this.lastUpdate = lastUpdate;
     }
+    public Animal(){}
 
     public int getId(){ return this.id; }
     public String getNome(){ return this.nome; }
@@ -36,6 +37,11 @@ public class Animal implements Serializable, Comparable<Animal> {
     public String getLastUpdate(){
         return this.lastUpdate;
     }
+
+
+    public void setId(int id) { this.id = id; }
+    public void setNome(String nome) { this.nome = nome; }
+    public void setLoteId(int loteId) { this.loteId = loteId; }
     public void setLastUpdate(String data){
         this.lastUpdate = data;
     }

@@ -9,13 +9,13 @@ import java.io.Serializable;
 public class Lote implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "nome")
-    final private String nome;
+    private String nome;
 
     @ColumnInfo(name = "experimento")
-    final private String experimento;
+    private String experimento;
 
     public Lote(int id, String nome, String experimento){
         this.id = id;
@@ -23,9 +23,15 @@ public class Lote implements Serializable {
         this.experimento = experimento;
     }
 
+    public Lote(){}
+
     public int getId(){ return this.id; }
     public String getNome(){ return this.nome; }
     public String getExperimento(){ return this.experimento; }
+
+    public void setId(int id) { this.id = id; }
+    public void setNome(String nome) { this.nome = nome; }
+    public void setExperimento(String experimento) { this.experimento = experimento; }
 
     @Override
     public boolean equals(Object o){

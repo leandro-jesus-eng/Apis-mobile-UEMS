@@ -9,12 +9,12 @@ import java.io.Serializable;
 public class TipoComportamento implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "descricao")
     private String descricao;
 
-    final private int idFormularioComportamento;
+   private int idFormularioComportamento;
 
     public TipoComportamento(int id, String descricao, int idFormularioComportamento){
         this.id = id;
@@ -22,10 +22,16 @@ public class TipoComportamento implements Serializable {
         this.idFormularioComportamento = idFormularioComportamento;
     }
 
+    public TipoComportamento(){}
+
     public int getId() { return id;}
     public String getDescricao() { return descricao; }
     public int getIdFormularioComportamento() { return idFormularioComportamento; }
+
+
+    public void setId(int id) { this.id = id; }
     public void setDescricao(String novaDescricao){
         this.descricao = novaDescricao;
     }
+    public void setIdFormularioComportamento(int idFormularioComportamento) { this.idFormularioComportamento = idFormularioComportamento; }
 }

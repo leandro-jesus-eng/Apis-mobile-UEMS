@@ -9,13 +9,13 @@ import java.io.Serializable;
 public class Comportamento implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    final private int id;
+    private int id;
 
     @ColumnInfo(name = "nome")
     private String nome;
 
     @ColumnInfo(name = "idTipo")
-    final private int idTipo;
+    private int idTipo;
 
     public Comportamento(int id, String nome, int idTipo){
        this.id = id;
@@ -23,10 +23,16 @@ public class Comportamento implements Serializable {
        this.idTipo = idTipo;
     }
 
+    public Comportamento(){}
+
     public int getId() { return id; }
     public String getNome(){return nome;}
     public int getIdTipo() { return idTipo; }
+
+
+    public void setId(int id) { this.id = id; }
     public void setNome(String nome){this.nome = nome;}
+    public void setIdTipo(int idTipo) { this.idTipo = idTipo; }
 
     @Override
     public boolean equals(Object o){
