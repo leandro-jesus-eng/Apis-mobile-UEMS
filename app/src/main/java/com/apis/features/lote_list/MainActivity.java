@@ -32,7 +32,9 @@ import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
+import com.apis.model.Animal;
 import com.apis.model.Lote;
+import com.apis.model.TipoComportamento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -76,6 +78,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
+
+        Lote lote = database.getAllLotes().get(0);
+        TipoComportamento tipo = database.getAllTipos().get(0);
+        Animal animal = database.getAnimais(lote.getId()).get(0);
+        new FirestoreRepository(getApplicationContext())
+            .updateRemote(
+                    lote,
+                    animal,
+                    tipo,
+                    database.getComportamento(tipo.getId()),
+                    database.getFormularioPadrao(true),
+                    database.getAnotacoesComportamento(animal.getId()).get(0)
+            );
+
     }
 
     public void configurarLista() {
