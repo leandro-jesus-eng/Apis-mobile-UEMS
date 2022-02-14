@@ -5,7 +5,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.apis.model.Animal;
 import com.apis.model.FormularioComportamento;
+
+import java.util.List;
 
 @Dao
 public interface FormularioComportamentoDao {
@@ -24,4 +28,7 @@ public interface FormularioComportamentoDao {
 
     @Query("SELECT * FROM tb_formularioComportamento WHERE formularioPadrao = :ehPadrao")
     FormularioComportamento getFormularioPadrao(boolean ehPadrao);
+
+    @Query("SELECT * FROM tb_formularioComportamento")
+    List<FormularioComportamento> getAllFormularioComportamento();
 }

@@ -3,6 +3,7 @@ package com.apis.data.repositories;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.apis.data.database.DAOs.AnimalDao;
@@ -18,6 +19,9 @@ import com.apis.model.Comportamento;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -83,7 +87,7 @@ public class FirestoreRepository {
         getAnotacoesComportamentoFromFirestore();
     }
 
-    private void insertLoteToFirestore(Lote lote){
+    public void insertLoteToFirestore(Lote lote){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
                     .document(LOTE_DOC_PREFIX + lote.getId())
@@ -93,7 +97,18 @@ public class FirestoreRepository {
         }
     }
 
-    private void insertAnimalToFirestore(Animal animal){
+    public void deleteLoteInFirestore(Lote lote){
+        try {
+            Lote lote2 = lote;
+            firebaseFirestore.collection(ROOT_PATH + "Lote")
+                    .document(LOTE_DOC_PREFIX + lote.getId())
+                    .delete();
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void insertAnimalToFirestore(Animal animal){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .document(ANIMAL_DOC_PREFIX + animal.getId())
@@ -103,7 +118,17 @@ public class FirestoreRepository {
         }
     }
 
-    private void insertTipoComportamentoToFirestore(TipoComportamento tipoComportamento){
+    public void deleteAnimalInFirestore(Animal animal){
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "Animal")
+                    .document(ANIMAL_DOC_PREFIX + animal.getId())
+                    .delete();
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void insertTipoComportamentoToFirestore(TipoComportamento tipoComportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
@@ -113,7 +138,17 @@ public class FirestoreRepository {
         }
     }
 
-    private void insertComportamentoToFirestore(Comportamento comportamento){
+    public void deleteTipoComportamentoInFirestore(TipoComportamento tipoComportamento){
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
+                    .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
+                    .delete();
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void insertComportamentoToFirestore(Comportamento comportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
@@ -123,7 +158,17 @@ public class FirestoreRepository {
         }
     }
 
-    private void insertFormularioComportamentoToFirestore(FormularioComportamento formularioComportamento){
+    public void deleteComportamentoInFirestore(Comportamento comportamento){
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "Comportamento")
+                    .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
+                    .delete();
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void insertFormularioComportamentoToFirestore(FormularioComportamento formularioComportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
@@ -133,11 +178,31 @@ public class FirestoreRepository {
         }
     }
 
-    private void insertAnotacaoComportamentoToFirestore(AnotacaoComportamento anotacaoComportamento){
+    public void deleteFormularioComportamentoInFirestore(FormularioComportamento formularioComportamento){
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
+                    .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
+                    .delete();
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void insertAnotacaoComportamentoToFirestore(AnotacaoComportamento anotacaoComportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "AnotacaoComportamento")
                     .document(ANOTACAO_COMPORTAMENTO_DOC_PREFIX + anotacaoComportamento.getId())
                     .set(anotacaoComportamento, SetOptions.merge());
+        } catch (Exception e){
+            Log.i("ERROR", e.toString());
+        }
+    }
+
+    public void deleteAnotacaoComportamentoInFirestore(AnotacaoComportamento anotacaoComportamento){
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "AnotacaoComportamento")
+                    .document(ANOTACAO_COMPORTAMENTO_DOC_PREFIX + anotacaoComportamento.getId())
+                    .delete();
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }

@@ -25,6 +25,7 @@ import com.apis.model.FileControl;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -45,6 +46,7 @@ public class DbRepository {
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
     final private RelationsDao relationsDao;
+    final private FirestoreRepository firestoreRepository;
 
     public DbRepository(Context ctx){
         context = ctx;
@@ -55,6 +57,7 @@ public class DbRepository {
         anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
         comportamentoDao = Database.getInstance(ctx).comportamentoDao();
         relationsDao = Database.getInstance(ctx).relationsDao();
+        firestoreRepository = new FirestoreRepository(ctx);
     }
 
     //--RELATIONS---------------------------------------------------------------------------------//
@@ -96,6 +99,7 @@ public class DbRepository {
 
     public void insertAnimal(Animal animalNovo){
         animalDao.insertAnimal(animalNovo);
+        firestoreRepository.insertAnimalToFirestore(animalNovo);
     }
 
     public boolean animalExiste(String nomeAnimal){
@@ -127,7 +131,6 @@ public class DbRepository {
 
     public void setLastUpdateAnimal(int animalId, String lastUpdate){
         animalDao.setLastUpdate(animalId, lastUpdate);
-
     }
 
     public String getLastUpdateAnimal(Animal animal){
@@ -136,15 +139,21 @@ public class DbRepository {
 
     public void excluirAnimal(Animal animal){
         animalDao.deleteAnimal(animal);
+        firestoreRepository.deleteAnimalInFirestore(animal);
     }
 
     //--LOTES-------------------------------------------------------------------------------------//
     public void insertLote(Lote lote){
         loteDao.insertLote(lote);
+        firestoreRepository.insertLoteToFirestore(getLastLote());
     }
 
     public Lote getLote(int idLote){
         return loteDao.getLote(idLote);
+    }
+
+    public Lote getLastLote(){
+        return loteDao.getAllLotes().get(getAllLotes().size() - 1);
     }
 
     public List<Lote> getAllLotes(){
@@ -168,6 +177,7 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote){
+        firestoreRepository.deleteLoteInFirestore(lote);
         loteDao.deleteLote(lote);
     }
 
@@ -179,6 +189,7 @@ public class DbRepository {
 
     public void insertComportamento(Comportamento comportamento){
         comportamentoDao.insertComportamento(comportamento);
+        firestoreRepository.insertComportamentoToFirestore(comportamento);
     }
 
     public void updateComportamento(Comportamento comportamento){
@@ -187,6 +198,7 @@ public class DbRepository {
 
     public void excluirComportamento(Comportamento comportamento){
         comportamentoDao.deleteComportamento(comportamento);
+        firestoreRepository.deleteComportamentoInFirestore(comportamento);
     }
 
     //--TIPO_COMPORTAMENTOS-----------------------------------------------------------------------//
@@ -197,6 +209,7 @@ public class DbRepository {
 
     public void insertTipoComportamento(TipoComportamento tipoComportamento){
         tipoComportamentoDao.insertTipo(tipoComportamento);
+        firestoreRepository.insertTipoComportamentoToFirestore(tipoComportamento);
     }
 
     public void updateTipo(TipoComportamento tipoComportamento){
@@ -209,12 +222,14 @@ public class DbRepository {
 
     public void excluirTipoComportamento(TipoComportamento tipoComportamento){
         tipoComportamentoDao.deleteTipo(tipoComportamento);
+        firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
     }
 
     //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
 
     public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
         formularioComportamentoDao.insertFormulario(formularioComportamento);
+        firestoreRepository.insertFormularioComportamentoToFirestore(formularioComportamento);
     }
 
     public FormularioComportamento getFormularioPadrao(boolean ehPadrao){
@@ -227,15 +242,17 @@ public class DbRepository {
 
     public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
         formularioComportamentoDao.deleteFormulario(formularioComportamento);
+        firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
     }
 
     //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//
     public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
         anotacaoComportamentoDao.insertAnotacao(anotacao);
+        firestoreRepository.insertAnotacaoComportamentoToFirestore(anotacao);
     }
 
     public List<AnotacaoComportamento> getAnotacoesComportamento(int animalId){
-        return anotacaoComportamentoDao.getAllAnotacoesAnimal(animalId);
+        return anotacaoComportamentoDao.getAllAnotacoesOfOneAnimal(animalId);
     }
 
     public List<Comportamento> getAllComportamentos(){
@@ -244,6 +261,7 @@ public class DbRepository {
 
     public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
         anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
+        firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
     }
 
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//
@@ -255,6 +273,25 @@ public class DbRepository {
         anotacaoComportamentoDao.deleteAllAnotacoes();
         formularioComportamentoDao.deleteAllFormularios();
         comportamentoDao.deleteAllComportamentos();
+
+        for(Animal animal : animalDao.getAllAnimais()){
+            firestoreRepository.deleteAnimalInFirestore(animal);
+        }
+        for(Lote lote : loteDao.getAllLotes()){
+            firestoreRepository.deleteLoteInFirestore(lote);
+        }
+        for(TipoComportamento tipoComportamento : tipoComportamentoDao.getAllTipos()){
+            firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
+        }
+        for(AnotacaoComportamento anotacaoComportamento : anotacaoComportamentoDao.getAllAnotacoesAnimal()){
+            firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
+        }
+        for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
+            firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        }
+        for(Comportamento comportamento : comportamentoDao.getAllComportamentos()){
+            firestoreRepository.deleteComportamentoInFirestore(comportamento);
+        }
 
         FileControl fc = new FileControl(context);
         fc.deleteEverthing();
