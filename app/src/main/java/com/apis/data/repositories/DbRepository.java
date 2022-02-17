@@ -102,17 +102,6 @@ public class DbRepository {
         firestoreRepository.insertAnimalToFirestore(getLastAnimal());
     }
 
-    public boolean animalExiste(String nomeAnimal){
-        List<Animal> result = animalDao.getAllAnimais();
-
-        for(Animal animal : result){
-            if(animal.getNome().equals(nomeAnimal)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     public List<Animal> getAnimaisPorId(int idLote){
         List<Animal> animais = animalDao.getAnimaisLote(idLote);
@@ -143,6 +132,11 @@ public class DbRepository {
     }
 
     public void excluirAnimal(Animal animal){
+        List<AnotacaoComportamento> listAnotacoes = getAnotacoesComportamento(animal.getId());
+        for (AnotacaoComportamento anotacaoComportamento : listAnotacoes){
+            excluirAnotacaoComportamento(anotacaoComportamento);
+            firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
+        }
         animalDao.deleteAnimal(animal);
         firestoreRepository.deleteAnimalInFirestore(animal);
     }
@@ -161,16 +155,6 @@ public class DbRepository {
         return loteDao.getAllLotes().get(loteDao.getAllLotes().size() - 1);
     }
 
-    public boolean loteExiste(String nomeLote, String experimento){
-        List<Lote> result = loteDao.getAllLotes();
-
-        for(Lote lote : result){
-            if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento) ){
-                return true;
-            }
-        }
-        return false;
-    }
     public String getNomeLote(int idLote){
         Lote result = loteDao.getLote(idLote);
 
@@ -182,7 +166,11 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote){
+        FormularioComportamento formularioComportamento =
+                getLoteAndFormulario(lote.getId()).get(0).formularioComportamento;
         firestoreRepository.deleteLoteInFirestore(lote);
+        firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        excluirFormularioComportamento(formularioComportamento);
         loteDao.deleteLote(lote);
     }
 
@@ -217,17 +205,6 @@ public class DbRepository {
         firestoreRepository.deleteComportamentoInFirestore(comportamento);
     }
 
-    public boolean comportamentoExiste(Integer comportamentoId){
-        List<Comportamento> result = comportamentoDao.getAllComportamentos();
-
-        for(Comportamento comportamento : result){
-            if(comportamento.getId() == comportamentoId){
-                return true;
-            }
-        }
-        return false;
-    }
-
     //--TIPO_COMPORTAMENTOS-----------------------------------------------------------------------//
 
     public TipoComportamento getTipo(int id){
@@ -257,17 +234,6 @@ public class DbRepository {
         firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
     }
 
-    public boolean tipoComportamentoExiste(Integer tipoComportamentoId){
-        List<TipoComportamento> result = tipoComportamentoDao.getAllTipos();
-
-        for(TipoComportamento tipoComportamento : result){
-            if(tipoComportamento.getId() == tipoComportamentoId){
-                return true;
-            }
-        }
-        return false;
-    }
-
     //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
 
     public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
@@ -294,18 +260,6 @@ public class DbRepository {
         firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
     }
 
-    public boolean formularioComportamentoExiste(Integer formularioComportamentoId){
-        List<FormularioComportamento> result =
-                formularioComportamentoDao.getAllFormularioComportamento();
-
-        for(FormularioComportamento formularioComportamento : result){
-            if(formularioComportamento.getId() == formularioComportamentoId){
-                return true;
-            }
-        }
-        return false;
-    }
-
     //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//
     public void insertAnotacaoComportamento(AnotacaoComportamento anotacao){
         anotacaoComportamentoDao.insertAnotacao(anotacao);
@@ -325,18 +279,6 @@ public class DbRepository {
     public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
         anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
         firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
-    }
-
-    public boolean anotacaoComportamentoExiste(Integer anotacaoComportamentoId){
-        List<AnotacaoComportamento> result =
-                anotacaoComportamentoDao.getAllAnotacoesAnimal();
-
-        for(AnotacaoComportamento anotacaoComportamento : result){
-            if(anotacaoComportamento.getId() == anotacaoComportamentoId){
-                return true;
-            }
-        }
-        return false;
     }
 
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//

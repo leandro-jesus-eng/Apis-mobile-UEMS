@@ -28,13 +28,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
+import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
-import com.apis.model.Animal;
 import com.apis.model.Lote;
-import com.apis.model.TipoComportamento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -44,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String nomeLote;
     private String nomeExperimento;
-    DbRepository database;
+    DbRepository dbRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
 
     String CHANNEL_ID = "main.notifications";
 
@@ -74,19 +74,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        database = new DbRepository(this);
+        dbRepository = new DbRepository(this);
+        entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
 
-        //new FirestoreRepository(this).setupRemoteChangeListener();
+        new FirestoreRepository(this).setupRemoteChangeListener();
     }
 
     public void configurarLista() {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
-        List<Lote> lotes = database.getAllLotes();
+        List<Lote> lotes = dbRepository.getAllLotes();
 
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
         ImageView alertImg  = (ImageView) findViewById(R.id.alertImgLotes);
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(camposValidos){
 
                             boolean loteJaExiste = false;
-                            if(database.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
+                            if(entitiesHandlerRepository.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
                                 loteJaExiste = true;
                             }
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 ////Salva no BD
                                 Lote novoLote = new Lote(0 ,nomeLote, nomeExperimento);
                                 try {
-                                    database.insertLote(novoLote);
+                                    dbRepository.insertLote(novoLote);
                                     finish();
                                     startActivity(getIntent());
                                 }catch (Throwable throwable){
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(database.excluirTudo()){
+                            if(dbRepository.excluirTudo()){
                                 Toast.makeText(getBaseContext(), "Feito!", Toast.LENGTH_LONG).show();
 
                                 finish();

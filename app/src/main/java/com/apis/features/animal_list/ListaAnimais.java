@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
+import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,7 +46,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     List<Animal> animais= new ArrayList<>();
 
     DrawerLayout drawer;
-    DbRepository database;
+    DbRepository dbRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        database = new DbRepository(this);
+        dbRepository = new DbRepository(this);
+        entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         drawer = findViewById(R.id.drawerListaAnimais);
         NavigationView navigationView = findViewById(R.id.navViewListaAnimais);
 
@@ -107,14 +110,14 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
 
         if(ordAscChecked){
-            animais = database.getAnimais(idLote);
-            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            animais = dbRepository.getAnimais(idLote);
+            animais = dbRepository.getAnimaisPorOrdemDeAnotacao(animais);
         }else if(idChecked){
-            animais = database.getAnimaisPorId(idLote);
+            animais = dbRepository.getAnimaisPorId(idLote);
         }else {
             //Ordenação por anotação mais antiga padrão
-            animais = database.getAnimais(idLote);
-            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            animais = dbRepository.getAnimais(idLote);
+            animais = dbRepository.getAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
         }
 
@@ -156,13 +159,13 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
 
                         if(!nomeAnimal.equals("")) {
 
-                            if(database.animalExiste(nomeAnimal)) {
+                            if(entitiesHandlerRepository.animalExiste(nomeAnimal)) {
                                 Toast.makeText(getApplicationContext(), "O animal com esse nome já existe!", Toast.LENGTH_LONG).show();
                             } else {
                                 ////Salva no BD
                                 Animal animal = new Animal(0, nomeAnimal, idLote, "Sem anotação!");
                                 try {
-                                    database.insertAnimal(animal);
+                                    dbRepository.insertAnimal(animal);
                                     finish();
                                     startActivity(getIntent());
                                 }catch (Throwable throwable){
@@ -197,8 +200,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = false;
             idChecked = false;
 
-            animais = database.getAnimais(idLote);
-            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            animais = dbRepository.getAnimais(idLote);
+            animais = dbRepository.getAnimaisPorOrdemDeAnotacao(animais);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por anotação mais recente!", Toast.LENGTH_SHORT).show();
@@ -208,8 +211,8 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = true;
             idChecked = false;
 
-            animais = database.getAnimais(idLote);
-            animais = database.getAnimaisPorOrdemDeAnotacao(animais);
+            animais = dbRepository.getAnimais(idLote);
+            animais = dbRepository.getAnimaisPorOrdemDeAnotacao(animais);
             Collections.reverse(animais);
 
             drawer.closeDrawer(GravityCompat.START);
@@ -220,7 +223,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             ordDscChecked = false;
             idChecked = true;
 
-            animais = database.getAnimaisPorId(idLote);
+            animais = dbRepository.getAnimaisPorId(idLote);
 
             drawer.closeDrawer(GravityCompat.START);
             Toast.makeText(getApplicationContext(), "Lista ordenada por identificação!", Toast.LENGTH_SHORT).show();

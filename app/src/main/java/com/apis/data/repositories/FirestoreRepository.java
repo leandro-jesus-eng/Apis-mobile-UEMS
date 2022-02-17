@@ -11,6 +11,7 @@ import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
 import com.apis.data.database.DAOs.FormularioComportamentoDao;
 import com.apis.data.database.DAOs.LoteDao;
+import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.Database;
 import com.apis.model.Animal;
@@ -45,11 +46,23 @@ public class FirestoreRepository {
     final String FORMULARIO_COMPORTAMENTO_DOC_PREFIX = "FormularioComportamento-id:";
     final String ANOTACAO_COMPORTAMENTO_DOC_PREFIX = "AnotacaoComportamento-id:";
 
-    final private DbRepository dbRepository;
+    final private AnimalDao animalDao;
+    final private LoteDao loteDao;
+    final private FormularioComportamentoDao formularioComportamentoDao;
+    final private TipoComportamentoDao tipoComportamentoDao;
+    final private AnotacaoComportamentoDao anotacaoComportamentoDao;
+    final private ComportamentoDao comportamentoDao;
+    final private EntitiesHandlerRepository entitiesHandlerRepository;
 
     public FirestoreRepository(Context ctx) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        dbRepository = new DbRepository(ctx);
+        entitiesHandlerRepository = new EntitiesHandlerRepository(ctx);
+        animalDao = Database.getInstance(ctx).animalDao();
+        loteDao = Database.getInstance(ctx).loteDao();
+        formularioComportamentoDao = Database.getInstance(ctx).formularioComportamentoDao();
+        tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
+        anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
+        comportamentoDao = Database.getInstance(ctx).comportamentoDao();
     }
 
     public void setupRemoteChangeListener(){
@@ -188,8 +201,8 @@ public class FirestoreRepository {
                         if(value != null){
                             for(DocumentChange lotes : value.getDocumentChanges()){
                                 Lote lote = lotes.getDocument().toObject(Lote.class);
-                                if(!dbRepository.loteExiste(lote.getNome(), lote.getExperimento())){
-                                    dbRepository.insertLote(lote);
+                                if(!entitiesHandlerRepository.loteExiste(lote.getNome(), lote.getExperimento())){
+                                    loteDao.insertLote(lote);
                                 }
                             }
                         }
@@ -206,8 +219,8 @@ public class FirestoreRepository {
                         if(value != null){
                             for(DocumentChange animais : value.getDocumentChanges()){
                                 Animal animal = animais.getDocument().toObject(Animal.class);
-                                if(!dbRepository.animalExiste(animal.getNome())){
-                                    dbRepository.insertAnimal(animal);
+                                if(!entitiesHandlerRepository.animalExiste(animal.getNome())){
+                                    animalDao.insertAnimal(animal);
                                 }
                             }
                         }
@@ -226,8 +239,8 @@ public class FirestoreRepository {
                                 TipoComportamento tipoComportamento = tiposComportamento
                                         .getDocument()
                                         .toObject(TipoComportamento.class);
-                                if(!dbRepository.tipoComportamentoExiste(tipoComportamento.getId())){
-                                    dbRepository.insertTipoComportamento(tipoComportamento);
+                                if(!entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId())){
+                                    tipoComportamentoDao.insertTipo(tipoComportamento);
                                 }
                             }
                         }
@@ -246,8 +259,8 @@ public class FirestoreRepository {
                                 Comportamento comportamento = comportamentos
                                         .getDocument()
                                         .toObject(Comportamento.class);
-                                if(!dbRepository.comportamentoExiste(comportamento.getId())){
-                                    dbRepository.insertComportamento(comportamento);
+                                if(!entitiesHandlerRepository.comportamentoExiste(comportamento.getId())){
+                                    comportamentoDao.insertComportamento(comportamento);
                                 }
                             }
                         }
@@ -266,8 +279,8 @@ public class FirestoreRepository {
                                 FormularioComportamento formularioComportamento = formulariosComportamento
                                         .getDocument()
                                         .toObject(FormularioComportamento.class);
-                                if(!dbRepository.formularioComportamentoExiste(formularioComportamento.getId())){
-                                    dbRepository.insertFormularioComportamento(formularioComportamento);
+                                if(!entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId())){
+                                    formularioComportamentoDao.insertFormulario(formularioComportamento);
                                 }
                             }
                         }
@@ -287,8 +300,8 @@ public class FirestoreRepository {
                                         .getDocument()
                                         .toObject(AnotacaoComportamento.class);
 
-                                if(!dbRepository.anotacaoComportamentoExiste(anotacaoComportamento.getId())){
-                                    dbRepository.insertAnotacaoComportamento(anotacaoComportamento);
+                                if(!entitiesHandlerRepository.anotacaoComportamentoExiste(anotacaoComportamento.getId())){
+                                    anotacaoComportamentoDao.insertAnotacao(anotacaoComportamento);
                                 }
                             }
                         }
