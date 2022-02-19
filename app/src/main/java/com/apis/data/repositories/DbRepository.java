@@ -166,10 +166,11 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote){
-        FormularioComportamento formularioComportamento =
-                getLoteAndFormulario(lote.getId()).get(0).formularioComportamento;
-        firestoreRepository.deleteLoteInFirestore(lote);
+        FormularioComportamento formularioComportamento = getLoteAndFormulario(
+                lote.getId()).get(0).formularioComportamento;
+
         firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        firestoreRepository.deleteLoteInFirestore(lote);
         excluirFormularioComportamento(formularioComportamento);
         loteDao.deleteLote(lote);
     }
@@ -230,8 +231,14 @@ public class DbRepository {
     }
 
     public void excluirTipoComportamento(TipoComportamento tipoComportamento){
-        tipoComportamentoDao.deleteTipo(tipoComportamento);
+        List<Comportamento> comportamentos = getTipoComportamentoWithComportamento(
+                tipoComportamento.getId()).get(0).comportamentos;
+        for(Comportamento comportamento : comportamentos){
+            firestoreRepository.deleteComportamentoInFirestore(comportamento);
+            excluirComportamento(comportamento);
+        }
         firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
+        tipoComportamentoDao.deleteTipo(tipoComportamento);
     }
 
     //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
@@ -256,8 +263,14 @@ public class DbRepository {
     }
 
     public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
-        formularioComportamentoDao.deleteFormulario(formularioComportamento);
+        List<TipoComportamento> tipoComportamentos = getFormularioWithTipoComportamento(
+                formularioComportamento.getId()).get(0).tiposComportamento;
+        for(TipoComportamento tipoComportamento : tipoComportamentos){
+            firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
+            excluirTipoComportamento(tipoComportamento);
+        }
         firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        formularioComportamentoDao.deleteFormulario(formularioComportamento);
     }
 
     //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//
