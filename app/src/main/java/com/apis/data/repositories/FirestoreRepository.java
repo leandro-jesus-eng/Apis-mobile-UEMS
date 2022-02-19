@@ -89,6 +89,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
                     .document(LOTE_DOC_PREFIX + lote.getId())
                     .delete();
+            loteDao.deleteLote(lote);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }
@@ -109,6 +110,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .document(ANIMAL_DOC_PREFIX + animal.getId())
                     .delete();
+            animalDao.deleteAnimal(animal);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }
@@ -129,6 +131,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
                     .delete();
+            tipoComportamentoDao.deleteTipo(tipoComportamento);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }
@@ -149,6 +152,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
                     .delete();
+            comportamentoDao.deleteComportamento(comportamento);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }
@@ -169,6 +173,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
                     .delete();
+            formularioComportamentoDao.deleteFormulario(formularioComportamento);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }
@@ -189,6 +194,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "AnotacaoComportamento")
                     .document(ANOTACAO_COMPORTAMENTO_DOC_PREFIX + anotacaoComportamento.getId())
                     .delete();
+            anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }

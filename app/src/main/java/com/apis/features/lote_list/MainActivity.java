@@ -78,9 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         pedirPermissoes();
         createNotificationChannel();
-        configurarLista();
-
         new FirestoreRepository(this).setupRemoteChangeListener();
+        configurarLista();
     }
 
     public void configurarLista() {
