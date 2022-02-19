@@ -89,7 +89,9 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
                     .document(LOTE_DOC_PREFIX + lote.getId())
                     .delete();
-            loteDao.deleteLote(lote);
+            if(entitiesHandlerRepository.loteExiste(lote.getNome(), lote.getExperimento())){
+                loteDao.deleteLote(lote);
+            }
         } catch (Exception e){
             Log.i("ERROR", e.toString());
         }

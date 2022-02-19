@@ -26,6 +26,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
@@ -43,8 +45,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String nomeLote;
     private String nomeExperimento;
+    private SwipeRefreshLayout swipeRefreshLayout;
     DbRepository dbRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
+    FirestoreRepository firestoreRepository;
 
     String CHANNEL_ID = "main.notifications";
 
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
         //Drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -76,16 +82,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dbRepository = new DbRepository(this);
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
+        firestoreRepository = new FirestoreRepository(this);
+
         pedirPermissoes();
         createNotificationChannel();
-        new FirestoreRepository(this).setupRemoteChangeListener();
         configurarLista();
+        setupSwipeRefresh();
+        //firestoreRepository.setupRemoteChangeListener();
+    }
+
+    private void setupSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                configurarLista();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     public void configurarLista() {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
-
         List<Lote> lotes = dbRepository.getAllLotes();
 
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
@@ -100,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         recyclerView.setAdapter(new LoteAdapter(lotes, this));
         LinearLayoutManager layout = new LinearLayoutManager(this);
-
         recyclerView.setLayoutManager(layout);
     }
 
