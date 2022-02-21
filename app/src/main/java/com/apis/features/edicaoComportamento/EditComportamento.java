@@ -1,16 +1,21 @@
 package com.apis.features.edicaoComportamento;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.animal_list.ListaAnimais;
@@ -30,7 +35,6 @@ public class EditComportamento extends AppCompatActivity {
     int idLote;
     boolean edit_comp_lote;
     String nomeLote;
-
     List<TipoComportamento> listaTipos = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
     List<TipoComportamento> newTypes = new ArrayList<>();
@@ -38,6 +42,7 @@ public class EditComportamento extends AppCompatActivity {
 
     TextView textAdicionarTipo;
     ImageButton imgAdicionarTipo;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +55,7 @@ public class EditComportamento extends AppCompatActivity {
         textAdicionarTipo = findViewById(R.id.lbl_tipo_adicionar_comportamento);
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
         database = new DbRepository(getApplicationContext());
+        //swipeRefreshLayout = findViewById(R.id.edicao_comportamento_swipe_refresh);
 
         if(database.getFormularioPadrao(true) == null &&
                 getIntent().hasExtra("lote_id")
@@ -103,6 +109,17 @@ public class EditComportamento extends AppCompatActivity {
         setRecycler();
         setAddTipoClickListener();
         setData();
+        //setupSwipeRefresh();
+    }
+
+    private void setupSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void setRecycler(){
@@ -295,6 +312,7 @@ public class EditComportamento extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

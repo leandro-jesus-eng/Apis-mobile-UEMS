@@ -22,9 +22,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
+import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,7 +51,9 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawer;
     DbRepository dbRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,6 +73,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        swipeRefreshLayout = findViewById(R.id.animal_list_swipe_refresh);
         dbRepository = new DbRepository(this);
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         drawer = findViewById(R.id.drawerListaAnimais);
@@ -81,6 +87,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         pegarDadosActivityPassada();
+        setupSwipeRefresh();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -88,6 +95,17 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         configurarLista();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setupSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                configurarLista();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void pegarDadosActivityPassada(){

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout = findViewById(R.id.lote_list_swipe_refresh);
 
         //Drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
