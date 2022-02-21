@@ -45,6 +45,11 @@ public class FirestoreRepository {
     final String COMPORTAMENTO_DOC_PREFIX = "Comportamento-id:";
     final String FORMULARIO_COMPORTAMENTO_DOC_PREFIX = "FormularioComportamento-id:";
     final String ANOTACAO_COMPORTAMENTO_DOC_PREFIX = "AnotacaoComportamento-id:";
+    final String DOCUMENT_CHANGE_TYPE_ADDED = "ADDED";
+    final String FIELD_NAME = "nome";
+    final String FIELD_LAST_UPDATE = "lastUpdate";
+    final String FIELD_DESCRIPTION = "descricao";
+    final String ERROR_TAG = "ERROR";
 
     final private AnimalDao animalDao;
     final private LoteDao loteDao;
@@ -80,7 +85,7 @@ public class FirestoreRepository {
                     .document(LOTE_DOC_PREFIX + lote.getId())
                     .set(lote, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -93,7 +98,7 @@ public class FirestoreRepository {
                 loteDao.deleteLote(lote);
             }
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -103,7 +108,7 @@ public class FirestoreRepository {
                     .document(ANIMAL_DOC_PREFIX + animal.getId())
                     .set(animal, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -114,7 +119,7 @@ public class FirestoreRepository {
                     .delete();
             animalDao.deleteAnimal(animal);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -124,7 +129,7 @@ public class FirestoreRepository {
                     .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
                     .set(tipoComportamento, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -135,7 +140,7 @@ public class FirestoreRepository {
                     .delete();
             tipoComportamentoDao.deleteTipo(tipoComportamento);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -145,7 +150,7 @@ public class FirestoreRepository {
                     .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
                     .set(comportamento, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -156,7 +161,7 @@ public class FirestoreRepository {
                     .delete();
             comportamentoDao.deleteComportamento(comportamento);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -166,7 +171,7 @@ public class FirestoreRepository {
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
                     .set(formularioComportamento, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -177,7 +182,7 @@ public class FirestoreRepository {
                     .delete();
             formularioComportamentoDao.deleteFormulario(formularioComportamento);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -187,7 +192,7 @@ public class FirestoreRepository {
                     .document(ANOTACAO_COMPORTAMENTO_DOC_PREFIX + anotacaoComportamento.getId())
                     .set(anotacaoComportamento, SetOptions.merge());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -198,7 +203,7 @@ public class FirestoreRepository {
                     .delete();
             anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -207,16 +212,20 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange lotes : value.getDocumentChanges()){
-                                Lote lote = lotes.getDocument().toObject(Lote.class);
-                                if(!entitiesHandlerRepository.loteExiste(lote.getNome(), lote.getExperimento())){
+                            for(DocumentChange loteChange : value.getDocumentChanges()){
+                                Lote lote = loteChange.getDocument().toObject(Lote.class);
+
+                                if(!entitiesHandlerRepository.loteExiste(
+                                        lote.getNome(),
+                                        lote.getExperimento()
+                                ) && loteChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)){
                                     loteDao.insertLote(lote);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -225,16 +234,19 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange animais : value.getDocumentChanges()){
-                                Animal animal = animais.getDocument().toObject(Animal.class);
-                                if(!entitiesHandlerRepository.animalExiste(animal.getNome())){
+                            for(DocumentChange animalChange : value.getDocumentChanges()){
+                                Animal animal = animalChange.getDocument().toObject(Animal.class);
+
+                                if(!entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                        animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
                                     animalDao.insertAnimal(animal);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -243,18 +255,20 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange tiposComportamento : value.getDocumentChanges()){
-                                TipoComportamento tipoComportamento = tiposComportamento
+                            for(DocumentChange tipoComportamentoChange : value.getDocumentChanges()){
+                                TipoComportamento tipoComportamento = tipoComportamentoChange
                                         .getDocument()
                                         .toObject(TipoComportamento.class);
-                                if(!entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId())){
+                                if(!entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId()) &&
+                                        tipoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
                                     tipoComportamentoDao.insertTipo(tipoComportamento);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -263,18 +277,20 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange comportamentos : value.getDocumentChanges()){
-                                Comportamento comportamento = comportamentos
+                            for(DocumentChange comportamentoChange : value.getDocumentChanges()){
+                                Comportamento comportamento = comportamentoChange
                                         .getDocument()
                                         .toObject(Comportamento.class);
-                                if(!entitiesHandlerRepository.comportamentoExiste(comportamento.getId())){
+                                if(!entitiesHandlerRepository.comportamentoExiste(comportamento.getId()) &&
+                                        comportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
                                     comportamentoDao.insertComportamento(comportamento);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -283,18 +299,20 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange formulariosComportamento : value.getDocumentChanges()){
-                                FormularioComportamento formularioComportamento = formulariosComportamento
+                            for(DocumentChange formularioComportamentoChange : value.getDocumentChanges()){
+                                FormularioComportamento formularioComportamento = formularioComportamentoChange
                                         .getDocument()
                                         .toObject(FormularioComportamento.class);
-                                if(!entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId())){
+                                if(!entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId()) &&
+                                        formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
                                     formularioComportamentoDao.insertFormulario(formularioComportamento);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 
@@ -303,46 +321,48 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "AnotacaoComportamento")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange anotacoesComportamento : value.getDocumentChanges()){
-                                AnotacaoComportamento anotacaoComportamento = anotacoesComportamento
+                            for(DocumentChange anotacaoComportamentoChange : value.getDocumentChanges()){
+                                AnotacaoComportamento anotacaoComportamento = anotacaoComportamentoChange
                                         .getDocument()
                                         .toObject(AnotacaoComportamento.class);
 
-                                if(!entitiesHandlerRepository.anotacaoComportamentoExiste(anotacaoComportamento.getId())){
+                                if(!entitiesHandlerRepository.anotacaoComportamentoExiste(anotacaoComportamento.getId()) &&
+                                        anotacaoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
                                     anotacaoComportamentoDao.insertAnotacao(anotacaoComportamento);
                                 }
                             }
                         }
                     });
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
     public void updateLastAnotacaoAnimalInFirebase(Integer animalId, String lastUpdate){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .document(ANIMAL_DOC_PREFIX + animalId)
-                    .update("lastUpdate",lastUpdate);
+                    .update(FIELD_LAST_UPDATE, lastUpdate);
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
     public void updateComportamentoInFirebase(Comportamento comportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
-                    .update("nome", comportamento.getNome());
+                    .update(FIELD_NAME, comportamento.getNome());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
     public void updateTipoComportamentoInFirebase(TipoComportamento tipoComportamento){
         try {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
-                    .update("descricao",tipoComportamento.getDescricao());
+                    .update(FIELD_DESCRIPTION, tipoComportamento.getDescricao());
         } catch (Exception e){
-            Log.i("ERROR", e.toString());
+            Log.i(ERROR_TAG, e.toString());
         }
     }
 }

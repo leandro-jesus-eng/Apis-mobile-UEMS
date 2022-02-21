@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannel();
         configurarLista();
         setupSwipeRefresh();
-        //firestoreRepository.setupRemoteChangeListener();
+        firestoreRepository.setupRemoteChangeListener();
     }
 
     private void setupSwipeRefresh() {
