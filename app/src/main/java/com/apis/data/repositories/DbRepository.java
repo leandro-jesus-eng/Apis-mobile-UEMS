@@ -175,8 +175,9 @@ public class DbRepository {
             firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
             excluirFormularioComportamento(formularioComportamento);
         }
-        firestoreRepository.deleteLoteInFirestore(lote);
+
         loteDao.deleteLote(lote);
+        firestoreRepository.deleteLoteInFirestore(lote);
     }
 
     //--COMPORTAMENTOS----------------------------------------------------------------------------//
@@ -243,8 +244,9 @@ public class DbRepository {
                 excluirComportamento(comportamento);
             }
         }
-        firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
+
         tipoComportamentoDao.deleteTipo(tipoComportamento);
+        firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
     }
 
     //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
@@ -277,8 +279,9 @@ public class DbRepository {
                 excluirTipoComportamento(tipoComportamento);
             }
         }
-        firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+
         formularioComportamentoDao.deleteFormulario(formularioComportamento);
+        firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
     }
 
     //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//

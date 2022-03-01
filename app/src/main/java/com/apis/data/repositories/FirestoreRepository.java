@@ -3,15 +3,11 @@ package com.apis.data.repositories;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
 import com.apis.data.database.DAOs.FormularioComportamentoDao;
 import com.apis.data.database.DAOs.LoteDao;
-import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.Database;
 import com.apis.model.Animal;
@@ -20,19 +16,9 @@ import com.apis.model.Comportamento;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-
-import java.util.List;
 
 public class FirestoreRepository {
 
@@ -46,6 +32,8 @@ public class FirestoreRepository {
     final String FORMULARIO_COMPORTAMENTO_DOC_PREFIX = "FormularioComportamento-id:";
     final String ANOTACAO_COMPORTAMENTO_DOC_PREFIX = "AnotacaoComportamento-id:";
     final String DOCUMENT_CHANGE_TYPE_ADDED = "ADDED";
+    final String DOCUMENT_CHANGE_TYPE_REMOVED = "REMOVED";
+    final String DOCUMENT_CHANGE_TYPE_MODIFIED = "MODIFIED";
     final String FIELD_NAME = "nome";
     final String FIELD_LAST_UPDATE = "lastUpdate";
     final String FIELD_DESCRIPTION = "descricao";
@@ -71,12 +59,12 @@ public class FirestoreRepository {
     }
 
     public void setupRemoteChangeListener(){
-        getLotesFromFirestore();
-        getAnimaisFromFirestore();
-        getTipoComportamentoFromFirestore();
-        getComportamentosFromFirestore();
-        getFormularioComportamentoFromFirestore();
-        getAnotacoesComportamentoFromFirestore();
+        refreshLotesWithFirestore();
+        refreshAnimaisWithFirestore();
+        refreshTipoComportamentoWithFirestore();
+        refreshComportamentosWithFirestore();
+        refreshFormulariosComportamentoWithFirestore();
+        refreshAnotacoesComportamentoWithFirestore();
     }
 
     public void insertLoteToFirestore(Lote lote){
@@ -207,7 +195,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getLotesFromFirestore(){
+    private void refreshLotesWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
                     .addSnapshotListener((value, error) -> {
@@ -221,6 +209,13 @@ public class FirestoreRepository {
                                 ) && loteChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)){
                                     loteDao.insertLote(lote);
                                 }
+
+                                if(entitiesHandlerRepository.loteExiste(
+                                        lote.getNome(),
+                                        lote.getExperimento()
+                                ) && loteChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)){
+                                    loteDao.deleteLote(lote);
+                                }
                             }
                         }
                     });
@@ -229,7 +224,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getAnimaisFromFirestore(){
+    private void refreshAnimaisWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .addSnapshotListener((value, error) -> {
@@ -242,6 +237,18 @@ public class FirestoreRepository {
                                 ){
                                     animalDao.insertAnimal(animal);
                                 }
+
+                                if(entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                        animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    animalDao.deleteAnimal(animal);
+                                }
+
+                                if(entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                        animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_MODIFIED)
+                                ){
+                                    animalDao.setLastUpdate(animal.getId(), animal.getLastUpdate());
+                                }
                             }
                         }
                     });
@@ -250,7 +257,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getTipoComportamentoFromFirestore(){
+    private void refreshTipoComportamentoWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .addSnapshotListener((value, error) -> {
@@ -264,6 +271,18 @@ public class FirestoreRepository {
                                 ){
                                     tipoComportamentoDao.insertTipo(tipoComportamento);
                                 }
+
+                                if(entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId()) &&
+                                        tipoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    tipoComportamentoDao.deleteTipo(tipoComportamento);
+                                }
+
+                                if(entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId()) &&
+                                        tipoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_MODIFIED)
+                                ){
+                                    tipoComportamentoDao.updateTipo(tipoComportamento);
+                                }
                             }
                         }
                     });
@@ -272,7 +291,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getComportamentosFromFirestore(){
+    private void refreshComportamentosWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .addSnapshotListener((value, error) -> {
@@ -286,6 +305,18 @@ public class FirestoreRepository {
                                 ){
                                     comportamentoDao.insertComportamento(comportamento);
                                 }
+
+                                if(entitiesHandlerRepository.comportamentoExiste(comportamento.getId()) &&
+                                        comportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    comportamentoDao.deleteComportamento(comportamento);
+                                }
+
+                                if(entitiesHandlerRepository.comportamentoExiste(comportamento.getId()) &&
+                                        comportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_MODIFIED)
+                                ){
+                                    comportamentoDao.updateComportamento(comportamento);
+                                }
                             }
                         }
                     });
@@ -294,7 +325,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getFormularioComportamentoFromFirestore(){
+    private void refreshFormulariosComportamentoWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .addSnapshotListener((value, error) -> {
@@ -308,6 +339,12 @@ public class FirestoreRepository {
                                 ){
                                     formularioComportamentoDao.insertFormulario(formularioComportamento);
                                 }
+
+                                if(entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId()) &&
+                                        formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    formularioComportamentoDao.deleteFormulario(formularioComportamento);
+                                }
                             }
                         }
                     });
@@ -316,7 +353,7 @@ public class FirestoreRepository {
         }
     }
 
-    private void getAnotacoesComportamentoFromFirestore(){
+    private void refreshAnotacoesComportamentoWithFirestore(){
         try {
             firebaseFirestore.collection(ROOT_PATH + "AnotacaoComportamento")
                     .addSnapshotListener((value, error) -> {
@@ -330,6 +367,12 @@ public class FirestoreRepository {
                                         anotacaoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
                                 ){
                                     anotacaoComportamentoDao.insertAnotacao(anotacaoComportamento);
+                                }
+
+                                if(entitiesHandlerRepository.anotacaoComportamentoExiste(anotacaoComportamento.getId()) &&
+                                        anotacaoComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
                                 }
                             }
                         }
