@@ -50,6 +50,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     }
 
     public void submitComportamentoList(List<Comportamento> listComportamentos){
+        comportamentos.clear();
         comportamentos = listComportamentos;
         notifyDataSetChanged();
     }

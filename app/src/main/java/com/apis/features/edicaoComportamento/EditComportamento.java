@@ -3,6 +3,7 @@ package com.apis.features.edicaoComportamento;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
+import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
@@ -30,7 +32,8 @@ public class EditComportamento extends AppCompatActivity {
 
     EditComportamentoAdapter _adapter;
     EditComportamentoAdapter adapter;
-    DbRepository database;
+    DbRepository dbRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
 
     int idLote;
     boolean edit_comp_lote;
@@ -54,10 +57,11 @@ public class EditComportamento extends AppCompatActivity {
 
         textAdicionarTipo = findViewById(R.id.lbl_tipo_adicionar_comportamento);
         imgAdicionarTipo = findViewById(R.id.imgAddTipo);
-        database = new DbRepository(getApplicationContext());
-        //swipeRefreshLayout = findViewById(R.id.edicao_comportamento_swipe_refresh);
+        dbRepository = new DbRepository(getApplicationContext());
+        entitiesHandlerRepository = new EntitiesHandlerRepository(getApplicationContext());
+        swipeRefreshLayout = findViewById(R.id.edit_comportamento_swipeRefresh);
 
-        if(database.getFormularioPadrao(true) == null &&
+        if(dbRepository.getFormularioPadrao(true) == null &&
                 getIntent().hasExtra("lote_id")
                 && getIntent().hasExtra("edit_comp_lote")
                 && getIntent().hasExtra("lote_nome")){
@@ -65,23 +69,23 @@ public class EditComportamento extends AppCompatActivity {
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
-            formularioComportamento = database.getFormularioPadrao(true);
+            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
 
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
-            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
-            formularioComportamento = database.getFormulario(idLote);
+            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
+            formularioComportamento = dbRepository.getFormulario(idLote);
             copyPatternIntoNewFormulario();
         }
-        else if(database.getFormularioPadrao(true) == null){
+        else if(dbRepository.getFormularioPadrao(true) == null){
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
-            formularioComportamento = database.getFormularioPadrao(true);
+            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
         }else if (
                 getIntent().hasExtra("lote_id")
@@ -92,24 +96,24 @@ public class EditComportamento extends AppCompatActivity {
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
 
-            if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento != null){
-                formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
+            if(dbRepository.getLoteAndFormulario(idLote).get(0).formularioComportamento != null){
+                formularioComportamento = dbRepository.getLoteAndFormulario(idLote).get(0).formularioComportamento;
             }else{
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-                database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
-                formularioComportamento = database.getFormulario(idLote);
+                dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
+                formularioComportamento = dbRepository.getFormulario(idLote);
                 copyPatternIntoNewFormulario();
             }
 
         }else{
-            formularioComportamento = database.getFormularioPadrao(true);
+            formularioComportamento = dbRepository.getFormularioPadrao(true);
         }
 
         setRecycler();
         setAddTipoClickListener();
         setData();
-        //setupSwipeRefresh();
+        setupSwipeRefresh();
     }
 
     private void setupSwipeRefresh() {
@@ -150,9 +154,9 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private void submitTypeToAdapter(){
-        database.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
+        dbRepository.insertTipoComportamento(new TipoComportamento(0, "", formularioComportamento.getId()));
 
-        List<TipoComportamento> tipos = database.getFormularioWithTipoComportamento(
+        List<TipoComportamento> tipos = dbRepository.getFormularioWithTipoComportamento(
                 formularioComportamento.getId()).get(0).tiposComportamento;
         TipoComportamento tipo = tipos.get(tipos.size() - 1);
 
@@ -161,18 +165,23 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private void setData(){
-        listaTipos = database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+        listaTipos = dbRepository.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
         List<Comportamento> tempListComp = new ArrayList<>();
 
-        for (Comportamento comportamento : database.getAllComportamentos()) {
+        for (Comportamento comportamento : dbRepository.getAllComportamentos()) {
             for (TipoComportamento tipoComportamento : listaTipos) {
-                if(comportamento.getIdTipo() == tipoComportamento.getId()){
+                if (comportamento.getIdTipo() == tipoComportamento.getId()) {
                     tempListComp.add(comportamento);
                 }
             }
         }
 
-        listaComportamentos = tempListComp;
+        for(Comportamento comportamento : tempListComp){
+            if(!listaComportamentos.contains(comportamento)){
+                listaComportamentos.add(comportamento);
+            }
+        }
+
         adapter.submitTipoList(listaTipos);
         adapter.submitComportamentoList(listaComportamentos);
     }
@@ -182,7 +191,7 @@ public class EditComportamento extends AppCompatActivity {
         insertNewType("Comportamento Reprodutivo", 0);
         insertNewType("Uso da Sombra", 0);
 
-        for(TipoComportamento tipoComportamento : database.getAllTipos()){
+        for(TipoComportamento tipoComportamento : dbRepository.getAllTipos()){
             switch (tipoComportamento.getDescricao()){
                 case "Comportamento Fisiológico":
                     insertNewComportamento("Pastejando", 0, tipoComportamento.getId());
@@ -205,16 +214,16 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private void copyPatternIntoNewFormulario(){
-        for(TipoComportamento tipo : getFormularioWithTipo(database.getFormularioPadrao(true))){
-            database.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioComportamento.getId()));
+        for(TipoComportamento tipo : getFormularioWithTipo(dbRepository.getFormularioPadrao(true))){
+            dbRepository.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioComportamento.getId()));
         }
         List<TipoComportamento> tiposFormularioLote = getFormularioWithTipo(formularioComportamento);
         List<Comportamento> comportamentosPadrao = new ArrayList<>();
 
-        for(Comportamento comportamento : database.getAllComportamentos()){
-            TipoComportamento tipo = database.getTipo(comportamento.getIdTipo());
+        for(Comportamento comportamento : dbRepository.getAllComportamentos()){
+            TipoComportamento tipo = dbRepository.getTipo(comportamento.getIdTipo());
             if(tipo != null) {
-                if (tipo.getIdFormularioComportamento() == database.getFormularioPadrao(true).getId()) {
+                if (tipo.getIdFormularioComportamento() == dbRepository.getFormularioPadrao(true).getId()) {
                     comportamentosPadrao.add(comportamento);
                 }
             }
@@ -222,9 +231,9 @@ public class EditComportamento extends AppCompatActivity {
 
         for(Comportamento comportamento : comportamentosPadrao){
             for(TipoComportamento tipoComportamento : tiposFormularioLote){
-                if(database.getTipo(comportamento.getIdTipo()).getDescricao().equals(tipoComportamento.getDescricao())){
-                    database.insertComportamento(new Comportamento(0, comportamento.getNome(), tipoComportamento.getId()));
-                    listaComportamentos.add(database.getComportamento(tipoComportamento.getId()));
+                if(dbRepository.getTipo(comportamento.getIdTipo()).getDescricao().equals(tipoComportamento.getDescricao())){
+                    dbRepository.insertComportamento(new Comportamento(0, comportamento.getNome(), tipoComportamento.getId()));
+                    listaComportamentos.add(dbRepository.getComportamento(tipoComportamento.getId()));
                 }
             }
         }
@@ -237,11 +246,11 @@ public class EditComportamento extends AppCompatActivity {
         List<TipoComportamento> listaTiposComportamentoExcluidos = adapter.getTiposExcluidos();
 
         for(Comportamento comportamento : listaComportamentosExcluidos){
-            database.excluirComportamento(comportamento);
+            dbRepository.excluirComportamento(comportamento);
         }
 
         for(TipoComportamento tipoComportamento : listaTiposComportamentoExcluidos){
-            database.excluirTipoComportamento(tipoComportamento);
+            dbRepository.excluirTipoComportamento(tipoComportamento);
         }
 
         for (TipoComportamento tipo : listaTipos) {
@@ -264,7 +273,7 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private List<TipoComportamento> getFormularioWithTipo(FormularioComportamento formularioComportamento){
-        return  database.getFormularioWithTipoComportamento(
+        return  dbRepository.getFormularioWithTipoComportamento(
                 formularioComportamento.getId())
                 .get(0)
                 .tiposComportamento;
@@ -273,42 +282,42 @@ public class EditComportamento extends AppCompatActivity {
     private void insertNewType(String descricao, int id){
         boolean exist = false;
 
-        for(TipoComportamento tipos :  database.getAllTipos()){
+        for(TipoComportamento tipos :  dbRepository.getAllTipos()){
             if(descricao.equals(tipos.getDescricao()) || tipos.getId() == id){
                 exist = true;
             }
         }
 
         if(exist){
-            for(TipoComportamento tipoComportamento : database.getAllTipos()){
+            for(TipoComportamento tipoComportamento : dbRepository.getAllTipos()){
                 if(tipoComportamento.getId() == id && tipoComportamento.getDescricao() != descricao){
                     tipoComportamento.setDescricao(descricao);
-                    database.updateTipo(tipoComportamento);
+                    dbRepository.updateTipo(tipoComportamento);
                 }
             }
         }else{
-            database.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
+            dbRepository.insertTipoComportamento(new TipoComportamento(0, descricao, formularioComportamento.getId()));
         }
     }
 
     private void insertNewComportamento(String nome, int id, int tipoId){
         boolean exist = false;
 
-        for(Comportamento comportamento :  database.getAllComportamentos()){
+        for(Comportamento comportamento :  dbRepository.getAllComportamentos()){
             if(nome.equals(comportamento.getNome()) || comportamento.getId() == id){
                 exist = true;
             }
         }
 
         if(exist){
-            for(Comportamento comportamento : database.getAllComportamentos()){
+            for(Comportamento comportamento : dbRepository.getAllComportamentos()){
                 if(comportamento.getId() == id && comportamento.getNome() != nome){
                     comportamento.setNome(nome);
-                    database.updateComportamento(comportamento);
+                    dbRepository.updateComportamento(comportamento);
                 }
             }
         }else{
-            database.insertComportamento(new Comportamento(id, nome, tipoId));
+            dbRepository.insertComportamento(new Comportamento(id, nome, tipoId));
         }
     }
 
@@ -325,7 +334,7 @@ public class EditComportamento extends AppCompatActivity {
                 }
                 if(!newTypes.isEmpty()){
                     for(TipoComportamento tipo : newTypes){
-                        database.excluirTipoComportamento(tipo);
+                        dbRepository.excluirTipoComportamento(tipo);
                     }
                 }
                 newTypes.clear();
