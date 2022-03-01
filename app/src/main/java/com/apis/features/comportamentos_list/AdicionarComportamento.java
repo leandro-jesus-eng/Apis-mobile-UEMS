@@ -26,6 +26,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
@@ -66,6 +68,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
     List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
     private FloatingActionButton goToReprodutivo;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     DbRepository database;
     LinearLayout layout;
@@ -82,8 +85,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         database = new DbRepository(this);
         layout = findViewById(R.id.linearLayoutAddComp);
+        swipeRefreshLayout = findViewById(R.id.adicionar_comportamento_swipeRefresh);
         goToReprodutivo = findViewById(R.id.fab);
-
 
         pegarDadosActivityPassada();
         pegarUltimaAtualizacao();
@@ -123,10 +126,20 @@ public class AdicionarComportamento extends AppCompatActivity {
                 finish();
             }
         });
+        setupSwipeRefresh();
+    }
+
+    private void setupSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void setList(){
-
         if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
             if(database.getFormularioPadrao(true) == null){
                 DateTime dateTime = new DateTime();
@@ -159,6 +172,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             }
         }
 
+        layout.removeAllViews();
         for(TipoComportamento tipoComportamento : tiposComportamento) {
             createTextView(tipoComportamento.getDescricao(), false);
 
