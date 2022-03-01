@@ -134,6 +134,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 setList();
+                configurarListaComportamentos();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

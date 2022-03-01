@@ -105,6 +105,7 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Animal")
                     .document(ANIMAL_DOC_PREFIX + animal.getId())
                     .delete();
+
             animalDao.deleteAnimal(animal);
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
@@ -126,7 +127,9 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "TipoComportamento")
                     .document(TIPO_COMPORTAMENTO_DOC_PREFIX + tipoComportamento.getId())
                     .delete();
-            tipoComportamentoDao.deleteTipo(tipoComportamento);
+            if(entitiesHandlerRepository.tipoComportamentoExiste(tipoComportamento.getId())){
+                tipoComportamentoDao.deleteTipo(tipoComportamento);
+            }
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
         }
@@ -147,7 +150,10 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "Comportamento")
                     .document(COMPORTAMENTO_DOC_PREFIX + comportamento.getId())
                     .delete();
-            comportamentoDao.deleteComportamento(comportamento);
+
+            if(entitiesHandlerRepository.comportamentoExiste(comportamento.getId())){
+                comportamentoDao.deleteComportamento(comportamento);
+            }
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
         }
@@ -168,7 +174,9 @@ public class FirestoreRepository {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
                     .delete();
-            formularioComportamentoDao.deleteFormulario(formularioComportamento);
+            if(entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId())){
+                formularioComportamentoDao.deleteFormulario(formularioComportamento);
+            }
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
         }

@@ -3,11 +3,14 @@ package com.apis.features.edicaoComportamento;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
@@ -126,7 +129,6 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
     private void createComportamento(
             EditComportamentoViewHolder holder, int position, boolean novo, String nome){
-
         View comportamento = LayoutInflater.from(context).inflate(
                 R.layout.item_comportamento_edit, holder.linearLayout, false
         );

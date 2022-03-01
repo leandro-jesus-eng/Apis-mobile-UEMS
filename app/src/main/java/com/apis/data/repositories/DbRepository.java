@@ -169,11 +169,11 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote){
-        FormularioComportamento formularioComportamento = getLoteAndFormulario(
-                lote.getId()).get(0).formularioComportamento;
-        if(formularioComportamento != null){
-            firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
-            excluirFormularioComportamento(formularioComportamento);
+        for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
+            if(formularioComportamento.getLoteId() == lote.getId()){
+                excluirFormularioComportamento(formularioComportamento);
+                firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+            }
         }
 
         loteDao.deleteLote(lote);
@@ -240,8 +240,8 @@ public class DbRepository {
                 tipoComportamento.getId()).get(0).comportamentos;
         if(comportamentos != null){
             for(Comportamento comportamento : comportamentos){
-                firestoreRepository.deleteComportamentoInFirestore(comportamento);
                 excluirComportamento(comportamento);
+                firestoreRepository.deleteComportamentoInFirestore(comportamento);
             }
         }
 
@@ -275,8 +275,8 @@ public class DbRepository {
                 formularioComportamento.getId()).get(0).tiposComportamento;
         if(tipoComportamentos != null){
             for(TipoComportamento tipoComportamento : tipoComportamentos){
-                firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
                 excluirTipoComportamento(tipoComportamento);
+                firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
             }
         }
 

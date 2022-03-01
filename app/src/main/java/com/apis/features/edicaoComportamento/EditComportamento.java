@@ -177,9 +177,18 @@ public class EditComportamento extends AppCompatActivity {
         }
 
         for(Comportamento comportamento : tempListComp){
+            Log.i("COMPORTAMENTO", "TEMP:"+comportamento.getNome());
+        }
+
+        listaComportamentos.clear();
+        for(Comportamento comportamento : tempListComp){
             if(!listaComportamentos.contains(comportamento)){
                 listaComportamentos.add(comportamento);
             }
+        }
+
+        for(Comportamento comportamento : tempListComp){
+            Log.i("COMPORTAMENTO", "FINAL:"+comportamento.getNome());
         }
 
         adapter.submitTipoList(listaTipos);
