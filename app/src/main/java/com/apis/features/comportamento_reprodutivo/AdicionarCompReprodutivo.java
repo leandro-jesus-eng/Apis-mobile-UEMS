@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
@@ -33,6 +35,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
     static private boolean isMontando = true;
 
     private TextView textMsg;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
         textMsg = findViewById(R.id.textMsg);
 
         database = new DbRepository(this);
+        swipeRefreshLayout = findViewById(R.id.comportamento_reprodutivo_swipeRefresh);
         isMontando = true;
 
         pegarDadosActivityPassada();
@@ -79,6 +83,21 @@ public class AdicionarCompReprodutivo extends AppCompatActivity {
                 adapter.isMontando(false);
             }
         });
+        setList();
+        setupSwipeRefresh();
+    }
+
+    private void setupSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void setList(){
         List<Animal> animalList = database.getAnimais(idLote);
         animalList.remove(findVacaEmAnotacao());
         adapter.submitList(animalList);
