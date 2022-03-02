@@ -120,7 +120,8 @@ public class EditComportamento extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setData();
+                finish();
+                startActivity(new Intent(getApplicationContext(), EditComportamento.class));
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -176,19 +177,11 @@ public class EditComportamento extends AppCompatActivity {
             }
         }
 
-        for(Comportamento comportamento : tempListComp){
-            Log.i("COMPORTAMENTO", "TEMP:"+comportamento.getNome());
-        }
-
         listaComportamentos.clear();
         for(Comportamento comportamento : tempListComp){
             if(!listaComportamentos.contains(comportamento)){
                 listaComportamentos.add(comportamento);
             }
-        }
-
-        for(Comportamento comportamento : tempListComp){
-            Log.i("COMPORTAMENTO", "FINAL:"+comportamento.getNome());
         }
 
         adapter.submitTipoList(listaTipos);

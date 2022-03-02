@@ -54,8 +54,7 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
 
     public void submitComportamentoList(List<Comportamento> listComportamentos){
         comportamentos.clear();
-        comportamentos = listComportamentos;
-        notifyDataSetChanged();
+        comportamentos.addAll(listComportamentos);
     }
 
     public void submitItem(TipoComportamento tipo){
@@ -73,12 +72,12 @@ public class EditComportamentoAdapter extends RecyclerView.Adapter<EditComportam
     @Override
     public void onBindViewHolder(final EditComportamentoViewHolder holder, final int position){
         if(!holder.edNomeTipo.equals("")){
-            holder.edNomeTipo.setText(tipos.get(holder.getAdapterPosition()).getDescricao());
+            holder.edNomeTipo.setText(tipos.get(holder.getAbsoluteAdapterPosition()).getDescricao());
         }
 
         for (Comportamento comportamento : comportamentos) {
-            if (comportamento.getIdTipo() == tipos.get(holder.getAdapterPosition()).getId()) {
-                createComportamento(holder, holder.getAdapterPosition(), false, comportamento.getNome());
+            if (comportamento.getIdTipo() == tipos.get(holder.getAbsoluteAdapterPosition()).getId()) {
+                createComportamento(holder, holder.getAbsoluteAdapterPosition(), false, comportamento.getNome());
             }
         }
 
