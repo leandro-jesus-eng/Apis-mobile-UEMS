@@ -34,20 +34,21 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:windowSoftInputMode="adjustPan"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".features.comportamentos_list.AdicionarComportamento"
-        tools:showIn="@layout/activity_adicionar_comportamento">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/comportamento_reprodutivo_swipeRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/comportamento_reprodutivo_swipeRefresh"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:windowSoftInputMode="adjustPan"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".features.comportamentos_list.AdicionarComportamento"
+            tools:showIn="@layout/activity_adicionar_comportamento">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,8 +100,9 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </androidx.core.widget.NestedScrollView>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/textMsg"
