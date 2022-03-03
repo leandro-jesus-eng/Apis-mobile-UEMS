@@ -120,8 +120,20 @@ public class EditComportamento extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if(!newTypes.isEmpty()){
+                    for(TipoComportamento tipo : newTypes){
+                        dbRepository.excluirTipoComportamento(tipo);
+                    }
+                }
+                newTypes.clear();
                 finish();
-                startActivity(new Intent(getApplicationContext(), EditComportamento.class));
+                Intent intent = new Intent(getApplicationContext(), EditComportamento.class);
+                if(edit_comp_lote) {
+                    intent.putExtra("edit_comp_lote", true);
+                    intent.putExtra("lote_id", idLote);
+                    intent.putExtra("lote_nome", nomeLote);
+                }
+                startActivity(intent);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
