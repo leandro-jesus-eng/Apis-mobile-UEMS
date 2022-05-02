@@ -18,11 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".features.sign_up.SignUpActivity"
+            android:exported="false" />
         <activity android:name=".features.others.IntroActivity" />
         <activity
             android:name=".features.others.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,6 +56,7 @@
             android:name=".features.comportamento_reprodutivo.AdicionarCompReprodutivo"
             android:label="Anotar comportamento reprodutivo"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <receiver
             android:name=".features.others.AlarmReceiver"
             android:process=":remote" />

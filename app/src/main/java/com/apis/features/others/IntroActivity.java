@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.apis.R;
 import com.apis.features.lote_list.MainActivity;
+import com.apis.features.sign_up.SignUpActivity;
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 
@@ -39,7 +40,7 @@ public class IntroActivity extends AppIntro {
         super.onDonePressed(currentFragment);
 
         Intent intent = new Intent(
-                IntroActivity.this,MainActivity.class
+                IntroActivity.this, SignUpActivity.class
         );
         startActivity(intent);
         finish();
