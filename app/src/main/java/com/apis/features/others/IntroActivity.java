@@ -28,9 +28,7 @@ public class IntroActivity extends AppIntro {
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
 
-        Intent intent = new Intent(
-                IntroActivity.this, MainActivity.class
-        );
+        Intent intent = new Intent(IntroActivity.this, SignUpActivity.class);
         startActivity(intent);
         finish();
     }
@@ -39,9 +37,7 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
 
-        Intent intent = new Intent(
-                IntroActivity.this, SignUpActivity.class
-        );
+        Intent intent = new Intent(IntroActivity.this, SignUpActivity.class);
         startActivity(intent);
         finish();
     }

@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".features.login.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.sign_up.SignUpActivity"
             android:exported="false" />
         <activity android:name=".features.others.IntroActivity" />

@@ -1,4 +1,4 @@
-package com.apis.features.sign_up;
+package com.apis.features.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,8 +12,9 @@ import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.features.lote_list.MainActivity;
+import com.apis.features.sign_up.SignUpActivity;
 
-public class SignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
     EditText emailInput;
@@ -38,19 +39,19 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                signUpUser(email, password);
+                loginUser(email, password);
             }
         });
     }
 
-    private void signUpUser(String email, String password) {
+    private void loginUser(String email, String password) {
         try {
-            authenticationRepository.signUpUser(email, password);
-            Toast.makeText(this, "Cadastro confirmado!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            authenticationRepository.loginUser(email, password);
+            Toast.makeText(this, "Login confirmado!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         } catch (Exception e) {
-            Toast.makeText(this, "Erro ao fazer cadastro!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erro ao fazer login!", Toast.LENGTH_SHORT).show();
         }
     }
 }
