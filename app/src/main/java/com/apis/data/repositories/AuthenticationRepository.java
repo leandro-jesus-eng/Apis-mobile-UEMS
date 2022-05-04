@@ -1,5 +1,7 @@
 package com.apis.data.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,6 +15,7 @@ import java.util.concurrent.Executor;
 public class AuthenticationRepository {
 
     final private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user;
 
     public void signUpUser(String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -20,7 +23,7 @@ public class AuthenticationRepository {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            user = firebaseAuth.getCurrentUser();
                         }
                     }
                 });
@@ -32,9 +35,29 @@ public class AuthenticationRepository {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            user = firebaseAuth.getCurrentUser();
                         }
                     }
                 });
+    }
+
+    public void logoutUser() {
+        try {
+            firebaseAuth.signOut();
+            user = null;
+        } catch (Exception e) {
+            Log.i("Error", "erro ao fazer logout");
+        }
+    }
+
+    public FirebaseUser getCurrentUser() {
+        try {
+            if(user == null) {
+                user = firebaseAuth.getCurrentUser();
+            }
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

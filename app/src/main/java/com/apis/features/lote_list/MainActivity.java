@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,28 +28,31 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.apis.R;
+import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
+import com.apis.features.sign_up.SignUpActivity;
 import com.apis.model.Lote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-
+import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private String nomeLote;
     private String nomeExperimento;
+    private FirebaseUser user;
     private SwipeRefreshLayout swipeRefreshLayout;
     DbRepository dbRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
     FirestoreRepository firestoreRepository;
+    AuthenticationRepository authenticationRepository;
 
     String CHANNEL_ID = "main.notifications";
 
@@ -83,12 +87,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dbRepository = new DbRepository(this);
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         firestoreRepository = new FirestoreRepository(this);
+        authenticationRepository = new AuthenticationRepository();
 
         pedirPermissoes();
         createNotificationChannel();
         configurarLista();
         setupSwipeRefresh();
         firestoreRepository.setupRemoteChangeListener();
+        getUser();
+    }
+
+    private void getUser() {
+        if (authenticationRepository.getCurrentUser() != null) {
+            user = authenticationRepository.getCurrentUser();
+            Log.i("USERZAO", user.getEmail());
+        } else {
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void logoutUser() {
+        /*
+        authenticationRepository.logoutUser();
+        user = null;
+        Log.i("USERZAO", authenticationRepository.getCurrentUser().getEmail());
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
+        
+         */
     }
 
     private void setupSwipeRefresh() {
@@ -304,6 +333,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setNegativeButton("Cancelar", null)
                     .create()
                     .show();
+        } else  {
+            logoutUser();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

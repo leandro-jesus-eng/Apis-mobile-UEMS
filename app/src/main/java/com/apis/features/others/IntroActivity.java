@@ -6,12 +6,15 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.apis.R;
+import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.features.sign_up.SignUpActivity;
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 
 public class IntroActivity extends AppIntro {
+
+    AuthenticationRepository authenticationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,29 +25,30 @@ public class IntroActivity extends AppIntro {
         addSlide(AppIntroFragment.createInstance("Notificações", "Ative as notificações no menu Configurações. Elas irão te lembrar de atualizar o comportamento dos animais.", R.drawable.intro_02, R.color.appintro_background_color));
         addSlide(AppIntroFragment.createInstance("Dados", "Os dados referentes aos registros de comportamento permanecerão na pasta /apis/, na raiz do armazenamento.", R.drawable.intro_04, R.color.appintro_background_color));
         addSlide(AppIntroFragment.createInstance("Dados", "Você também pode exportar os dados individualmente nas telas \"Lista de Lotes\" e \"Lista de Animais\".", R.drawable.intro_03, R.color.appintro_background_color));
+        authenticationRepository = new AuthenticationRepository();
     }
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-
-        Intent intent = new Intent(IntroActivity.this, SignUpActivity.class);
-        startActivity(intent);
-        finish();
+        navigateToMain();
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-
-        Intent intent = new Intent(IntroActivity.this, SignUpActivity.class);
-        startActivity(intent);
-        finish();
+        navigateToMain();
     }
 
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
+    }
+
+    private void navigateToMain() {
+        Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

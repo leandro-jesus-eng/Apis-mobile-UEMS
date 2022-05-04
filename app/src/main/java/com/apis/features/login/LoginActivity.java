@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.features.lote_list.MainActivity;
-import com.apis.features.sign_up.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,12 +23,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth);
+        setContentView(R.layout.activity_login);
 
         authenticationRepository = new AuthenticationRepository();
-        emailInput = findViewById(R.id.input_email_editText);
-        passwordInput = findViewById(R.id.input_password_editText);
-        saveButton = findViewById(R.id.save_button);
+        emailInput = findViewById(R.id.login_input_email_editText);
+        passwordInput = findViewById(R.id.login_input_password_editText);
+        saveButton = findViewById(R.id.login_save_button);
         onConfirm();
     }
 

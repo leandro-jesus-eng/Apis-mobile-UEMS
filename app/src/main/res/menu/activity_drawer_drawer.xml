@@ -38,4 +38,13 @@
                 android:title="GitHub" />
         </menu>
     </item>
+
+    <item android:title="Sair">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/help"
+                android:title="Fazer logout" />
+        </menu>
+    </item>
 </menu>
