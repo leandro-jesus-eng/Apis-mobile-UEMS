@@ -14,8 +14,6 @@ import com.github.appintro.AppIntroFragment;
 
 public class IntroActivity extends AppIntro {
 
-    AuthenticationRepository authenticationRepository;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +23,6 @@ public class IntroActivity extends AppIntro {
         addSlide(AppIntroFragment.createInstance("Notificações", "Ative as notificações no menu Configurações. Elas irão te lembrar de atualizar o comportamento dos animais.", R.drawable.intro_02, R.color.appintro_background_color));
         addSlide(AppIntroFragment.createInstance("Dados", "Os dados referentes aos registros de comportamento permanecerão na pasta /apis/, na raiz do armazenamento.", R.drawable.intro_04, R.color.appintro_background_color));
         addSlide(AppIntroFragment.createInstance("Dados", "Você também pode exportar os dados individualmente nas telas \"Lista de Lotes\" e \"Lista de Animais\".", R.drawable.intro_03, R.color.appintro_background_color));
-        authenticationRepository = new AuthenticationRepository();
     }
 
     @Override

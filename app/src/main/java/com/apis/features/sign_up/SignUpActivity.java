@@ -3,6 +3,7 @@ package com.apis.features.sign_up;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.features.login.LoginActivity;
 import com.apis.features.lote_list.MainActivity;
+import com.apis.model.User;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -46,9 +48,27 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                signUpUser(email, password);
+                if(verifyForm(email, password)) signUpUser(email, password);
+
             }
         });
+    }
+
+    private Boolean verifyForm(String email, String password) {
+        if(email.isEmpty() && password.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(email.isEmpty()) {
+            Toast.makeText(this, "Insira um email!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(password.isEmpty()) {
+            Toast.makeText(this, "Insira uma senha!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void onGoToLogin() {
@@ -65,9 +85,14 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUpUser(String email, String password) {
         try {
             authenticationRepository.signUpUser(email, password);
+            User user = new User(email);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("user_from_sign_up", user);
+
             Toast.makeText(this, "Cadastro confirmado!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            startActivity(intent);
             finish();
+
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao fazer cadastro!", Toast.LENGTH_SHORT).show();
         }

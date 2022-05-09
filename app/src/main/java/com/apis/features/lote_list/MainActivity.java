@@ -25,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -38,22 +39,28 @@ import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
 import com.apis.features.sign_up.SignUpActivity;
 import com.apis.model.Lote;
+import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private String nomeLote;
     private String nomeExperimento;
-    private FirebaseUser user;
+    private User user;
     private SwipeRefreshLayout swipeRefreshLayout;
     DbRepository dbRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
     FirestoreRepository firestoreRepository;
     AuthenticationRepository authenticationRepository;
-
+    
     String CHANNEL_ID = "main.notifications";
 
     @Override
@@ -94,30 +101,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configurarLista();
         setupSwipeRefresh();
         firestoreRepository.setupRemoteChangeListener();
-        getUser();
     }
 
-    private void getUser() {
-        if (authenticationRepository.getCurrentUser() != null) {
-            user = authenticationRepository.getCurrentUser();
-            Log.i("USERZAO", user.getEmail());
-        } else {
-            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-            startActivity(intent);
-            finish();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null) {
+            user = new User(firebaseAuth.getCurrentUser().getEmail());
         }
+        if (getIntent().hasExtra("user_from_login")){
+            user = (User) getIntent().getSerializableExtra("user_from_login");
+        }
+        if (getIntent().hasExtra("user_from_sign_up")){
+            user = (User) getIntent().getSerializableExtra("user_from_sign_up");
+        }
+        hasUserLogged(user);
+    }
+
+    private void hasUserLogged(User user) {
+        if (user == null) {
+            Log.i("USERZAO", "usuario: nulo");
+            startActivity(new Intent(this, SignUpActivity.class));
+            finish();
+        } else Log.i("USERZAO", "usuario: " + user.getEmail());
     }
 
     private void logoutUser() {
-        /*
         authenticationRepository.logoutUser();
         user = null;
-        Log.i("USERZAO", authenticationRepository.getCurrentUser().getEmail());
-        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, SignUpActivity.class));
         finish();
-        
-         */
     }
 
     private void setupSwipeRefresh() {
