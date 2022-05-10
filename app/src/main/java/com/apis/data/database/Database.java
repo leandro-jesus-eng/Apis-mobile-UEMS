@@ -17,6 +17,7 @@ import com.apis.model.Comportamento;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+import com.apis.model.User;
 
 @androidx.room.Database(entities = {
         Animal.class,
@@ -25,6 +26,7 @@ import com.apis.model.TipoComportamento;
         TipoComportamento.class,
         Comportamento.class,
         AnotacaoComportamento.class,
+        User.class
 }, version = 2, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
@@ -34,6 +36,7 @@ abstract public class Database extends RoomDatabase {
     public abstract ComportamentoDao comportamentoDao();
     public abstract FormularioComportamentoDao formularioComportamentoDao();
     public abstract TipoComportamentoDao tipoComportamentoDao();
+    public abstract User userDao();
     public abstract RelationsDao relationsDao();
 
     private static Database database;
