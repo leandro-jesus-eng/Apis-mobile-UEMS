@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
-import com.apis.features.animal_list.ListaAnimais;
 import com.apis.features.login.LoginActivity;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
@@ -75,9 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
         goToLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
     }
@@ -92,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Cadastro confirmado!", Toast.LENGTH_SHORT).show();
             startActivity(intent);
             finish();
-
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao fazer cadastro!", Toast.LENGTH_SHORT).show();
         }

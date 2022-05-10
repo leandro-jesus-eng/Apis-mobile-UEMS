@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".features.login.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".features.sign_up.SignUpActivity"/>
         <activity
             android:name=".features.sign_up.SignUpActivity"
             android:exported="false" />

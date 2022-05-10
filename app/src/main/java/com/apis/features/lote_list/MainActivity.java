@@ -25,7 +25,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,12 +42,7 @@ import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -60,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EntitiesHandlerRepository entitiesHandlerRepository;
     FirestoreRepository firestoreRepository;
     AuthenticationRepository authenticationRepository;
-    
+
     String CHANNEL_ID = "main.notifications";
 
     @Override
@@ -81,16 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Botão flutuante
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                salvarLote();
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            }
-        });
-
         dbRepository = new DbRepository(this);
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         firestoreRepository = new FirestoreRepository(this);
@@ -100,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannel();
         configurarLista();
         setupSwipeRefresh();
+        setupFloatingButton();
         firestoreRepository.setupRemoteChangeListener();
     }
 
@@ -121,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void hasUserLogged(User user) {
         if (user == null) {
-            Log.i("USERZAO", "usuario: nulo");
+            Log.i("User", "usuario: nulo");
             startActivity(new Intent(this, SignUpActivity.class));
             finish();
-        } else Log.i("USERZAO", "usuario: " + user.getEmail());
+        } else Log.i("User", "usuario: " + user.getEmail());
     }
 
     private void logoutUser() {
@@ -164,8 +149,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(layout);
     }
 
-    public void salvarLote() {
+    private void setupFloatingButton() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                salvarLote();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            }
+        });
+    }
 
+    public void salvarLote() {
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
         View promptView = layoutInflater.inflate(R.layout.prompt_lote, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -241,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
-
     final static String[] PERMISSIONS_WRITE_EXTERNAL_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
