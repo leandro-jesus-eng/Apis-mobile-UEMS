@@ -70,7 +70,7 @@ public class FirestoreRepository {
         refreshComportamentosWithFirestore();
         refreshFormulariosComportamentoWithFirestore();
         refreshAnotacoesComportamentoWithFirestore();
-        refreshUsersWithFirestore();
+        //refreshUsersWithFirestore();
     }
 
     public void insertLoteToFirestore(Lote lote) {
