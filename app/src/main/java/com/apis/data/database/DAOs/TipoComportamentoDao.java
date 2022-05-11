@@ -29,5 +29,4 @@ public interface TipoComportamentoDao {
 
     @Update
     void updateTipo(TipoComportamento tipoComportamento);
-
 }

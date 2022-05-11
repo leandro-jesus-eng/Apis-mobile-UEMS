@@ -12,7 +12,6 @@ import com.apis.data.database.relations.LoteWithAnimal;
 import com.apis.data.database.relations.LoteWithUsers;
 import com.apis.data.database.relations.TipoComportamentoWithComportamento;
 import com.apis.data.database.relations.UserLoteCrossRef;
-import com.apis.data.database.relations.UserWithLotes;
 
 import java.util.List;
 
@@ -20,11 +19,11 @@ import java.util.List;
 public interface RelationsDao {
 
     @Transaction
-    @Query("SELECT * FROM tb_lote WHERE id = :loteId")
+    @Query("SELECT * FROM tb_lote WHERE loteId = :loteId")
     List<LoteWithAnimal> getLoteWithAnimal(int loteId);
 
     @Transaction
-    @Query("SELECT * FROM tb_lote WHERE id = :loteId")
+    @Query("SELECT * FROM tb_lote WHERE loteId = :loteId")
     List<LoteAndFormulario> getLoteAndFormulario(int loteId);
 
     @Transaction
@@ -43,10 +42,6 @@ public interface RelationsDao {
     void insertUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef);
 
     @Transaction
-    @Query("SELECT * FROM tb_lote WHERE id = :loteId")
-    List<UserWithLotes> getUsersOfLote(int loteId);
-
-    @Transaction
-    @Query("SELECT * FROM tb_user WHERE id = :userId")
-    List<LoteWithUsers> getLotesOfUser(int userId);
+    @Query("SELECT * FROM tb_lote WHERE loteId = :loteId")
+    List<LoteWithUsers> getUsersOfLote(int loteId);
 }

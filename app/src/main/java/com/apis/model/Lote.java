@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Lote implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int loteId;
 
     @ColumnInfo(name = "nome")
     private String nome;
@@ -18,28 +18,28 @@ public class Lote implements Serializable {
     private String experimento;
 
     public Lote(int id, String nome, String experimento){
-        this.id = id;
+        this.loteId = id;
         this.nome = nome;
         this.experimento = experimento;
     }
 
     public Lote(){}
 
-    public int getId(){ return this.id; }
+    public int getLoteId(){ return this.loteId; }
     public String getNome(){ return this.nome; }
     public String getExperimento(){ return this.experimento; }
 
-    public void setId(int id) { this.id = id; }
+    public void setLoteId(int id) { this.loteId = id; }
     public void setNome(String nome) { this.nome = nome; }
     public void setExperimento(String experimento) { this.experimento = experimento; }
 
     @Override
     public boolean equals(Object o){
-        return this.id == ((Lote)o).id;
+        return this.loteId == ((Lote)o).loteId;
     }
 
     @Override
     public int hashCode(){
-        return this.id;
+        return this.loteId;
     }
 }

@@ -22,9 +22,9 @@ public interface UserDao {
     @Query("DELETE FROM tb_user")
     void deleteAllUsers();
 
-    @Query("SELECT * FROM tb_user WHERE id = :userId")
-    Lote getUser(int userId);
+    @Query("SELECT * FROM tb_user WHERE userId = :userId")
+    User getUser(int userId);
 
     @Query("SELECT * FROM tb_user")
-    List<Lote> getAllUsers();
+    List<User> getAllUsers();
 }

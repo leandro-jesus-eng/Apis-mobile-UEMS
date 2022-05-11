@@ -10,11 +10,11 @@ import com.apis.model.User;
 import java.util.List;
 
 public class LoteWithUsers {
-    @Embedded Lote lote;
+    @Embedded public Lote lote;
     @Relation(
-            parentColumn = "id",
+            parentColumn = "loteId",
             entityColumn = "userId",
             associateBy = @Junction(UserLoteCrossRef.class)
     )
-    List<User> userList;
+    public List<User> userList;
 }

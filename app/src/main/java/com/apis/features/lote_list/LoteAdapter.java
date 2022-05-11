@@ -56,7 +56,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
     public void onBindViewHolder(LoteViewHolder holder, final int position)
     {
         holder.nome.setText(lotes.get(position).getNome());
-        holder.experimento.setText("["+lotes.get(position).getId()+"] "+lotes.get(position).getExperimento());
+        holder.experimento.setText("["+lotes.get(position).getLoteId()+"] "+lotes.get(position).getExperimento());
 
         final Lote lote = lotes.get(position);
 
@@ -76,11 +76,11 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
                                 //Apaga arquivo
                                 FileControl fileControl = new FileControl(context);
-                                fileControl.deleteLoteFile(context, lote.getId());
+                                fileControl.deleteLoteFile(context, lote.getLoteId());
 
                                 try {
                                     database.excluirLote(lotes.get(position));
-                                    List<Animal> animaisLote = database.getAnimais(lote.getId());
+                                    List<Animal> animaisLote = database.getAnimais(lote.getLoteId());
                                     for (Animal animal : animaisLote) {
                                         database.excluirAnimal(animal);
                                     }
@@ -127,7 +127,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
                 boolean existeDados = false;
                 DbRepository database = new DbRepository(context);
-                List<Animal> listAnimais = database.getAnimais(lote.getId());
+                List<Animal> listAnimais = database.getAnimais(lote.getLoteId());
                 try {
                     FileOutputStream out = new FileOutputStream(f, true);
                     for(Animal animal : listAnimais) {
@@ -182,7 +182,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
             public void onClick(View v) {
                 Intent intent = new Intent(context, ListaAnimais.class);
                 intent.putExtra("lote_nome", lotes.get(holder.getAdapterPosition()).getNome());
-                intent.putExtra("lote_id", lotes.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("lote_id", lotes.get(holder.getAdapterPosition()).getLoteId());
                 context.startActivity(intent);
             }
         });

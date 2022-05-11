@@ -10,7 +10,7 @@ public class LoteAndFormulario {
     @Embedded
     public Lote lote;
     @Relation(
-            parentColumn = "id",
+            parentColumn = "loteId",
             entityColumn = "loteId"
     )
     public FormularioComportamento formularioComportamento;

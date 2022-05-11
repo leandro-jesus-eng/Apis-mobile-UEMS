@@ -70,7 +70,7 @@ public class FirestoreRepository {
     public void insertLoteToFirestore(Lote lote){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
-                    .document(LOTE_DOC_PREFIX + lote.getId())
+                    .document(LOTE_DOC_PREFIX + lote.getLoteId())
                     .set(lote, SetOptions.merge());
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
@@ -80,7 +80,7 @@ public class FirestoreRepository {
     public void deleteLoteInFirestore(Lote lote){
         try {
             firebaseFirestore.collection(ROOT_PATH + "Lote")
-                    .document(LOTE_DOC_PREFIX + lote.getId())
+                    .document(LOTE_DOC_PREFIX + lote.getLoteId())
                     .delete();
             if(entitiesHandlerRepository.loteExiste(lote.getNome(), lote.getExperimento())){
                 loteDao.deleteLote(lote);

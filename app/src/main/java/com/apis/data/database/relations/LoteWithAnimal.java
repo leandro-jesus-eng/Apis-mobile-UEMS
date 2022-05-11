@@ -12,7 +12,7 @@ public class LoteWithAnimal {
     @Embedded
     public Lote lote;
     @Relation(
-            parentColumn = "id",
+            parentColumn = "loteId",
             entityColumn = "loteId"
     )
     public List<Animal> animais;

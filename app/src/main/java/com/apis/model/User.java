@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int userId;
 
     @ColumnInfo(name = "email")
     private String email;
@@ -22,8 +22,8 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getUserId() { return userId; }
+    public void setUserId(int id) { this.userId = id; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

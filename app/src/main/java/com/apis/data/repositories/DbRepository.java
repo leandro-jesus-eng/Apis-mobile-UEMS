@@ -2,7 +2,6 @@ package com.apis.data.repositories;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
@@ -13,12 +12,15 @@ import com.apis.data.database.DAOs.FormularioComportamentoDao;
 import com.apis.data.database.DAOs.LoteDao;
 import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
+import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
 import com.apis.data.database.relations.AnimalWithAnotacao;
 import com.apis.data.database.relations.FormularioWithTipoComportamento;
 import com.apis.data.database.relations.LoteAndFormulario;
 import com.apis.data.database.relations.LoteWithAnimal;
+import com.apis.data.database.relations.LoteWithUsers;
 import com.apis.data.database.relations.TipoComportamentoWithComportamento;
+import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
@@ -48,6 +50,7 @@ public class DbRepository {
     final private ComportamentoDao comportamentoDao;
     final private RelationsDao relationsDao;
     final private FirestoreRepository firestoreRepository;
+    final private UserDao userDao;
 
     public DbRepository(Context ctx){
         context = ctx;
@@ -58,6 +61,7 @@ public class DbRepository {
         anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
         comportamentoDao = Database.getInstance(ctx).comportamentoDao();
         relationsDao = Database.getInstance(ctx).relationsDao();
+        userDao = Database.getInstance(ctx).userDao();
         firestoreRepository = new FirestoreRepository(ctx);
     }
 
@@ -69,23 +73,33 @@ public class DbRepository {
     }
 
     //Retorna Comportamentos de um Tipo
-    public List<TipoComportamentoWithComportamento> getTipoComportamentoWithComportamento(int idTipo){
+    public List<TipoComportamentoWithComportamento> getTipoComportamentoWithComportamento(int idTipo) {
         return relationsDao.getTipoComportamentoWithComportamento(idTipo);
     }
 
     //Retorna tipos de um Formulario
-    public List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int idFormulario){
+    public List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int idFormulario) {
         return relationsDao.getFormularioWithTipoComportamento(idFormulario);
     }
 
     //Retorna animais de um Lote
-    public List<LoteWithAnimal> getLoteWithAnimal(int idLote){
+    public List<LoteWithAnimal> getLoteWithAnimal(int idLote) {
         return relationsDao.getLoteWithAnimal(idLote);
     }
 
     //Retorna formulario de um Lote
-    public List<LoteAndFormulario> getLoteAndFormulario(int idLote){
+    public List<LoteAndFormulario> getLoteAndFormulario(int idLote) {
         return relationsDao.getLoteAndFormulario(idLote);
+    }
+
+    //Retorna Lotes com user
+    public List<LoteWithUsers> getUserOfLote(int loteId) {
+        return relationsDao.getUsersOfLote(loteId);
+    }
+
+    //Inserir Relação UserLote
+    public void insertUserLoteCrossRef(int userId, int loteId) {
+        relationsDao.insertUserLoteCrossRef(new UserLoteCrossRef(userId, loteId));
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -170,7 +184,7 @@ public class DbRepository {
 
     public void excluirLote(Lote lote){
         for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
-            if(formularioComportamento.getLoteId() == lote.getId()){
+            if(formularioComportamento.getLoteId() == lote.getLoteId()){
                 excluirFormularioComportamento(formularioComportamento);
                 firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
             }

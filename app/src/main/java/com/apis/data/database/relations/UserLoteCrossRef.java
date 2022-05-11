@@ -1,9 +1,15 @@
 package com.apis.data.database.relations;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 @Entity(primaryKeys = {"userId", "loteId"})
 public class UserLoteCrossRef {
-    Integer userId;
-    Integer loteId;
+    @NonNull public Integer userId;
+    @NonNull public Integer loteId;
+
+    public UserLoteCrossRef(@NonNull Integer userId, @NonNull Integer loteId) {
+        this.userId = userId;
+        this.loteId = loteId;
+    }
 }
