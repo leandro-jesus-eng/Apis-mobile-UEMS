@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.apis.R;
+import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
@@ -198,9 +199,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             } else {
                                 ////Salva no BD
-                                Lote novoLote = new Lote(0 ,nomeLote, nomeExperimento);
+                                Lote novoLote = new Lote(0 , nomeLote, nomeExperimento);
+
                                 try {
-                                    dbRepository.insertLote(novoLote);
+                                    dbRepository.insertLote(novoLote, user.getUserId());
                                     finish();
                                     startActivity(getIntent());
                                 }catch (Throwable throwable){

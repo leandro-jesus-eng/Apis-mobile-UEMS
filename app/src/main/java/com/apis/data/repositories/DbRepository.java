@@ -28,6 +28,7 @@ import com.apis.model.FileControl;
 import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+import com.apis.model.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,8 +99,8 @@ public class DbRepository {
     }
 
     //Inserir Relação UserLote
-    public void insertUserLoteCrossRef(int userId, int loteId) {
-        relationsDao.insertUserLoteCrossRef(new UserLoteCrossRef(userId, loteId));
+    public void insertUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef) {
+        relationsDao.insertUserLoteCrossRef(userLoteCrossRef);
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -159,9 +160,10 @@ public class DbRepository {
     }
 
     //--LOTES-------------------------------------------------------------------------------------//
-    public void insertLote(Lote lote){
+    public void insertLote(Lote lote, Integer userId){
         loteDao.insertLote(lote);
         firestoreRepository.insertLoteToFirestore(getLastLote());
+        insertUserLoteCrossRef(new UserLoteCrossRef(userId, getLastLote().getLoteId()));
     }
 
     public Lote getLote(int idLote){
@@ -317,6 +319,25 @@ public class DbRepository {
     public void excluirAnotacaoComportamento(AnotacaoComportamento anotacaoComportamento){
         anotacaoComportamentoDao.deleteAnotacao(anotacaoComportamento);
         firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
+    }
+
+    //--User--------------------------------------------------------------------------------------//
+
+    public void insertUser(User user){
+        userDao.insertUser(user);
+        firestoreRepository.insertUserToFirestore(user);
+    }
+
+    public List<User> getAllUsers(){
+        return userDao.getAllUsers();
+    }
+
+    public User getLastUser(){
+        return getAllUsers().get(getAllUsers().size() - 1);
+    }
+
+    public void deleteUser(User user){
+        userDao.deleteUser(user);
     }
 
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//

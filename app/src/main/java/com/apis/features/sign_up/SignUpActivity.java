@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.features.login.LoginActivity;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
@@ -18,6 +19,7 @@ import com.apis.model.User;
 public class SignUpActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
+    DbRepository dbRepository;
     EditText emailInput;
     EditText passwordInput;
     Button saveButton;
@@ -29,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         authenticationRepository = new AuthenticationRepository();
+        dbRepository = new DbRepository(this);
         emailInput = findViewById(R.id.sign_up_input_email_editText);
         passwordInput = findViewById(R.id.sign_up_input_password_editText);
         saveButton = findViewById(R.id.sign_up_save_button);
@@ -82,9 +85,9 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUpUser(String email, String password) {
         try {
             authenticationRepository.signUpUser(email, password);
-            User user = new User(email);
+            dbRepository.insertUser(new User(email));
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("user_from_sign_up", user);
+            intent.putExtra("user_from_sign_up", dbRepository.getLastUser());
 
             Toast.makeText(this, "Cadastro confirmado!", Toast.LENGTH_SHORT).show();
             startActivity(intent);
