@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
+import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
     EditText emailInput;
     EditText passwordInput;
     Button saveButton;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         authenticationRepository = new AuthenticationRepository();
+        entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         emailInput = findViewById(R.id.login_input_email_editText);
         passwordInput = findViewById(R.id.login_input_password_editText);
         saveButton = findViewById(R.id.login_save_button);
@@ -61,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(!entitiesHandlerRepository.userExists(email)) {
+            Toast.makeText(this, "Não há usuários com esse email!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

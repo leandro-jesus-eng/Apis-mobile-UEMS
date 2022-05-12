@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
+import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.login.LoginActivity;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
@@ -20,6 +21,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
     DbRepository dbRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
     EditText emailInput;
     EditText passwordInput;
     Button saveButton;
@@ -31,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         authenticationRepository = new AuthenticationRepository();
+        entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         dbRepository = new DbRepository(this);
         emailInput = findViewById(R.id.sign_up_input_email_editText);
         passwordInput = findViewById(R.id.sign_up_input_password_editText);
@@ -68,6 +71,9 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(entitiesHandlerRepository.userExists(email)) {
+            Toast.makeText(this, "Esse email já está sendo usado!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
