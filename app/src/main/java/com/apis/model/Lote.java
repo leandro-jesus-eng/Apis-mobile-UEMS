@@ -23,7 +23,7 @@ public class Lote implements Serializable {
         this.experimento = experimento;
     }
 
-    public Lote(){}
+    public Lote() {}
 
     public int getLoteId(){ return this.loteId; }
     public String getNome(){ return this.nome; }

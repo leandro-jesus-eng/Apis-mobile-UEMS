@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
@@ -19,6 +21,8 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.FileControl;
 import com.apis.model.Lote;
+import com.apis.model.User;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,10 +35,12 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
 
     final private List<Lote> lotes;
     final private Context context;
+    final private User user;
 
-    public LoteAdapter(List lotes, Context context){
+    public LoteAdapter(List lotes, Context context, User user){
         this.lotes = lotes;
         this.context = context;
+        this.user = user;
     }
 
     public void removerLote(Lote lote){
@@ -79,7 +85,11 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                                 fileControl.deleteLoteFile(context, lote.getLoteId());
 
                                 try {
-                                    database.excluirLote(lotes.get(position));
+                                    UserLoteCrossRef userLoteCrossRef = new UserLoteCrossRef(
+                                            user.getUserId(),
+                                            lote.getLoteId()
+                                    );
+                                    database.excluirLote(lotes.get(position), userLoteCrossRef);
                                     List<Animal> animaisLote = database.getAnimais(lote.getLoteId());
                                     for (Animal animal : animaisLote) {
                                         database.excluirAnimal(animal);

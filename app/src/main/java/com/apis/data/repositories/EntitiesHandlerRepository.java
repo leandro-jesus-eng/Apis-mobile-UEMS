@@ -116,4 +116,13 @@ public class EntitiesHandlerRepository {
         }
         return false;
     }
+
+    public boolean userCExists(String email) {
+        List<User> result = userDao.getAllUsers();
+
+        for(User user : result){
+            if(user.getEmail().equals(email)) return true;
+        }
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package com.apis.data.database.DAOs;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -38,8 +39,15 @@ public interface RelationsDao {
     @Query("SELECT * FROM tb_animal WHERE id = :idAnimal")
     List<AnimalWithAnotacao> getAnimalWithAnotacao(int idAnimal);
 
+    @Transaction
+    @Query("SELECT * FROM UserLoteCrossRef")
+    List<UserLoteCrossRef> getAllUserLoteCrossRef();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef);
+
+    @Delete
+    void deleteUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef);
 
     @Transaction
     @Query("SELECT * FROM tb_lote WHERE loteId = :loteId")

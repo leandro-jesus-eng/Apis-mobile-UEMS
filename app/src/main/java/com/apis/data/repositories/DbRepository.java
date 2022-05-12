@@ -101,6 +101,12 @@ public class DbRepository {
     //Inserir Relação UserLote
     public void insertUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef) {
         relationsDao.insertUserLoteCrossRef(userLoteCrossRef);
+        firestoreRepository.insertUserLoteCrossRefToFirestore(userLoteCrossRef);
+    }
+
+    //Deletar Relação UserLote
+    public void deleteUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef) {
+        relationsDao.deleteUserLoteCrossRef(userLoteCrossRef);
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -184,7 +190,7 @@ public class DbRepository {
         return loteDao.getAllLotes();
     }
 
-    public void excluirLote(Lote lote){
+    public void excluirLote(Lote lote, UserLoteCrossRef userLoteCrossRef){
         for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
             if(formularioComportamento.getLoteId() == lote.getLoteId()){
                 excluirFormularioComportamento(formularioComportamento);
@@ -194,6 +200,7 @@ public class DbRepository {
 
         loteDao.deleteLote(lote);
         firestoreRepository.deleteLoteInFirestore(lote);
+        deleteUserLoteCrossRef(userLoteCrossRef);
     }
 
     //--COMPORTAMENTOS----------------------------------------------------------------------------//
@@ -325,7 +332,7 @@ public class DbRepository {
 
     public void insertUser(User user){
         userDao.insertUser(user);
-        firestoreRepository.insertUserToFirestore(user);
+        firestoreRepository.insertUserToFirestore(getLastUser());
     }
 
     public List<User> getAllUsers(){
@@ -334,6 +341,10 @@ public class DbRepository {
 
     public User getLastUser(){
         return getAllUsers().get(getAllUsers().size() - 1);
+    }
+
+    public User getUser(String email){
+        return userDao.getUser(email);
     }
 
     public void deleteUser(User user){
@@ -361,7 +372,11 @@ public class DbRepository {
         for(Comportamento comportamento : comportamentoDao.getAllComportamentos()){
             firestoreRepository.deleteComportamentoInFirestore(comportamento);
         }
-
+        /*
+        for(User user : userDao.getAllUsers()){
+            deleteUser(user);
+        }
+         */
         animalDao.deleteAllAnimais();
         loteDao.deleteAllLotes();
         tipoComportamentoDao.deleteAllTipos();

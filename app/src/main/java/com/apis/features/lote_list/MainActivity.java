@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         pedirPermissoes();
         createNotificationChannel();
-        configurarLista();
         setupSwipeRefresh();
         setupFloatingButton();
         firestoreRepository.setupRemoteChangeListener();
@@ -103,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             user = (User) getIntent().getSerializableExtra("user_from_sign_up");
         }
         hasUserLogged(user);
+        configurarLista();
     }
 
     private void hasUserLogged(User user) {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertImg.setVisibility(View.VISIBLE);
         }
 
-        recyclerView.setAdapter(new LoteAdapter(lotes, this));
+        recyclerView.setAdapter(new LoteAdapter(lotes, this, user));
         LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
     }

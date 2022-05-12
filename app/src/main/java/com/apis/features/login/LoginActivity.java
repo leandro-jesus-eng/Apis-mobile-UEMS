@@ -1,8 +1,6 @@
 package com.apis.features.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -15,7 +13,6 @@ import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 

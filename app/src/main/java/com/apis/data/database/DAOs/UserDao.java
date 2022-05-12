@@ -22,8 +22,8 @@ public interface UserDao {
     @Query("DELETE FROM tb_user")
     void deleteAllUsers();
 
-    @Query("SELECT * FROM tb_user WHERE userId = :userId")
-    User getUser(int userId);
+    @Query("SELECT * FROM tb_user WHERE email = :userEmail")
+    User getUser(String userEmail);
 
     @Query("SELECT * FROM tb_user")
     List<User> getAllUsers();
