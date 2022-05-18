@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -107,6 +108,19 @@ public class DbRepository {
     //Deletar Relação UserLote
     public void deleteUserLoteCrossRef(UserLoteCrossRef userLoteCrossRef) {
         relationsDao.deleteUserLoteCrossRef(userLoteCrossRef);
+    }
+
+    //Deletar Relação UserLote
+    public UserLoteCrossRef findUserLoteCrossRefByIds(Integer userId, Integer loteId) {
+        List<UserLoteCrossRef> result = relationsDao.getAllUserLoteCrossRef();
+
+        for (UserLoteCrossRef userLoteCrossRef : result) {
+            if (userLoteCrossRef.userId.equals(userId) && userLoteCrossRef.loteId.equals(loteId)) {
+                return userLoteCrossRef;
+            }
+        }
+        return null;
+
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -201,6 +215,22 @@ public class DbRepository {
         loteDao.deleteLote(lote);
         firestoreRepository.deleteLoteInFirestore(lote);
         deleteUserLoteCrossRef(userLoteCrossRef);
+        firestoreRepository.deleteUserLoteCrossRefToFirestore(userLoteCrossRef);
+    }
+
+    public List<Lote> selectVisibleLotes(User currentUser) {
+        List<Lote> visibleLotes = new ArrayList<>();
+
+        for(Lote lote : getAllLotes()) {
+            LoteWithUsers loteWithUsers =  getUserOfLote(lote.getLoteId()).get(0);
+            List<User> usersWithPermission = loteWithUsers.userList;
+            for(User userWithPermission : usersWithPermission) {
+                if(currentUser.getEmail().equals(userWithPermission.getEmail())) {
+                    visibleLotes.add(lote);
+                }
+            }
+        }
+        return visibleLotes;
     }
 
     //--COMPORTAMENTOS----------------------------------------------------------------------------//

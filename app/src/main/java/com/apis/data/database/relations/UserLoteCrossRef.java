@@ -12,4 +12,6 @@ public class UserLoteCrossRef {
         this.userId = userId;
         this.loteId = loteId;
     }
+
+    public UserLoteCrossRef() {}
 }

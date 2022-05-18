@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.apis.R;
+import com.apis.data.database.relations.LoteWithUsers;
 import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
@@ -43,6 +44,8 @@ import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -93,7 +96,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null) {
-            user = new User(firebaseAuth.getCurrentUser().getEmail());
+            User newUser = new User(firebaseAuth.getCurrentUser().getEmail());
+            if(entitiesHandlerRepository.userExists(newUser.getEmail())) {
+                user = dbRepository.getUser(newUser.getEmail());
+            } else {
+                dbRepository.insertUser(newUser);
+                user = dbRepository.getLastUser();
+            }
         }
         if (getIntent().hasExtra("user_from_login")){
             user = (User) getIntent().getSerializableExtra("user_from_login");
@@ -131,13 +140,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void configurarLista() {
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerAnimais);
-        List<Lote> lotes = dbRepository.getAllLotes();
-
         TextView nenhumLote = (TextView) findViewById(R.id.textNenhumLote);
         ImageView alertImg  = (ImageView) findViewById(R.id.alertImgLotes);
-        if(lotes.size() > 0){
+
+        List<Lote> visibleLotes = dbRepository.selectVisibleLotes(user);
+
+        if(visibleLotes.size() > 0) {
             nenhumLote.setVisibility(View.INVISIBLE);
             alertImg.setVisibility(View.INVISIBLE);
         }else {
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertImg.setVisibility(View.VISIBLE);
         }
 
-        recyclerView.setAdapter(new LoteAdapter(lotes, this, user));
+        recyclerView.setAdapter(new LoteAdapter(visibleLotes, this, user));
         LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
     }

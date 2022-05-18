@@ -85,10 +85,10 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                                 fileControl.deleteLoteFile(context, lote.getLoteId());
 
                                 try {
-                                    UserLoteCrossRef userLoteCrossRef = new UserLoteCrossRef(
-                                            user.getUserId(),
-                                            lote.getLoteId()
+                                    UserLoteCrossRef userLoteCrossRef = database.findUserLoteCrossRefByIds(
+                                            user.getUserId(), lote.getLoteId()
                                     );
+
                                     database.excluirLote(lotes.get(position), userLoteCrossRef);
                                     List<Animal> animaisLote = database.getAnimais(lote.getLoteId());
                                     for (Animal animal : animaisLote) {

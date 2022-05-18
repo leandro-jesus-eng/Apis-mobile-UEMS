@@ -8,6 +8,7 @@ import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
 import com.apis.data.database.DAOs.FormularioComportamentoDao;
 import com.apis.data.database.DAOs.LoteDao;
+import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
@@ -51,6 +52,7 @@ public class FirestoreRepository {
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
     final private UserDao userDao;
+    final private RelationsDao relationsDao;
     final private EntitiesHandlerRepository entitiesHandlerRepository;
 
     public FirestoreRepository(Context ctx) {
@@ -63,6 +65,7 @@ public class FirestoreRepository {
         anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
         comportamentoDao = Database.getInstance(ctx).comportamentoDao();
         userDao = Database.getInstance(ctx).userDao();
+        relationsDao = Database.getInstance(ctx).relationsDao();
     }
 
     public void setupRemoteChangeListener(){
@@ -73,6 +76,7 @@ public class FirestoreRepository {
         refreshFormulariosComportamentoWithFirestore();
         refreshAnotacoesComportamentoWithFirestore();
         refreshUsersWithFirestore();
+        refreshUserLoteCrossRefsWithFirestore();
     }
 
     public void insertLoteToFirestore(Lote lote) {
@@ -442,6 +446,33 @@ public class FirestoreRepository {
                                 if (entitiesHandlerRepository.userExists(user.getEmail()) &&
                                         userChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
                                 ) { userDao.deleteUser(user); }
+                            }
+                        }
+                    });
+        } catch (Exception e){
+            Log.i(ERROR_TAG, e.toString());
+        }
+    }
+
+    private void refreshUserLoteCrossRefsWithFirestore() {
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "UserLoteCrossRef")
+                    .addSnapshotListener((value, error) -> {
+                        if(value != null){
+                            for(DocumentChange userChange : value.getDocumentChanges()){
+                                UserLoteCrossRef userLoteCrossRef =
+                                        userChange.getDocument().toObject(UserLoteCrossRef.class);
+
+                                if (!entitiesHandlerRepository.userLoteCrosRefExists(
+                                        userLoteCrossRef.userId, userLoteCrossRef.loteId
+                                ) && userChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)) {
+                                    relationsDao.insertUserLoteCrossRef(userLoteCrossRef);
+                                }
+                                if (entitiesHandlerRepository.userLoteCrosRefExists(
+                                        userLoteCrossRef.userId, userLoteCrossRef.loteId
+                                ) && userChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)) {
+                                    relationsDao.deleteUserLoteCrossRef(userLoteCrossRef);
+                                }
                             }
                         }
                     });

@@ -10,6 +10,7 @@ import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
+import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
@@ -29,6 +30,7 @@ public class EntitiesHandlerRepository {
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
     final private UserDao userDao;
+    final private RelationsDao relationsDao;
 
     public EntitiesHandlerRepository(Context ctx) {
         animalDao = Database.getInstance(ctx).animalDao();
@@ -38,6 +40,7 @@ public class EntitiesHandlerRepository {
         anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
         comportamentoDao = Database.getInstance(ctx).comportamentoDao();
         userDao = Database.getInstance(ctx).userDao();
+        relationsDao = Database.getInstance(ctx).relationsDao();
     }
 
     public boolean animalExiste(String nomeAnimal) {
@@ -117,11 +120,13 @@ public class EntitiesHandlerRepository {
         return false;
     }
 
-    public boolean userCExists(String email) {
-        List<User> result = userDao.getAllUsers();
+    public boolean userLoteCrosRefExists(Integer userId, Integer loteId) {
+        List<UserLoteCrossRef> result = relationsDao.getAllUserLoteCrossRef();
 
-        for(User user : result){
-            if(user.getEmail().equals(email)) return true;
+        for (UserLoteCrossRef userLoteCrossRef : result) {
+            if (userLoteCrossRef.userId.equals(userId) && userLoteCrossRef.loteId.equals(loteId)) {
+                return true;
+            }
         }
         return false;
     }
