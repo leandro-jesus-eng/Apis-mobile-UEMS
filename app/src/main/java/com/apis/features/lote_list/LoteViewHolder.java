@@ -14,6 +14,7 @@ public class LoteViewHolder extends RecyclerView.ViewHolder {
     final TextView experimento;
     final ImageButton btnExcluir;
     final ImageButton btnExportarDados;
+    final ImageButton shareLoteButton;
 
     public LoteViewHolder(View view) {
         super(view);
@@ -22,6 +23,6 @@ public class LoteViewHolder extends RecyclerView.ViewHolder {
         experimento = (TextView) view.findViewById(R.id.lbl_experimento);
         btnExcluir = (ImageButton) view.findViewById(R.id.btnDeleteLote);
         btnExportarDados = (ImageButton) view.findViewById(R.id.btnExportarDados);
-
+        shareLoteButton = (ImageButton) view.findViewById(R.id.share_lote_button);
     }
 }

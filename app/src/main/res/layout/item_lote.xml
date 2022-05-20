@@ -31,7 +31,21 @@
             android:layout_marginLeft="16dp"
             android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_nome_lote" />
+            app:layout_constraintTop_toBottomOf="@id/lbl_nome_lote" />
+
+        <ImageButton
+            android:id="@+id/share_lote_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_baseline_share_24"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnExportarDados"/>
 
         <ImageButton
             android:id="@+id/btnDeleteLote"
@@ -42,7 +56,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/ic_baseline_delete_24"
-            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,8 +68,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/divider"
-            app:layout_constraintEnd_toStartOf="@+id/btnDeleteLote"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintEnd_toStartOf="@id/btnDeleteLote"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/database_export" />
 
@@ -71,7 +85,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_experimento" />
+            app:layout_constraintTop_toBottomOf="@id/lbl_experimento" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

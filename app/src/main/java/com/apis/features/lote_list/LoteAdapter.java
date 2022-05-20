@@ -17,6 +17,7 @@ import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
+import com.apis.features.shareLote.ShareLoteActivity;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.FileControl;
@@ -193,6 +194,16 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 Intent intent = new Intent(context, ListaAnimais.class);
                 intent.putExtra("lote_nome", lotes.get(holder.getAdapterPosition()).getNome());
                 intent.putExtra("lote_id", lotes.get(holder.getAdapterPosition()).getLoteId());
+                context.startActivity(intent);
+            }
+        });
+
+        holder.shareLoteButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ShareLoteActivity.class);
+                intent.putExtra("lote_nome", lotes.get(holder.getAbsoluteAdapterPosition()).getNome());
+                intent.putExtra("lote_id", lotes.get(holder.getAbsoluteAdapterPosition()).getLoteId());
                 context.startActivity(intent);
             }
         });
