@@ -204,6 +204,7 @@ public class LoteAdapter extends RecyclerView.Adapter<LoteViewHolder>{
                 Intent intent = new Intent(context, ShareLoteActivity.class);
                 intent.putExtra("lote_nome", lotes.get(holder.getAbsoluteAdapterPosition()).getNome());
                 intent.putExtra("lote_id", lotes.get(holder.getAbsoluteAdapterPosition()).getLoteId());
+                intent.putExtra("user", user);
                 context.startActivity(intent);
             }
         });
