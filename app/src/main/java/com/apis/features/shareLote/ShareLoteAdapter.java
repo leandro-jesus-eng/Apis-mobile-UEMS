@@ -1,10 +1,12 @@
 package com.apis.features.shareLote;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.features.shareLote.ShareLoteViewHolder;
@@ -19,9 +21,12 @@ public class ShareLoteAdapter extends RecyclerView.Adapter<ShareLoteViewHolder>{
 
     final private List<ItemUser> users;
     final private Context context;
-    final private ArrayList<Integer> selectedUsers = new ArrayList<>();
 
-    public List<Integer> getSelectedUserIds() {
+    public List<User> getSelectedUsers() {
+        List<User> selectedUsers = new ArrayList<>();
+        for(ItemUser itemUser : users) {
+            if(itemUser.isSelected()) selectedUsers.add(itemUser.getUser());
+        }
         return selectedUsers;
     }
 
@@ -41,34 +46,23 @@ public class ShareLoteAdapter extends RecyclerView.Adapter<ShareLoteViewHolder>{
     public void onBindViewHolder(ShareLoteViewHolder holder, final int position) {
         ItemUser itemUser = users.get(holder.getAbsoluteAdapterPosition());
         holder.userEmail.setText(itemUser.getUser().getEmail());
-        setItemColor(itemUser, holder);
 
         holder.listItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 itemUser.setSelected(!itemUser.isSelected());
-                setItemColor(itemUser, holder);
+                changeItemColor(itemUser, holder);
             }
         });
     }
 
-    private void setItemColor(ItemUser itemUser, ShareLoteViewHolder holder) {
-        if(itemUser.isSelected()) {
-            /*
-            if(!selectedUsers.contains(itemUser.getUser().getUserId())) {
-                selectedUsers.add(itemUser.getUser().getUserId());
-            }
-
-             */
-            holder.listItem.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+    private void changeItemColor(ItemUser itemUser, ShareLoteViewHolder holder) {
+        if (itemUser.isSelected()) {
+            holder.listItem.setBackground(
+                   AppCompatResources.getDrawable(context, R.drawable.ic_baseline_check_green)
+            );
         } else {
-            /*
-            if(selectedUsers.contains(itemUser.getUser().getUserId())) {
-                selectedUsers.remove(itemUser.getUser().getUserId());
-            }
-            
-             */
-            holder.listItem.setBackgroundColor(context.getResources().getColor(R.color.white));
+            holder.listItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_check_white));
         }
     }
 
