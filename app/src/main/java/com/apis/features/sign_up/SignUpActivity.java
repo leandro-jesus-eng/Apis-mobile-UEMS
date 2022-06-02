@@ -53,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                if(verifyForm(email, password)) signUpUser(email, password);
+                if(verifyForm(email, password)) signUpUser(email, password.trim());
 
             }
         });

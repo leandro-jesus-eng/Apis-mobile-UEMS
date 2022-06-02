@@ -29,8 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.apis.R;
-import com.apis.data.database.relations.LoteWithUsers;
-import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
@@ -44,8 +42,6 @@ import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -116,10 +112,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void hasUserLogged(User user) {
         if (user == null) {
-            Log.i("User", "usuario: nulo");
+            Log.i("Usuario", "usuario: nulo");
             startActivity(new Intent(this, SignUpActivity.class));
             finish();
-        } else Log.i("User", "usuario: " + user.getEmail());
+        } else {
+            Log.i("Usuario", "usuario email: " + user.getEmail());
+            Log.i("Usuario", "usuario id: " + user.getUserId());
+        }
     }
 
     private void logoutUser() {

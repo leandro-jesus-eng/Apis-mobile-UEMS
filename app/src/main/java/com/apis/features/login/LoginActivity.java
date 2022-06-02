@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
+import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
+    DbRepository dbRepository;
     EditText emailInput;
     EditText passwordInput;
     Button saveButton;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
         authenticationRepository = new AuthenticationRepository();
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
+        dbRepository = new DbRepository(this);
         emailInput = findViewById(R.id.login_input_email_editText);
         passwordInput = findViewById(R.id.login_input_password_editText);
         saveButton = findViewById(R.id.login_save_button);
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                if(verifyForm(email, password)) loginUser(email, password);
+                if(verifyForm(email, password)) loginUser(email, password.trim());
             }
         });
     }
@@ -72,11 +75,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         try {
-            authenticationRepository.loginUser(email, password);
-            User user = new User(email);
+            User user;
             Intent intent = new Intent(this, MainActivity.class);
+            authenticationRepository.loginUser(email, password);
+            if(entitiesHandlerRepository.userExists(email)) {
+                user = dbRepository.getUser(email);
+            } else {
+                dbRepository.insertUser(new User(email));
+                user = dbRepository.getLastUser();
+            }
             intent.putExtra("user_from_login", user);
-
             Toast.makeText(getApplicationContext(), "Login confirmado!", Toast.LENGTH_SHORT).show();
             startActivity(intent);
             finish();

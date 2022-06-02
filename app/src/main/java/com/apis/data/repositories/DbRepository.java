@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
-
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
@@ -29,7 +28,6 @@ import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -377,10 +375,6 @@ public class DbRepository {
         return userDao.getUser(email);
     }
 
-    public void deleteUser(User user){
-        userDao.deleteUser(user);
-    }
-
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//
 
     public boolean excluirTudo() {
@@ -402,11 +396,7 @@ public class DbRepository {
         for(Comportamento comportamento : comportamentoDao.getAllComportamentos()){
             firestoreRepository.deleteComportamentoInFirestore(comportamento);
         }
-        /*
-        for(User user : userDao.getAllUsers()){
-            deleteUser(user);
-        }
-         */
+
         animalDao.deleteAllAnimais();
         loteDao.deleteAllLotes();
         tipoComportamentoDao.deleteAllTipos();
