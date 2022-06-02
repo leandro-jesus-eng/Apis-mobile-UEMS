@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.R;
@@ -23,7 +22,6 @@ import com.apis.model.AnotacaoComportamento;
 import com.apis.model.FileControl;
 import com.apis.model.Lote;
 import com.apis.model.User;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

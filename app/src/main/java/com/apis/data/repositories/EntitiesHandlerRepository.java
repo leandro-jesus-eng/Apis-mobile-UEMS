@@ -18,7 +18,6 @@ import com.apis.model.FormularioComportamento;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
-
 import java.util.List;
 
 public class EntitiesHandlerRepository {

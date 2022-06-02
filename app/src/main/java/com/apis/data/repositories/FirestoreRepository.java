@@ -2,7 +2,6 @@ package com.apis.data.repositories;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
