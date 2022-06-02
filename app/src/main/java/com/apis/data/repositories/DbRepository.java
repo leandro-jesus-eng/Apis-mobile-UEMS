@@ -109,16 +109,16 @@ public class DbRepository {
     }
 
     //Deletar Relação UserLote
-    public UserLoteCrossRef findUserLoteCrossRefByIds(Integer userId, Integer loteId) {
+    public List<UserLoteCrossRef> findUserLoteCrossRefByIds(Integer loteId) {
         List<UserLoteCrossRef> result = relationsDao.getAllUserLoteCrossRef();
+        ArrayList<UserLoteCrossRef> selectedCrossRefs = new ArrayList<>();
 
         for (UserLoteCrossRef userLoteCrossRef : result) {
-            if (userLoteCrossRef.userId.equals(userId) && userLoteCrossRef.loteId.equals(loteId)) {
-                return userLoteCrossRef;
+            if (userLoteCrossRef.loteId.equals(loteId)) {
+                selectedCrossRefs.add(userLoteCrossRef);
             }
         }
-        return null;
-
+        return selectedCrossRefs;
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -202,18 +202,20 @@ public class DbRepository {
         return loteDao.getAllLotes();
     }
 
-    public void excluirLote(Lote lote, UserLoteCrossRef userLoteCrossRef){
+    public void excluirLote(Lote lote, List<UserLoteCrossRef> userLoteCrossRefs){
         for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
             if(formularioComportamento.getLoteId() == lote.getLoteId()){
                 excluirFormularioComportamento(formularioComportamento);
                 firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
             }
         }
-
         loteDao.deleteLote(lote);
         firestoreRepository.deleteLoteInFirestore(lote);
-        deleteUserLoteCrossRef(userLoteCrossRef);
-        firestoreRepository.deleteUserLoteCrossRefToFirestore(userLoteCrossRef);
+
+        for(UserLoteCrossRef userLoteCrossRef : userLoteCrossRefs) {
+            deleteUserLoteCrossRef(userLoteCrossRef);
+            firestoreRepository.deleteUserLoteCrossRefToFirestore(userLoteCrossRef);
+        }
     }
 
     public List<Lote> selectVisibleLotes(User currentUser) {

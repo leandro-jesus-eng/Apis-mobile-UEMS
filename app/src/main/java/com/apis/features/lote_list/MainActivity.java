@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(camposValidos){
 
                             boolean loteJaExiste = false;
-                            if(entitiesHandlerRepository.loteExiste(nomeLote.trim(), nomeExperimento.trim() )){
+                            if(entitiesHandlerRepository.loteExiste(nomeLote.trim(), nomeExperimento.trim())){
                                 loteJaExiste = true;
                             }
 
