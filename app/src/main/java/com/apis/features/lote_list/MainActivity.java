@@ -33,6 +33,7 @@ import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.data.repositories.FirestoreRepository;
+import com.apis.features.ManageUser;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannel();
         setupSwipeRefresh();
         setupFloatingButton();
-        firestoreRepository.setupRemoteChangeListener();
     }
 
     @Override
@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             user = (User) getIntent().getSerializableExtra("user_from_sign_up");
         }
         hasUserLogged(user);
+        new ManageUser().setUser(user);
+        firestoreRepository.setupRemoteChangeListener();
         configurarLista();
     }
 

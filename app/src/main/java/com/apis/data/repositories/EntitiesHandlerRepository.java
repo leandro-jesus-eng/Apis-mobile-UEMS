@@ -1,6 +1,8 @@
 package com.apis.data.repositories;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
@@ -11,6 +13,7 @@ import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
 import com.apis.data.database.relations.UserLoteCrossRef;
+import com.apis.features.ManageUser;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
@@ -54,11 +57,15 @@ public class EntitiesHandlerRepository {
     }
 
     public boolean loteExiste(String nomeLote, String experimento) {
-        List<Lote> result = loteDao.getAllLotes();
-
-        for(Lote lote : result) {
-            if(lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento)) {
-                return true;
+        List<Lote> loteList = loteDao.getAllLotes();
+        for (Lote lote : loteList) {
+            if (lote.getNome().equals(nomeLote) && lote.getExperimento().equals(experimento)) {
+                List<User> userList = relationsDao.getUsersOfLote(lote.getLoteId()).get(0).userList;
+                for(User user : userList) {
+                    if(user.getUserId() == new ManageUser().getUser().getUserId()) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
