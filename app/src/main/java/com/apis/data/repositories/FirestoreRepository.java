@@ -5,7 +5,8 @@ import android.util.Log;
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
-import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.FormularioLoteDao;
+import com.apis.data.database.DAOs.FormularioPadraoDao;
 import com.apis.data.database.DAOs.LoteDao;
 import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
@@ -16,6 +17,7 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -32,7 +34,8 @@ public class FirestoreRepository {
     final String ANIMAL_DOC_PREFIX = "Animal-id:";
     final String TIPO_COMPORTAMENTO_DOC_PREFIX = "TipoComportamento-id:";
     final String COMPORTAMENTO_DOC_PREFIX = "Comportamento-id:";
-    final String FORMULARIO_COMPORTAMENTO_DOC_PREFIX = "FormularioComportamento-id:";
+    final String FORMULARIO_LOTE_DOC_PREFIX = "FormularioLote-id:";
+    final String FORMULARIO_PADRAO_DOC_PREFIX = "FormularioPadrao-id:";
     final String ANOTACAO_COMPORTAMENTO_DOC_PREFIX = "AnotacaoComportamento-id:";
     final String USER_DOC_PREFIX = "User-id:";
     final String USER_LOTE_CROSS_REF_DOC_PREFIX = "UserLoteCrossRef-id:";
@@ -46,7 +49,8 @@ public class FirestoreRepository {
 
     final private AnimalDao animalDao;
     final private LoteDao loteDao;
-    final private FormularioComportamentoDao formularioComportamentoDao;
+    final private FormularioLoteDao formularioComportamentoDao;
+    final private FormularioPadraoDao formularioPadraoDao;
     final private TipoComportamentoDao tipoComportamentoDao;
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
@@ -55,16 +59,18 @@ public class FirestoreRepository {
     final private EntitiesHandlerRepository entitiesHandlerRepository;
 
     public FirestoreRepository(Context ctx) {
+        Database databaseInstance = Database.getInstance(ctx);
         firebaseFirestore = FirebaseFirestore.getInstance();
         entitiesHandlerRepository = new EntitiesHandlerRepository(ctx);
-        animalDao = Database.getInstance(ctx).animalDao();
-        loteDao = Database.getInstance(ctx).loteDao();
-        formularioComportamentoDao = Database.getInstance(ctx).formularioComportamentoDao();
-        tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
-        anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
-        comportamentoDao = Database.getInstance(ctx).comportamentoDao();
-        userDao = Database.getInstance(ctx).userDao();
-        relationsDao = Database.getInstance(ctx).relationsDao();
+        animalDao = databaseInstance.animalDao();
+        loteDao = databaseInstance.loteDao();
+        formularioComportamentoDao = databaseInstance.formularioLoteDao();
+        formularioPadraoDao = databaseInstance.formularioPadraoDao();
+        tipoComportamentoDao = databaseInstance.tipoComportamentoDao();
+        anotacaoComportamentoDao = databaseInstance.anotacaoComportamentoDao();
+        comportamentoDao = databaseInstance.comportamentoDao();
+        userDao = databaseInstance.userDao();
+        relationsDao = databaseInstance.relationsDao();
     }
 
     public void setupRemoteChangeListener(){
@@ -170,23 +176,46 @@ public class FirestoreRepository {
         }
     }
 
-    public void insertFormularioComportamentoToFirestore(FormularioLote formularioComportamento) {
+    public void insertFormularioLoteToFirestore(FormularioLote formularioLote) {
         try {
-            firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
-                    .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
-                    .set(formularioComportamento, SetOptions.merge());
+            firebaseFirestore.collection(ROOT_PATH + "FormularioLote")
+                    .document(FORMULARIO_LOTE_DOC_PREFIX + formularioLote.getId())
+                    .set(formularioLote, SetOptions.merge());
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
         }
     }
 
-    public void deleteFormularioComportamentoInFirestore(FormularioLote formularioComportamento) {
+    public void deleteFormularioLoteInFirestore(FormularioLote formularioLote) {
         try {
-            firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
-                    .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
+            firebaseFirestore.collection(ROOT_PATH + "FormularioLote")
+                    .document(FORMULARIO_LOTE_DOC_PREFIX + formularioLote.getId())
                     .delete();
-            if(entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId())){
-                formularioComportamentoDao.deleteFormulario(formularioComportamento);
+            if(entitiesHandlerRepository.formularioLoteExiste(formularioLote.getId())){
+                formularioComportamentoDao.deleteFormulario(formularioLote);
+            }
+        } catch (Exception e){
+            Log.i(ERROR_TAG, e.toString());
+        }
+    }
+
+    public void insertFormularioPadraoToFirestore(FormularioPadrao formularioPadrao) {
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "FormularioPadrao")
+                    .document(FORMULARIO_PADRAO_DOC_PREFIX + formularioPadrao.getId())
+                    .set(formularioPadrao, SetOptions.merge());
+        } catch (Exception e){
+            Log.i(ERROR_TAG, e.toString());
+        }
+    }
+
+    public void deleteFormularioPadraoInFirestore(FormularioPadrao formularioPadrao) {
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "FormularioPadrao")
+                    .document(FORMULARIO_PADRAO_DOC_PREFIX + formularioPadrao.getId())
+                    .delete();
+            if(entitiesHandlerRepository.formularioPadraoExiste(formularioPadrao.getId())){
+                formularioPadraoDao.deleteFormularioPadrao(formularioPadrao);
             }
         } catch (Exception e){
             Log.i(ERROR_TAG, e.toString());
@@ -383,13 +412,13 @@ public class FirestoreRepository {
                                 FormularioLote formularioComportamento = formularioComportamentoChange
                                         .getDocument()
                                         .toObject(FormularioLote.class);
-                                if(!entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId()) &&
+                                if(!entitiesHandlerRepository.formularioLoteExiste(formularioComportamento.getId()) &&
                                         formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
                                 ){
                                     formularioComportamentoDao.insertFormulario(formularioComportamento);
                                 }
 
-                                if(entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId()) &&
+                                if(entitiesHandlerRepository.formularioLoteExiste(formularioComportamento.getId()) &&
                                         formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
                                 ){
                                     formularioComportamentoDao.deleteFormulario(formularioComportamento);

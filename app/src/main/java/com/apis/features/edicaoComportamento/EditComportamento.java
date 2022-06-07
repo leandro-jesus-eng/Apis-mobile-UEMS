@@ -68,22 +68,22 @@ public class EditComportamento extends AppCompatActivity {
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
+            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
             formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
 
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
-            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, false, idLote));
-            formularioComportamento = dbRepository.getFormulario(idLote);
+            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, false, idLote));
+            formularioComportamento = dbRepository.getFormularioLote(idLote);
             copyPatternIntoNewFormulario();
         }
         else if(dbRepository.getFormularioPadrao(true) == null){
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
+            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
             formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
         }else if (
@@ -100,8 +100,8 @@ public class EditComportamento extends AppCompatActivity {
             }else{
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-                dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, false, idLote));
-                formularioComportamento = dbRepository.getFormulario(idLote);
+                dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, false, idLote));
+                formularioComportamento = dbRepository.getFormularioLote(idLote);
                 copyPatternIntoNewFormulario();
             }
 

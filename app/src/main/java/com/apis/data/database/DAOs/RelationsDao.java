@@ -12,6 +12,7 @@ import com.apis.data.database.relations.LoteAndFormulario;
 import com.apis.data.database.relations.LoteWithAnimal;
 import com.apis.data.database.relations.LoteWithUsers;
 import com.apis.data.database.relations.TipoComportamentoWithComportamento;
+import com.apis.data.database.relations.UserAndFormularioPadrao;
 import com.apis.data.database.relations.UserLoteCrossRef;
 
 import java.util.List;
@@ -26,6 +27,10 @@ public interface RelationsDao {
     @Transaction
     @Query("SELECT * FROM tb_lote WHERE loteId = :loteId")
     List<LoteAndFormulario> getLoteAndFormulario(int loteId);
+
+    @Transaction
+    @Query("SELECT * FROM tb_formulario_padrao WHERE userId = :userId")
+    List<UserAndFormularioPadrao> getUserAndFormulario(int userId);
 
     @Transaction
     @Query("SELECT * FROM tb_formulario_lote WHERE id = :formularioId")

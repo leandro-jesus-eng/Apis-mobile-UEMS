@@ -6,7 +6,8 @@ import androidx.room.RoomDatabase;
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
-import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.FormularioLoteDao;
+import com.apis.data.database.DAOs.FormularioPadraoDao;
 import com.apis.data.database.DAOs.LoteDao;
 import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
@@ -16,6 +17,7 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -24,19 +26,21 @@ import com.apis.model.User;
         Animal.class,
         Lote.class,
         FormularioLote.class,
+        FormularioPadrao.class,
         TipoComportamento.class,
         Comportamento.class,
         AnotacaoComportamento.class,
         User.class,
         UserLoteCrossRef.class
-}, version = 4, exportSchema = false)
+}, version = 5, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
     public abstract AnimalDao animalDao();
     public abstract LoteDao loteDao();
     public abstract AnotacaoComportamentoDao anotacaoComportamentoDao();
     public abstract ComportamentoDao comportamentoDao();
-    public abstract FormularioComportamentoDao formularioComportamentoDao();
+    public abstract FormularioLoteDao formularioLoteDao();
+    public abstract FormularioPadraoDao formularioPadraoDao();
     public abstract TipoComportamentoDao tipoComportamentoDao();
     public abstract UserDao userDao();
     public abstract RelationsDao relationsDao();

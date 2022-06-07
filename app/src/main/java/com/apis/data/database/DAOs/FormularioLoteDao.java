@@ -11,7 +11,7 @@ import com.apis.model.FormularioLote;
 import java.util.List;
 
 @Dao
-public interface FormularioComportamentoDao {
+public interface FormularioLoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFormulario(FormularioLote formularioComportamento);

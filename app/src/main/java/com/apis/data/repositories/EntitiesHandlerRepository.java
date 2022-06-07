@@ -1,11 +1,11 @@
 package com.apis.data.repositories;
 
 import android.content.Context;
-
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
-import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.FormularioLoteDao;
+import com.apis.data.database.DAOs.FormularioPadraoDao;
 import com.apis.data.database.DAOs.LoteDao;
 import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
@@ -17,6 +17,7 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -26,7 +27,8 @@ public class EntitiesHandlerRepository {
 
     final private AnimalDao animalDao;
     final private LoteDao loteDao;
-    final private FormularioComportamentoDao formularioComportamentoDao;
+    final private FormularioLoteDao formularioLoteDao;
+    final private FormularioPadraoDao formularioPadraoDao;
     final private TipoComportamentoDao tipoComportamentoDao;
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
@@ -34,14 +36,16 @@ public class EntitiesHandlerRepository {
     final private RelationsDao relationsDao;
 
     public EntitiesHandlerRepository(Context ctx) {
-        animalDao = Database.getInstance(ctx).animalDao();
-        loteDao = Database.getInstance(ctx).loteDao();
-        formularioComportamentoDao = Database.getInstance(ctx).formularioComportamentoDao();
-        tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
-        anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
-        comportamentoDao = Database.getInstance(ctx).comportamentoDao();
-        userDao = Database.getInstance(ctx).userDao();
-        relationsDao = Database.getInstance(ctx).relationsDao();
+        Database databaseInstance = Database.getInstance(ctx);
+        animalDao = databaseInstance.animalDao();
+        loteDao = databaseInstance.loteDao();
+        formularioLoteDao = databaseInstance.formularioLoteDao();
+        formularioPadraoDao = databaseInstance.formularioPadraoDao();
+        tipoComportamentoDao = databaseInstance.tipoComportamentoDao();
+        anotacaoComportamentoDao = databaseInstance.anotacaoComportamentoDao();
+        comportamentoDao = databaseInstance.comportamentoDao();
+        userDao = databaseInstance.userDao();
+        relationsDao = databaseInstance.relationsDao();
     }
 
     public boolean animalExiste(String nomeAnimal) {
@@ -92,12 +96,24 @@ public class EntitiesHandlerRepository {
         return false;
     }
 
-    public boolean formularioComportamentoExiste(Integer formularioComportamentoId) {
+    public boolean formularioLoteExiste(Integer formularioLoteId) {
         List<FormularioLote> result =
-                formularioComportamentoDao.getAllFormularioComportamento();
+                formularioLoteDao.getAllFormularioComportamento();
 
         for(FormularioLote formularioComportamento : result) {
-            if(formularioComportamento.getId() == formularioComportamentoId) {
+            if(formularioComportamento.getId() == formularioLoteId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean formularioPadraoExiste(Integer formularioPadraoId) {
+        List<FormularioPadrao> result =
+                formularioPadraoDao.getAllFormularioPadrao();
+
+        for(FormularioPadrao formularioPadrao : result) {
+            if(formularioPadrao.getId() == formularioPadraoId) {
                 return true;
             }
         }

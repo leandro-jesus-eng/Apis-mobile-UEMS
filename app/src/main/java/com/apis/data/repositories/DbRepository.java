@@ -7,7 +7,8 @@ import androidx.annotation.RequiresApi;
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
 import com.apis.data.database.DAOs.ComportamentoDao;
-import com.apis.data.database.DAOs.FormularioComportamentoDao;
+import com.apis.data.database.DAOs.FormularioLoteDao;
+import com.apis.data.database.DAOs.FormularioPadraoDao;
 import com.apis.data.database.DAOs.LoteDao;
 import com.apis.data.database.DAOs.RelationsDao;
 import com.apis.data.database.DAOs.TipoComportamentoDao;
@@ -19,12 +20,14 @@ import com.apis.data.database.relations.LoteAndFormulario;
 import com.apis.data.database.relations.LoteWithAnimal;
 import com.apis.data.database.relations.LoteWithUsers;
 import com.apis.data.database.relations.TipoComportamentoWithComportamento;
+import com.apis.data.database.relations.UserAndFormularioPadrao;
 import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.FileControl;
 import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -44,7 +47,8 @@ public class DbRepository {
     final private Context context;
     final private AnimalDao animalDao;
     final private LoteDao loteDao;
-    final private FormularioComportamentoDao formularioComportamentoDao;
+    final private FormularioLoteDao formularioLoteDao;
+    final private FormularioPadraoDao formularioPadraoDao;
     final private TipoComportamentoDao tipoComportamentoDao;
     final private AnotacaoComportamentoDao anotacaoComportamentoDao;
     final private ComportamentoDao comportamentoDao;
@@ -53,15 +57,17 @@ public class DbRepository {
     final private UserDao userDao;
 
     public DbRepository(Context ctx){
+        Database databaseInstance = Database.getInstance(ctx);
         context = ctx;
-        animalDao = Database.getInstance(ctx).animalDao();
-        loteDao = Database.getInstance(ctx).loteDao();
-        formularioComportamentoDao = Database.getInstance(ctx).formularioComportamentoDao();
-        tipoComportamentoDao = Database.getInstance(ctx).tipoComportamentoDao();
-        anotacaoComportamentoDao = Database.getInstance(ctx).anotacaoComportamentoDao();
-        comportamentoDao = Database.getInstance(ctx).comportamentoDao();
-        relationsDao = Database.getInstance(ctx).relationsDao();
-        userDao = Database.getInstance(ctx).userDao();
+        animalDao = databaseInstance.animalDao();
+        loteDao = databaseInstance.loteDao();
+        formularioLoteDao = databaseInstance.formularioLoteDao();
+        formularioPadraoDao = databaseInstance.formularioPadraoDao();
+        tipoComportamentoDao = databaseInstance.tipoComportamentoDao();
+        anotacaoComportamentoDao = databaseInstance.anotacaoComportamentoDao();
+        comportamentoDao = databaseInstance.comportamentoDao();
+        relationsDao = databaseInstance.relationsDao();
+        userDao = databaseInstance.userDao();
         firestoreRepository = new FirestoreRepository(ctx);
     }
 
@@ -119,6 +125,11 @@ public class DbRepository {
             }
         }
         return selectedCrossRefs;
+    }
+
+    //Retorna usuario de um formulario
+    public List<UserAndFormularioPadrao> getUserAndFormularioPadrao(int userId) {
+        return relationsDao.getUserAndFormulario(userId);
     }
 
     //--ANIMAIS-----------------------------------------------------------------------------------//
@@ -203,10 +214,10 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote, List<UserLoteCrossRef> userLoteCrossRefs){
-        for(FormularioLote formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
+        for(FormularioLote formularioComportamento : formularioLoteDao.getAllFormularioComportamento()){
             if(formularioComportamento.getLoteId() == lote.getLoteId()){
-                excluirFormularioComportamento(formularioComportamento);
-                firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+                deleteFormularioLote(formularioComportamento);
+                firestoreRepository.deleteFormularioLoteInFirestore(formularioComportamento);
             }
         }
         loteDao.deleteLote(lote);
@@ -302,28 +313,28 @@ public class DbRepository {
         firestoreRepository.deleteTipoComportamentoInFirestore(tipoComportamento);
     }
 
-    //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
+    //--FORMULARIO_LOTE-----------------------------------------------------------------//
 
-    public void insertFormularioComportamento(FormularioLote formularioComportamento){
-        formularioComportamentoDao.insertFormulario(formularioComportamento);
-        firestoreRepository.insertFormularioComportamentoToFirestore(getLastFormularioComportamento());
+    public void insertFormularioLote(FormularioLote formularioComportamento){
+        formularioLoteDao.insertFormulario(formularioComportamento);
+        firestoreRepository.insertFormularioLoteToFirestore(getLastFormularioLote());
     }
 
     public FormularioLote getFormularioPadrao(boolean ehPadrao){
-        return formularioComportamentoDao.getFormularioPadrao(ehPadrao);
+        return formularioLoteDao.getFormularioPadrao(ehPadrao);
     }
 
-    public FormularioLote getFormulario(int id){
-        return formularioComportamentoDao.getFormulario(id);
+    public FormularioLote getFormularioLote(int id){
+        return formularioLoteDao.getFormulario(id);
     }
 
-    public FormularioLote getLastFormularioComportamento(){
-        return formularioComportamentoDao.getAllFormularioComportamento().get(
-                formularioComportamentoDao.getAllFormularioComportamento().size() - 1
+    public FormularioLote getLastFormularioLote(){
+        return formularioLoteDao.getAllFormularioComportamento().get(
+                formularioLoteDao.getAllFormularioComportamento().size() - 1
         );
     }
 
-    public void excluirFormularioComportamento(FormularioLote formularioComportamento){
+    public void deleteFormularioLote(FormularioLote formularioComportamento){
         List<TipoComportamento> tipoComportamentos = getFormularioWithTipoComportamento(
                 formularioComportamento.getId()).get(0).tiposComportamento;
         if(tipoComportamentos != null){
@@ -333,8 +344,18 @@ public class DbRepository {
             }
         }
 
-        formularioComportamentoDao.deleteFormulario(formularioComportamento);
-        firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        formularioLoteDao.deleteFormulario(formularioComportamento);
+        firestoreRepository.deleteFormularioLoteInFirestore(formularioComportamento);
+    }
+
+    //--FORMULARIO_PADRAO-----------------------------------------------------------------//
+
+    public void insertFormularioPadrao(FormularioPadrao formularioPadrao){
+        formularioPadraoDao.insertFormularioPadrao(formularioPadrao);
+    }
+
+    public FormularioPadrao getFormularioPadrao(int userId){
+        return formularioPadraoDao.getFormularioPadrao(userId);
     }
 
     //--ANOTAÇÃO_COMPORTAMENTOS-------------------------------------------------------------------//

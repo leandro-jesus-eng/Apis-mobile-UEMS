@@ -146,7 +146,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-                database.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
+                database.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
                 formularioComportamento = database.getFormularioPadrao(true);
 
                 createPatternData();

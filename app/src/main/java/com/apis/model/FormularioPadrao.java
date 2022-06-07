@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "tb_formulario_padrao")
-abstract public class FormularioPadrao implements Serializable {
+public class FormularioPadrao implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
