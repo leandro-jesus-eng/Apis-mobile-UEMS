@@ -15,7 +15,7 @@ import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -170,7 +170,7 @@ public class FirestoreRepository {
         }
     }
 
-    public void insertFormularioComportamentoToFirestore(FormularioComportamento formularioComportamento) {
+    public void insertFormularioComportamentoToFirestore(FormularioLote formularioComportamento) {
         try {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
@@ -180,7 +180,7 @@ public class FirestoreRepository {
         }
     }
 
-    public void deleteFormularioComportamentoInFirestore(FormularioComportamento formularioComportamento) {
+    public void deleteFormularioComportamentoInFirestore(FormularioLote formularioComportamento) {
         try {
             firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
                     .document(FORMULARIO_COMPORTAMENTO_DOC_PREFIX + formularioComportamento.getId())
@@ -380,9 +380,9 @@ public class FirestoreRepository {
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
                             for(DocumentChange formularioComportamentoChange : value.getDocumentChanges()){
-                                FormularioComportamento formularioComportamento = formularioComportamentoChange
+                                FormularioLote formularioComportamento = formularioComportamentoChange
                                         .getDocument()
-                                        .toObject(FormularioComportamento.class);
+                                        .toObject(FormularioLote.class);
                                 if(!entitiesHandlerRepository.formularioComportamentoExiste(formularioComportamento.getId()) &&
                                         formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
                                 ){

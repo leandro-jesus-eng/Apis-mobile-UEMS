@@ -24,7 +24,7 @@ import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.FileControl;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -203,7 +203,7 @@ public class DbRepository {
     }
 
     public void excluirLote(Lote lote, List<UserLoteCrossRef> userLoteCrossRefs){
-        for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
+        for(FormularioLote formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
             if(formularioComportamento.getLoteId() == lote.getLoteId()){
                 excluirFormularioComportamento(formularioComportamento);
                 firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
@@ -304,26 +304,26 @@ public class DbRepository {
 
     //--FORMULARIO_COMPORTAMENTOS-----------------------------------------------------------------//
 
-    public void insertFormularioComportamento(FormularioComportamento formularioComportamento){
+    public void insertFormularioComportamento(FormularioLote formularioComportamento){
         formularioComportamentoDao.insertFormulario(formularioComportamento);
         firestoreRepository.insertFormularioComportamentoToFirestore(getLastFormularioComportamento());
     }
 
-    public FormularioComportamento getFormularioPadrao(boolean ehPadrao){
+    public FormularioLote getFormularioPadrao(boolean ehPadrao){
         return formularioComportamentoDao.getFormularioPadrao(ehPadrao);
     }
 
-    public FormularioComportamento getFormulario(int id){
+    public FormularioLote getFormulario(int id){
         return formularioComportamentoDao.getFormulario(id);
     }
 
-    public FormularioComportamento getLastFormularioComportamento(){
+    public FormularioLote getLastFormularioComportamento(){
         return formularioComportamentoDao.getAllFormularioComportamento().get(
                 formularioComportamentoDao.getAllFormularioComportamento().size() - 1
         );
     }
 
-    public void excluirFormularioComportamento(FormularioComportamento formularioComportamento){
+    public void excluirFormularioComportamento(FormularioLote formularioComportamento){
         List<TipoComportamento> tipoComportamentos = getFormularioWithTipoComportamento(
                 formularioComportamento.getId()).get(0).tiposComportamento;
         if(tipoComportamentos != null){
@@ -379,6 +379,7 @@ public class DbRepository {
 
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//
 
+    /*
     public boolean excluirTudo() {
         for(Animal animal : animalDao.getAllAnimais()){
             firestoreRepository.deleteAnimalInFirestore(animal);
@@ -392,7 +393,7 @@ public class DbRepository {
         for(AnotacaoComportamento anotacaoComportamento : anotacaoComportamentoDao.getAllAnotacoesAnimal()){
             firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
         }
-        for(FormularioComportamento formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
+        for(FormularioLote formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
             firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
         }
         for(Comportamento comportamento : comportamentoDao.getAllComportamentos()){
@@ -409,6 +410,8 @@ public class DbRepository {
         fc.deleteEverthing();
         return true;
     }
+
+     */
 
     //--EXPORTAR_DADOS----------------------------------------------------------------------------//
 

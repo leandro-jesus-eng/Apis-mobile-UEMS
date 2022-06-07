@@ -3,7 +3,6 @@ package com.apis.features.edicaoComportamento;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,7 +22,7 @@ import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.animal_list.ListaAnimais;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.TipoComportamento;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class EditComportamento extends AppCompatActivity {
     List<TipoComportamento> listaTipos = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
     List<TipoComportamento> newTypes = new ArrayList<>();
-    FormularioComportamento formularioComportamento;
+    FormularioLote formularioComportamento;
 
     TextView textAdicionarTipo;
     ImageButton imgAdicionarTipo;
@@ -69,14 +68,14 @@ public class EditComportamento extends AppCompatActivity {
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
             formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
 
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
-            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
+            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, false, idLote));
             formularioComportamento = dbRepository.getFormulario(idLote);
             copyPatternIntoNewFormulario();
         }
@@ -84,7 +83,7 @@ public class EditComportamento extends AppCompatActivity {
             DateTime dateTime = new DateTime();
             String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+            dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
             formularioComportamento = dbRepository.getFormularioPadrao(true);
             createPatternData();
         }else if (
@@ -101,7 +100,7 @@ public class EditComportamento extends AppCompatActivity {
             }else{
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-                dbRepository.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, false, idLote));
+                dbRepository.insertFormularioComportamento(new FormularioLote(0, dataCriacao, false, idLote));
                 formularioComportamento = dbRepository.getFormulario(idLote);
                 copyPatternIntoNewFormulario();
             }
@@ -286,7 +285,7 @@ public class EditComportamento extends AppCompatActivity {
         finish();
     }
 
-    private List<TipoComportamento> getFormularioWithTipo(FormularioComportamento formularioComportamento){
+    private List<TipoComportamento> getFormularioWithTipo(FormularioLote formularioComportamento){
         return  dbRepository.getFormularioWithTipoComportamento(
                 formularioComportamento.getId())
                 .get(0)

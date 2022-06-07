@@ -33,7 +33,7 @@ import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.data.repositories.FirestoreRepository;
-import com.apis.features.ManageUser;
+import com.apis.features.usecases.ManageUser;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.others.IntroActivity;
 import com.apis.features.others.SettingsActivity;
@@ -332,27 +332,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
-        } else if (id == R.id.nav_delete_all) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Confirmação")
-                    .setMessage("Tem certeza que deseja excluir todos os dados do app? Isso irá apagar (lotes, animais, comportamentos, etc.) e a ação não poderá ser desfeita.")
-                    .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(dbRepository.excluirTudo()){
-                                Toast.makeText(getBaseContext(), "Feito!", Toast.LENGTH_LONG).show();
-
-                                finish();
-                                startActivity(getIntent());
-                            } else {
-                                Toast.makeText(getBaseContext(), "Erro!", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .create()
-                    .show();
         } else  {
             logoutUser();
         }

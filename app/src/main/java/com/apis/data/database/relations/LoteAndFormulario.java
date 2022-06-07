@@ -2,7 +2,7 @@ package com.apis.data.database.relations;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 
 public class LoteAndFormulario {
@@ -13,5 +13,5 @@ public class LoteAndFormulario {
             parentColumn = "loteId",
             entityColumn = "loteId"
     )
-    public FormularioComportamento formularioComportamento;
+    public FormularioLote formularioComportamento;
 }

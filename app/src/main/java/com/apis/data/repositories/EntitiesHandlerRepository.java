@@ -1,7 +1,6 @@
 package com.apis.data.repositories;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.apis.data.database.DAOs.AnimalDao;
 import com.apis.data.database.DAOs.AnotacaoComportamentoDao;
@@ -13,11 +12,11 @@ import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
 import com.apis.data.database.relations.UserLoteCrossRef;
-import com.apis.features.ManageUser;
+import com.apis.features.usecases.ManageUser;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -94,10 +93,10 @@ public class EntitiesHandlerRepository {
     }
 
     public boolean formularioComportamentoExiste(Integer formularioComportamentoId) {
-        List<FormularioComportamento> result =
+        List<FormularioLote> result =
                 formularioComportamentoDao.getAllFormularioComportamento();
 
-        for(FormularioComportamento formularioComportamento : result) {
+        for(FormularioLote formularioComportamento : result) {
             if(formularioComportamento.getId() == formularioComportamentoId) {
                 return true;
             }

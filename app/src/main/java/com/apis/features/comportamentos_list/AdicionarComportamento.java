@@ -37,7 +37,7 @@ import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
 import com.apis.model.FileControl;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,7 +60,7 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String comportamentoReprodutivo = "";
     private String comportamentoOutraVaca = "";
     private String obS = "";
-    private FormularioComportamento formularioComportamento;
+    private FormularioLote formularioComportamento;
     private Boolean temReprodutivo = false;
 
     private DateTime dateTime = new DateTime();
@@ -146,7 +146,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-                database.insertFormularioComportamento(new FormularioComportamento(0, dataCriacao, true, -1));
+                database.insertFormularioComportamento(new FormularioLote(0, dataCriacao, true, -1));
                 formularioComportamento = database.getFormularioPadrao(true);
 
                 createPatternData();

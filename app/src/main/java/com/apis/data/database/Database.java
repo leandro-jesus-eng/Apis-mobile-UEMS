@@ -15,7 +15,7 @@ import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
-import com.apis.model.FormularioComportamento;
+import com.apis.model.FormularioLote;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
@@ -23,13 +23,13 @@ import com.apis.model.User;
 @androidx.room.Database(entities = {
         Animal.class,
         Lote.class,
-        FormularioComportamento.class,
+        FormularioLote.class,
         TipoComportamento.class,
         Comportamento.class,
         AnotacaoComportamento.class,
         User.class,
         UserLoteCrossRef.class
-}, version = 3, exportSchema = false)
+}, version = 4, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
     public abstract AnimalDao animalDao();

@@ -5,8 +5,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
-@Entity(tableName = "tb_formularioComportamento")
-public class FormularioComportamento implements Serializable {
+@Entity(tableName = "tb_formulario_lote")
+public class FormularioLote implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -20,14 +20,14 @@ public class FormularioComportamento implements Serializable {
     @ColumnInfo(name = "loteId")
     private int loteId;
 
-    public FormularioComportamento(int id, String dataCriacao, boolean formularioPadrao, int loteId){
+    public FormularioLote(int id, String dataCriacao, boolean formularioPadrao, int loteId){
         this.id = id;
         this.dataCriacao = dataCriacao;
         this.formularioPadrao = formularioPadrao;
         this.loteId = loteId;
     }
 
-    public FormularioComportamento(){}
+    public FormularioLote(){}
 
     public int getId() { return id; }
     public String getDataCriacao() { return dataCriacao; }

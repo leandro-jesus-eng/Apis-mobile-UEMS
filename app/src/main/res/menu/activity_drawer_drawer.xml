@@ -18,10 +18,6 @@
                 android:id="@+id/nav_edicao_comportamentos"
                 android:icon="@drawable/prefs"
                 android:title="Alterar Comportamentos padrão" />
-            <item
-                android:id="@+id/nav_delete_all"
-                android:icon="@drawable/trash"
-                android:title="Apagar tudo" />
         </menu>
     </item>
 

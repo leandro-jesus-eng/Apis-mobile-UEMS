@@ -28,7 +28,7 @@ public interface RelationsDao {
     List<LoteAndFormulario> getLoteAndFormulario(int loteId);
 
     @Transaction
-    @Query("SELECT * FROM tb_formularioComportamento WHERE id = :formularioId")
+    @Query("SELECT * FROM tb_formulario_lote WHERE id = :formularioId")
     List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int formularioId);
 
     @Transaction
