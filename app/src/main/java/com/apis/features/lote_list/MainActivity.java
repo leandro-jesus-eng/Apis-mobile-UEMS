@@ -93,12 +93,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null) {
             User newUser = new User(firebaseAuth.getCurrentUser().getEmail());
-            if(entitiesHandlerRepository.userExists(newUser.getEmail())) {
-                user = dbRepository.getUser(newUser.getEmail());
-            } else {
+            if (!entitiesHandlerRepository.userExists(newUser.getEmail())) {
                 dbRepository.insertUser(newUser);
-                user = dbRepository.getLastUser();
             }
+            user = dbRepository.getUser(newUser.getEmail());
         }
         if (getIntent().hasExtra("user_from_login")){
             user = (User) getIntent().getSerializableExtra("user_from_login");
@@ -134,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //dbRepository.excluirTudo();
                 configurarLista();
                 swipeRefreshLayout.setRefreshing(false);
             }

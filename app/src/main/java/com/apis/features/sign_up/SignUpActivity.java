@@ -90,10 +90,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void signUpUser(String email, String password) {
         try {
+            User user = new User(email);
             authenticationRepository.signUpUser(email, password);
-            dbRepository.insertUser(new User(email));
+            dbRepository.insertUser(user);
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("user_from_sign_up", dbRepository.getLastUser());
+            intent.putExtra("user_from_sign_up", dbRepository.getUser(user.getEmail()));
 
             Toast.makeText(this, "Cadastro confirmado!", Toast.LENGTH_SHORT).show();
             startActivity(intent);

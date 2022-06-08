@@ -78,12 +78,10 @@ public class LoginActivity extends AppCompatActivity {
             User user;
             Intent intent = new Intent(this, MainActivity.class);
             authenticationRepository.loginUser(email, password);
-            if(entitiesHandlerRepository.userExists(email)) {
-                user = dbRepository.getUser(email);
-            } else {
+            if (!entitiesHandlerRepository.userExists(email)) {
                 dbRepository.insertUser(new User(email));
-                user = dbRepository.getLastUser();
             }
+            user = dbRepository.getUser(email);
             intent.putExtra("user_from_login", user);
             Toast.makeText(getApplicationContext(), "Login confirmado!", Toast.LENGTH_SHORT).show();
             startActivity(intent);

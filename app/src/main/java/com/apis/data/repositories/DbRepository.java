@@ -352,6 +352,9 @@ public class DbRepository {
 
     public void insertFormularioPadrao(FormularioPadrao formularioPadrao){
         formularioPadraoDao.insertFormularioPadrao(formularioPadrao);
+        firestoreRepository.insertFormularioPadraoToFirestore(
+                getFormularioPadrao(formularioPadrao.getUserId())
+        );
     }
 
     public FormularioPadrao getFormularioPadrao(int userId){
@@ -383,15 +386,11 @@ public class DbRepository {
 
     public void insertUser(User user){
         userDao.insertUser(user);
-        firestoreRepository.insertUserToFirestore(getLastUser());
+        firestoreRepository.insertUserToFirestore(getUser(user.getEmail()));
     }
 
     public List<User> getAllUsers(){
         return userDao.getAllUsers();
-    }
-
-    public User getLastUser(){
-        return getAllUsers().get(getAllUsers().size() - 1);
     }
 
     public User getUser(String email){
@@ -400,7 +399,7 @@ public class DbRepository {
 
     //--EXCLUIR_TUDO------------------------------------------------------------------------------//
 
-    /*
+
     public boolean excluirTudo() {
         for(Animal animal : animalDao.getAllAnimais()){
             firestoreRepository.deleteAnimalInFirestore(animal);
@@ -414,8 +413,11 @@ public class DbRepository {
         for(AnotacaoComportamento anotacaoComportamento : anotacaoComportamentoDao.getAllAnotacoesAnimal()){
             firestoreRepository.deleteAnotacaoComportamentoInFirestore(anotacaoComportamento);
         }
-        for(FormularioLote formularioComportamento : formularioComportamentoDao.getAllFormularioComportamento()){
-            firestoreRepository.deleteFormularioComportamentoInFirestore(formularioComportamento);
+        for(FormularioLote formularioComportamento : formularioLoteDao.getAllFormularioComportamento()){
+            firestoreRepository.deleteFormularioLoteInFirestore(formularioComportamento);
+        }
+        for(FormularioPadrao formularioPadrao : formularioPadraoDao.getAllFormularioPadrao()){
+            firestoreRepository.deleteFormularioPadraoInFirestore(formularioPadrao);
         }
         for(Comportamento comportamento : comportamentoDao.getAllComportamentos()){
             firestoreRepository.deleteComportamentoInFirestore(comportamento);
@@ -425,14 +427,13 @@ public class DbRepository {
         loteDao.deleteAllLotes();
         tipoComportamentoDao.deleteAllTipos();
         anotacaoComportamentoDao.deleteAllAnotacoes();
-        formularioComportamentoDao.deleteAllFormularios();
+        formularioLoteDao.deleteAllFormularios();
+        formularioPadraoDao.deleteAllFormulariosPadrao();
         comportamentoDao.deleteAllComportamentos();
         FileControl fc = new FileControl(context);
         fc.deleteEverthing();
         return true;
     }
-
-     */
 
     //--EXPORTAR_DADOS----------------------------------------------------------------------------//
 

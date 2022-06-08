@@ -78,10 +78,11 @@ public class FirestoreRepository {
         refreshAnimaisWithFirestore();
         refreshTipoComportamentoWithFirestore();
         refreshComportamentosWithFirestore();
-        refreshFormulariosComportamentoWithFirestore();
+        refreshFormulariosLoteWithFirestore();
         refreshAnotacoesComportamentoWithFirestore();
         refreshUsersWithFirestore();
         refreshUserLoteCrossRefsWithFirestore();
+        refreshFormulariosPadraoWithFirestore();
     }
 
     public void insertLoteToFirestore(Lote lote) {
@@ -403,25 +404,53 @@ public class FirestoreRepository {
         }
     }
 
-    private void refreshFormulariosComportamentoWithFirestore() {
+    private void refreshFormulariosLoteWithFirestore() {
         try {
-            firebaseFirestore.collection(ROOT_PATH + "FormularioComportamento")
+            firebaseFirestore.collection(ROOT_PATH + "FormularioLote")
                     .addSnapshotListener((value, error) -> {
                         if(value != null){
-                            for(DocumentChange formularioComportamentoChange : value.getDocumentChanges()){
-                                FormularioLote formularioComportamento = formularioComportamentoChange
+                            for(DocumentChange formularioLoteChange : value.getDocumentChanges()){
+                                FormularioLote formularioLote = formularioLoteChange
                                         .getDocument()
                                         .toObject(FormularioLote.class);
-                                if(!entitiesHandlerRepository.formularioLoteExiste(formularioComportamento.getId()) &&
-                                        formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                if(!entitiesHandlerRepository.formularioLoteExiste(formularioLote.getId()) &&
+                                        formularioLoteChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
                                 ){
-                                    formularioComportamentoDao.insertFormulario(formularioComportamento);
+                                    formularioComportamentoDao.insertFormulario(formularioLote);
                                 }
 
-                                if(entitiesHandlerRepository.formularioLoteExiste(formularioComportamento.getId()) &&
-                                        formularioComportamentoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                if(entitiesHandlerRepository.formularioLoteExiste(formularioLote.getId()) &&
+                                        formularioLoteChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
                                 ){
-                                    formularioComportamentoDao.deleteFormulario(formularioComportamento);
+                                    formularioComportamentoDao.deleteFormulario(formularioLote);
+                                }
+                            }
+                        }
+                    });
+        } catch (Exception e){
+            Log.i(ERROR_TAG, e.toString());
+        }
+    }
+
+    private void refreshFormulariosPadraoWithFirestore() {
+        try {
+            firebaseFirestore.collection(ROOT_PATH + "FormularioPadrao")
+                    .addSnapshotListener((value, error) -> {
+                        if(value != null){
+                            for(DocumentChange formularioPadraoChange : value.getDocumentChanges()){
+                                FormularioPadrao formularioPadrao = formularioPadraoChange
+                                        .getDocument()
+                                        .toObject(FormularioPadrao.class);
+                                if(!entitiesHandlerRepository.formularioPadraoExiste(formularioPadrao.getId()) &&
+                                        formularioPadraoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
+                                ){
+                                    formularioPadraoDao.insertFormularioPadrao(formularioPadrao);
+                                }
+
+                                if(entitiesHandlerRepository.formularioPadraoExiste(formularioPadrao.getId()) &&
+                                        formularioPadraoChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
+                                ){
+                                    formularioPadraoDao.deleteFormularioPadrao(formularioPadrao);
                                 }
                             }
                         }

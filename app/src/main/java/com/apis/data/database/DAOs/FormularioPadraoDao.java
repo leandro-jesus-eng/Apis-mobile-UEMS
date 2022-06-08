@@ -18,6 +18,9 @@ public interface FormularioPadraoDao {
     @Delete
     void deleteFormularioPadrao(FormularioPadrao formularioComportamento);
 
+    @Query("DELETE FROM tb_formulario_padrao")
+    void deleteAllFormulariosPadrao();
+
     @Query("SELECT * FROM tb_formulario_padrao WHERE userId = :userId")
     FormularioPadrao getFormularioPadrao(Integer userId);
 
