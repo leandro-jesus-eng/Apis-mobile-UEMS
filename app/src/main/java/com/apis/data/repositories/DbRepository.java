@@ -326,8 +326,8 @@ public class DbRepository {
         firestoreRepository.insertFormularioLoteToFirestore(getLastFormularioLote());
     }
 
-    public FormularioLote getFormularioLote(int id){
-        return formularioLoteDao.getFormulario(id);
+    public FormularioLote getFormularioLote(int loteId){
+        return formularioLoteDao.getFormulario(loteId);
     }
 
     public FormularioLote getLastFormularioLote(){
