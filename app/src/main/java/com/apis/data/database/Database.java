@@ -32,7 +32,7 @@ import com.apis.model.User;
         AnotacaoComportamento.class,
         User.class,
         UserLoteCrossRef.class
-}, version = 5, exportSchema = false)
+}, version = 6, exportSchema = false)
 abstract public class Database extends RoomDatabase {
 
     public abstract AnimalDao animalDao();

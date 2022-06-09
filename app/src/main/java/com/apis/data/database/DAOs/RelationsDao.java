@@ -7,7 +7,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import com.apis.data.database.relations.AnimalWithAnotacao;
-import com.apis.data.database.relations.FormularioWithTipoComportamento;
+import com.apis.data.database.relations.FormularioLoteWithTipoComportamento;
+import com.apis.data.database.relations.FormularioPadraoWithTipoComportamento;
 import com.apis.data.database.relations.LoteAndFormulario;
 import com.apis.data.database.relations.LoteWithAnimal;
 import com.apis.data.database.relations.LoteWithUsers;
@@ -34,7 +35,11 @@ public interface RelationsDao {
 
     @Transaction
     @Query("SELECT * FROM tb_formulario_lote WHERE id = :formularioId")
-    List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int formularioId);
+    List<FormularioLoteWithTipoComportamento> getFormularioLoteWithTipoComportamento(int formularioId);
+
+    @Transaction
+    @Query("SELECT * FROM tb_formulario_padrao WHERE id = :formularioId")
+    List<FormularioPadraoWithTipoComportamento> getFormularioPadraoWithTipoComportamento(int formularioId);
 
     @Transaction
     @Query("SELECT * FROM tb_tipoComportamento WHERE id = :tipoComportamentoId")

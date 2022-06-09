@@ -2,14 +2,14 @@ package com.apis.data.database.relations;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
-import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.TipoComportamento;
 
 import java.util.List;
 
-public class FormularioWithTipoComportamento {
+public class FormularioPadraoWithTipoComportamento {
 
-    @Embedded public FormularioLote formularioComportamento;
+    @Embedded public FormularioPadrao formularioPadrao;
     @Relation(
             parentColumn = "id",
             entityColumn = "idFormularioComportamento"

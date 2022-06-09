@@ -141,7 +141,8 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     private void setList(){
-        if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
+        /*
+        if(database.getLoteAndFormulario(idLote).get(0).formularioLote == null){
             if(database.getFormularioPadrao(true) == null){
                 DateTime dateTime = new DateTime();
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
@@ -154,12 +155,12 @@ public class AdicionarComportamento extends AppCompatActivity {
                 formularioComportamento = database.getFormularioPadrao(true);
             }
         }else{
-            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
+            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioLote;
         }
 
         List<Comportamento> comportamentos = database.getAllComportamentos();
         List<TipoComportamento> tiposComportamento =
-                database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+                database.getFormularioLoteWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
         for(TipoComportamento tipoComportamento : tiposComportamento){
             if(
@@ -206,6 +207,8 @@ public class AdicionarComportamento extends AppCompatActivity {
             createTextView("Comportamento Reprodutivo", false);
             createTextView("*"+comportamentoReprodutivo, true);
         }
+        */
+
     }
 
     private Animal findAnimalByName(String nomeAnimal){
@@ -300,10 +303,11 @@ public class AdicionarComportamento extends AppCompatActivity {
             nomeLote = database.getNomeLote(idLote);
         }
 
-        if(database.getLoteAndFormulario(idLote).get(0).formularioComportamento == null){
-            formularioComportamento = database.getFormularioPadrao(true);
+        if(database.getLoteAndFormulario(idLote).get(0).formularioLote == null){
+            //TODO
+            //formularioComportamento = database.getFormularioPadrao(true);
         }else{
-            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioComportamento;
+            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioLote;
         }
 
         if (getIntent().hasExtra("anotacao_vaca")){
@@ -312,7 +316,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             comportamentoOutraVaca = getIntent().getStringExtra("anotacao_outra_vaca");
 
             List<TipoComportamento> tiposComportamento =
-                    database.getFormularioWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
+                    database.getFormularioLoteWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
 
             for(TipoComportamento tipoComportamento : tiposComportamento){
@@ -397,6 +401,7 @@ public class AdicionarComportamento extends AppCompatActivity {
 
                         try {
                             if(!comportamentoReprodutivo.isEmpty()){
+                                //TODO
                                 Animal outra_vaca = findAnimalByName(nomeOutraVaca);
                                 AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
                                         0,

@@ -25,9 +25,6 @@ public interface FormularioLoteDao {
     @Query("SELECT * FROM tb_formulario_lote WHERE loteId = :loteId")
     FormularioLote getFormulario(int loteId);
 
-    @Query("SELECT * FROM tb_formulario_lote WHERE formularioPadrao = :ehPadrao")
-    FormularioLote getFormularioPadrao(boolean ehPadrao);
-
     @Query("SELECT * FROM tb_formulario_lote")
     List<FormularioLote> getAllFormularioComportamento();
 }

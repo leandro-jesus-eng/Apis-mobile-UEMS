@@ -14,7 +14,7 @@ public class TipoComportamento implements Serializable {
     @ColumnInfo(name = "descricao")
     private String descricao;
 
-   private int idFormularioComportamento;
+    private int idFormularioComportamento;
 
     public TipoComportamento(int id, String descricao, int idFormularioComportamento){
         this.id = id;

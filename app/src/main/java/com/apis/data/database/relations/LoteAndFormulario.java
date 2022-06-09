@@ -13,5 +13,5 @@ public class LoteAndFormulario {
             parentColumn = "loteId",
             entityColumn = "loteId"
     )
-    public FormularioLote formularioComportamento;
+    public FormularioLote formularioLote;
 }

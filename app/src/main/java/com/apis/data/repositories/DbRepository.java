@@ -15,7 +15,8 @@ import com.apis.data.database.DAOs.TipoComportamentoDao;
 import com.apis.data.database.DAOs.UserDao;
 import com.apis.data.database.Database;
 import com.apis.data.database.relations.AnimalWithAnotacao;
-import com.apis.data.database.relations.FormularioWithTipoComportamento;
+import com.apis.data.database.relations.FormularioLoteWithTipoComportamento;
+import com.apis.data.database.relations.FormularioPadraoWithTipoComportamento;
 import com.apis.data.database.relations.LoteAndFormulario;
 import com.apis.data.database.relations.LoteWithAnimal;
 import com.apis.data.database.relations.LoteWithUsers;
@@ -83,9 +84,14 @@ public class DbRepository {
         return relationsDao.getTipoComportamentoWithComportamento(idTipo);
     }
 
-    //Retorna tipos de um Formulario
-    public List<FormularioWithTipoComportamento> getFormularioWithTipoComportamento(int idFormulario) {
-        return relationsDao.getFormularioWithTipoComportamento(idFormulario);
+    //Retorna tipos de um Formulario de Lote
+    public List<FormularioLoteWithTipoComportamento> getFormularioLoteWithTipoComportamento(int idFormulario) {
+        return relationsDao.getFormularioLoteWithTipoComportamento(idFormulario);
+    }
+
+    //Retorna tipos de um Formulario Padrao
+    public List<FormularioPadraoWithTipoComportamento> getFormularioPadraoWithTipoComportamento(int idFormulario) {
+        return relationsDao.getFormularioPadraoWithTipoComportamento(idFormulario);
     }
 
     //Retorna animais de um Lote
@@ -320,10 +326,6 @@ public class DbRepository {
         firestoreRepository.insertFormularioLoteToFirestore(getLastFormularioLote());
     }
 
-    public FormularioLote getFormularioPadrao(boolean ehPadrao){
-        return formularioLoteDao.getFormularioPadrao(ehPadrao);
-    }
-
     public FormularioLote getFormularioLote(int id){
         return formularioLoteDao.getFormulario(id);
     }
@@ -335,7 +337,7 @@ public class DbRepository {
     }
 
     public void deleteFormularioLote(FormularioLote formularioComportamento){
-        List<TipoComportamento> tipoComportamentos = getFormularioWithTipoComportamento(
+        List<TipoComportamento> tipoComportamentos = getFormularioLoteWithTipoComportamento(
                 formularioComportamento.getId()).get(0).tiposComportamento;
         if(tipoComportamentos != null){
             for(TipoComportamento tipoComportamento : tipoComportamentos){

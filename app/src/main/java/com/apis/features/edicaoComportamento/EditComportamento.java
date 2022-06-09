@@ -8,14 +8,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
@@ -27,7 +25,6 @@ import com.apis.model.FormularioLote;
 import com.apis.model.FormularioPadrao;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +41,9 @@ public class EditComportamento extends AppCompatActivity {
     List<TipoComportamento> listaTipos = new ArrayList<>();
     List<Comportamento> listaComportamentos = new ArrayList<>();
     List<TipoComportamento> newTypes = new ArrayList<>();
-    FormularioLote formularioLote;
-    User user =  new ManageUser().getUser();
-
+    int formularioId;
+    User user = new ManageUser().getUser();
+    DateTime dateTime = new DateTime();
 
     TextView textAdicionarTipo;
     ImageButton imgAdicionarTipo;
@@ -67,54 +64,55 @@ public class EditComportamento extends AppCompatActivity {
         entitiesHandlerRepository = new EntitiesHandlerRepository(getApplicationContext());
         swipeRefreshLayout = findViewById(R.id.edit_comportamento_swipeRefresh);
 
-        //dbRepository.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
-        if(dbRepository.getFormularioPadrao(true) == null &&
+        //Não tem Padrão e Entrou na tela de Formulario Lote
+        if(dbRepository.getFormularioPadrao(user.getUserId()) == null &&
                 getIntent().hasExtra("lote_id")
                 && getIntent().hasExtra("edit_comp_lote")
-                && getIntent().hasExtra("lote_nome")){
-
-            DateTime dateTime = new DateTime();
-            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-
-            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
-            formularioLote = dbRepository.getFormularioPadrao(true);
-            createPatternData();
-
+                && getIntent().hasExtra("lote_nome")
+        ) {
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
-            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, false, idLote));
-            formularioLote = dbRepository.getFormularioLote(idLote);
-            copyPatternIntoNewFormulario();
-        }
-        else if(dbRepository.getFormularioPadrao(true) == null){
-            DateTime dateTime = new DateTime();
-            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
 
-            dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
-            formularioLote = dbRepository.getFormularioPadrao(true);
+            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+            FormularioLote newFormularioLote = new FormularioLote(0, dataCriacao, idLote);
+            FormularioPadrao newFormularioPadrao = new FormularioPadrao(0, user.getUserId());
+
+            dbRepository.insertFormularioPadrao(newFormularioPadrao);
+            formularioId = dbRepository.getFormularioPadrao(newFormularioPadrao.getId()).getId();
             createPatternData();
-        }else if (
+            dbRepository.insertFormularioLote(newFormularioLote);
+            formularioId = dbRepository.getFormularioLote(newFormularioLote.getId()).getId();
+            copyPatternIntoNewFormulario();
+
+            //Não tem padrão  e está na FormularioPadrao
+        } else if (dbRepository.getFormularioPadrao(user.getUserId()) == null){
+            dbRepository.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
+            formularioId = dbRepository.getFormularioPadrao(user.getUserId()).getId();
+            createPatternData();
+
+            //Tem Padrao e esta na FormularioLote
+        } else if (
                 getIntent().hasExtra("lote_id")
                         && getIntent().hasExtra("edit_comp_lote")
                         && getIntent().hasExtra("lote_nome")
-        ){
+        ) {
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
 
-            if(dbRepository.getLoteAndFormulario(idLote).get(0).formularioComportamento != null){
-                formularioLote = dbRepository.getLoteAndFormulario(idLote).get(0).formularioComportamento;
-            }else{
-                DateTime dateTime = new DateTime();
+            if (dbRepository.getLoteAndFormulario(idLote).get(0).formularioLote != null){
+                formularioId = dbRepository.getLoteAndFormulario(idLote).get(0).formularioLote.getId();
+            } else {
                 String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-                dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, false, idLote));
-                formularioLote = dbRepository.getFormularioLote(idLote);
+                dbRepository.insertFormularioLote(new FormularioLote(0, dataCriacao, idLote));
+                formularioId = dbRepository.getFormularioLote(idLote).getId();
                 copyPatternIntoNewFormulario();
             }
 
-        }else{
-            formularioLote = dbRepository.getFormularioPadrao(true);
+            //Tem Padrão e está na Formulario Padrao
+        } else {
+            formularioId = dbRepository.getFormularioPadrao(user.getUserId()).getId();
         }
 
         setRecycler();
@@ -163,7 +161,6 @@ public class EditComportamento extends AppCompatActivity {
                 submitTypeToAdapter();
             }
         });
-
         imgAdicionarTipo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,18 +171,22 @@ public class EditComportamento extends AppCompatActivity {
     }
 
     private void submitTypeToAdapter(){
-        dbRepository.insertTipoComportamento(new TipoComportamento(0, "", formularioLote.getId()));
+        List<TipoComportamento> tipos;
+        TipoComportamento tipo;
+        dbRepository.insertTipoComportamento(new TipoComportamento(0, "", formularioId));
 
-        List<TipoComportamento> tipos = dbRepository.getFormularioWithTipoComportamento(
-                formularioLote.getId()).get(0).tiposComportamento;
-        TipoComportamento tipo = tipos.get(tipos.size() - 1);
+        if(edit_comp_lote) tipos = getFormularioWithTipo(false);
+        else tipos = getFormularioWithTipo(true);
 
+        tipo = tipos.get(tipos.size() - 1);
         adapter.submitItem(tipo);
         newTypes.add(tipo);
     }
 
     private void setData(){
-        listaTipos = dbRepository.getFormularioWithTipoComportamento(formularioLote.getId()).get(0).tiposComportamento;
+        if(edit_comp_lote) listaTipos = getFormularioWithTipo(false);
+        else listaTipos = getFormularioWithTipo(true);
+
         List<Comportamento> tempListComp = new ArrayList<>();
 
         for (Comportamento comportamento : dbRepository.getAllComportamentos()) {
@@ -234,17 +235,17 @@ public class EditComportamento extends AppCompatActivity {
         }
     }
 
-    private void copyPatternIntoNewFormulario(){
-        for(TipoComportamento tipo : getFormularioWithTipo(dbRepository.getFormularioPadrao(true))){
-            dbRepository.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioLote.getId()));
+    private void copyPatternIntoNewFormulario() {
+        for(TipoComportamento tipo : getFormularioWithTipo(true)){
+            dbRepository.insertTipoComportamento(new TipoComportamento(0, tipo.getDescricao(), formularioId));
         }
-        List<TipoComportamento> tiposFormularioLote = getFormularioWithTipo(formularioLote);
+        List<TipoComportamento> tiposFormularioLote = getFormularioWithTipo(false);
         List<Comportamento> comportamentosPadrao = new ArrayList<>();
 
         for(Comportamento comportamento : dbRepository.getAllComportamentos()){
             TipoComportamento tipo = dbRepository.getTipo(comportamento.getIdTipo());
             if(tipo != null) {
-                if (tipo.getIdFormularioComportamento() == dbRepository.getFormularioPadrao(true).getId()) {
+                if (tipo.getIdFormularioComportamento() == dbRepository.getFormularioPadrao(user.getUserId()).getId()) {
                     comportamentosPadrao.add(comportamento);
                 }
             }
@@ -293,9 +294,14 @@ public class EditComportamento extends AppCompatActivity {
         finish();
     }
 
-    private List<TipoComportamento> getFormularioWithTipo(FormularioLote formularioComportamento){
-        return  dbRepository.getFormularioWithTipoComportamento(
-                formularioComportamento.getId())
+    private List<TipoComportamento> getFormularioWithTipo(boolean padrao) {
+        if (padrao) {
+            int formularioPadrao = dbRepository.getFormularioPadrao(user.getUserId()).getId();
+            return dbRepository.getFormularioPadraoWithTipoComportamento(formularioPadrao)
+                    .get(0)
+                    .tiposComportamento;
+        }
+        return dbRepository.getFormularioLoteWithTipoComportamento(formularioId)
                 .get(0)
                 .tiposComportamento;
     }
@@ -317,7 +323,7 @@ public class EditComportamento extends AppCompatActivity {
                 }
             }
         }else{
-            dbRepository.insertTipoComportamento(new TipoComportamento(0, descricao, formularioLote.getId()));
+            dbRepository.insertTipoComportamento(new TipoComportamento(0, descricao, formularioId));
         }
     }
 
