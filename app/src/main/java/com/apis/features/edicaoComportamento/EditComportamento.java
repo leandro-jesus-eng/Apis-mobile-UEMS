@@ -73,17 +73,21 @@ public class EditComportamento extends AppCompatActivity {
             idLote = getIntent().getIntExtra("lote_id", 9999);
             edit_comp_lote = getIntent().getBooleanExtra("edit_comp_lote", true);
             nomeLote = getIntent().getStringExtra("lote_nome");
-
-            String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-            FormularioLote newFormularioLote = new FormularioLote(0, dataCriacao, idLote);
             FormularioPadrao newFormularioPadrao = new FormularioPadrao(0, user.getUserId());
 
             dbRepository.insertFormularioPadrao(newFormularioPadrao);
             formularioId = dbRepository.getFormularioPadrao(user.getUserId()).getId();
             createPatternData();
-            dbRepository.insertFormularioLote(newFormularioLote);
-            formularioId = dbRepository.getFormularioLote(idLote).getId();
-            copyPatternIntoNewFormulario();
+
+            if(dbRepository.getFormularioLote(idLote) != null) {
+                formularioId = dbRepository.getFormularioLote(idLote).getId();
+            } else {
+                String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
+                FormularioLote newFormularioLote = new FormularioLote(0, dataCriacao, idLote);
+                dbRepository.insertFormularioLote(newFormularioLote);
+                formularioId = dbRepository.getFormularioLote(idLote).getId();
+                copyPatternIntoNewFormulario();
+            }
 
             //Não tem padrão  e está na FormularioPadrao
         } else if (dbRepository.getFormularioPadrao(user.getUserId()) == null){

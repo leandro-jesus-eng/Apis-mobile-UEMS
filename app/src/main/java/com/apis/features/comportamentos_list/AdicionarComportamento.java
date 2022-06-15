@@ -32,14 +32,17 @@ import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
 import com.apis.features.others.AlarmReceiver;
+import com.apis.features.usecases.ManageUser;
 import com.apis.model.Animal;
 import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
 import com.apis.model.FileControl;
 import com.apis.model.FormularioLote;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
+import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,15 +63,16 @@ public class AdicionarComportamento extends AppCompatActivity {
     private String comportamentoReprodutivo = "";
     private String comportamentoOutraVaca = "";
     private String obS = "";
-    private FormularioLote formularioComportamento;
+    private Integer formularioId;
     private Boolean temReprodutivo = false;
 
-    private DateTime dateTime = new DateTime();
+    private final DateTime dateTime = new DateTime();
     final private List<CheckBox> listComportamentoView = new ArrayList<>();
     List<TipoComportamento> tiposComportamentoReprodutivo = new ArrayList<>();
     List<Comportamento> comportamentosReprodutivos = new ArrayList<>();
     private FloatingActionButton goToReprodutivo;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private final User user = new ManageUser().getUser();
 
     DbRepository database;
     LinearLayout layout;
@@ -141,26 +145,23 @@ public class AdicionarComportamento extends AppCompatActivity {
     }
 
     private void setList(){
-        /*
-        if(database.getLoteAndFormulario(idLote).get(0).formularioLote == null){
-            if(database.getFormularioPadrao(true) == null){
-                DateTime dateTime = new DateTime();
-                String dataCriacao = dateTime.pegarData() + " " + dateTime.pegarHora();
-
-                database.insertFormularioLote(new FormularioLote(0, dataCriacao, true, -1));
-                formularioComportamento = database.getFormularioPadrao(true);
+        List<TipoComportamento> tiposComportamento;
+        if (database.getLoteAndFormulario(idLote).get(0).formularioLote == null) {
+            if (database.getFormularioPadrao(user.getUserId()) == null) {
+                database.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
+                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
 
                 createPatternData();
-            }else{
-                formularioComportamento = database.getFormularioPadrao(true);
+            } else {
+                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
             }
-        }else{
-            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioLote;
+            tiposComportamento = getFormularioWithTipo(true);
+        } else {
+            formularioId = database.getLoteAndFormulario(idLote).get(0).formularioLote.getId();
+            tiposComportamento = getFormularioWithTipo(false);
         }
 
         List<Comportamento> comportamentos = database.getAllComportamentos();
-        List<TipoComportamento> tiposComportamento =
-                database.getFormularioLoteWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
 
         for(TipoComportamento tipoComportamento : tiposComportamento){
             if(
@@ -207,8 +208,6 @@ public class AdicionarComportamento extends AppCompatActivity {
             createTextView("Comportamento Reprodutivo", false);
             createTextView("*"+comportamentoReprodutivo, true);
         }
-        */
-
     }
 
     private Animal findAnimalByName(String nomeAnimal){
@@ -281,7 +280,6 @@ public class AdicionarComportamento extends AppCompatActivity {
 
 
     public void configurarListaComportamentos() {
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerComportamento);
 
         List<AnotacaoComportamento> comportamentos = database.getAnimalWithAnotacao(idAnimal).get(0).anotacaoComportamentos;
@@ -303,11 +301,15 @@ public class AdicionarComportamento extends AppCompatActivity {
             nomeLote = database.getNomeLote(idLote);
         }
 
-        if(database.getLoteAndFormulario(idLote).get(0).formularioLote == null){
-            //TODO
-            //formularioComportamento = database.getFormularioPadrao(true);
-        }else{
-            formularioComportamento = database.getLoteAndFormulario(idLote).get(0).formularioLote;
+        if (database.getLoteAndFormulario(idLote).get(0).formularioLote == null) {
+            if (database.getFormularioPadrao(user.getUserId()) == null) {
+                database.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
+                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
+                createPatternData();
+            }
+            formularioId = database.getFormularioPadrao(user.getUserId()).getId();
+        } else {
+            formularioId = database.getLoteAndFormulario(idLote).get(0).formularioLote.getId();
         }
 
         if (getIntent().hasExtra("anotacao_vaca")){
@@ -315,9 +317,7 @@ public class AdicionarComportamento extends AppCompatActivity {
             nomeOutraVaca = getIntent().getStringExtra("outra_vaca_nome");
             comportamentoOutraVaca = getIntent().getStringExtra("anotacao_outra_vaca");
 
-            List<TipoComportamento> tiposComportamento =
-                    database.getFormularioLoteWithTipoComportamento(formularioComportamento.getId()).get(0).tiposComportamento;
-
+            List<TipoComportamento> tiposComportamento = getFormularioWithTipo(false);
 
             for(TipoComportamento tipoComportamento : tiposComportamento){
                 if(tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
@@ -401,7 +401,6 @@ public class AdicionarComportamento extends AppCompatActivity {
 
                         try {
                             if(!comportamentoReprodutivo.isEmpty()){
-                                //TODO
                                 Animal outra_vaca = findAnimalByName(nomeOutraVaca);
                                 AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
                                         0,
@@ -531,15 +530,21 @@ public class AdicionarComportamento extends AppCompatActivity {
         database.insertTipoComportamento(
                 new TipoComportamento(0,
                         "Comportamento Fisiológico",
-                        formularioComportamento.getId()));
+                        formularioId
+                )
+        );
         database.insertTipoComportamento(
                 new TipoComportamento(0,
                         "Comportamento Reprodutivo",
-                        formularioComportamento.getId()));
+                        formularioId
+                )
+        );
         database.insertTipoComportamento(
                 new TipoComportamento(0,
                         "Uso da Sombra",
-                        formularioComportamento.getId()));
+                        formularioId
+                )
+        );
 
         for(TipoComportamento tipoComportamento : database.getAllTipos()){
             switch (tipoComportamento.getDescricao()){
@@ -561,6 +566,18 @@ public class AdicionarComportamento extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    private List<TipoComportamento> getFormularioWithTipo(boolean padrao) {
+        if (padrao) {
+            int formularioPadrao = database.getFormularioPadrao(user.getUserId()).getId();
+            return database.getFormularioPadraoWithTipoComportamento(formularioPadrao)
+                    .get(0)
+                    .tiposComportamento;
+        }
+        return database.getFormularioLoteWithTipoComportamento(formularioId)
+                .get(0)
+                .tiposComportamento;
     }
 
     @Override
