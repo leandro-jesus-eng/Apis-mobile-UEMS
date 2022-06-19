@@ -136,7 +136,7 @@ public class EditComportamento extends AppCompatActivity {
         else listaTipos = getFormularioWithTipo(true);
 
         List<Comportamento> tempListComp = new ArrayList<>();
-        List<TipoComportamento> t = listaTipos;
+
         for (Comportamento comportamento : dbRepository.getAllComportamentos()) {
             for (TipoComportamento tipoComportamento : listaTipos) {
                 if (comportamento.getIdTipo() == tipoComportamento.getId()) {
@@ -151,8 +151,6 @@ public class EditComportamento extends AppCompatActivity {
                 listaComportamentos.add(comportamento);
             }
         }
-
-        List<Comportamento> c = listaComportamentos;
 
         adapter.submitTipoList(listaTipos);
         adapter.submitComportamentoList(listaComportamentos);
