@@ -1,4 +1,4 @@
-package com.apis.features.others;
+package com.apis.features.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.apis.R;
+import com.apis.features.usecases.ManageUser;
+import com.apis.model.User;
 
 public class SettingsActivity extends AppCompatActivity  {
 
@@ -34,8 +36,9 @@ public class SettingsActivity extends AppCompatActivity  {
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            final User user = new ManageUser().getUser();
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
+            findPreference("user_email").setTitle(user.getEmail());
         }
     }
 

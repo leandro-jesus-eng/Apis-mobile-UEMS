@@ -29,9 +29,9 @@
         <activity
             android:name=".features.sign_up.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".features.others.IntroActivity" />
+        <activity android:name=".features.intro_app.IntroActivity" />
         <activity
-            android:name=".features.others.SplashScreen"
+            android:name=".features.intro_app.SplashScreen"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".features.others.SettingsActivity"
+            android:name=".features.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".features.animal_list.ListaAnimais"
@@ -66,7 +66,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
-            android:name=".features.others.AlarmReceiver"
+            android:name=".features.settings.AlarmReceiver"
             android:process=":remote" />
     </application>
 

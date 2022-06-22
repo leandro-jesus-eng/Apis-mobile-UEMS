@@ -1,4 +1,4 @@
-package com.apis.features.others;
+package com.apis.features.settings;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;

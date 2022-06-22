@@ -1,14 +1,11 @@
-package com.apis.features.others;
+package com.apis.features.intro_app;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.apis.R;
-import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.features.lote_list.MainActivity;
-import com.apis.features.sign_up.SignUpActivity;
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryDark"
     android:theme="@style/AppTheme.Fullscreen"
-    tools:context=".features.others.SplashScreen">
+    tools:context=".features.intro_app.SplashScreen">
 
     <ImageView
         android:id="@+id/imageView2"

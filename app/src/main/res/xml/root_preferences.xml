@@ -27,7 +27,8 @@
         <Preference
             app:key="github"
             app:summary="https://github.com/leandro-jesus-eng/Apis-mobile-UEMS"
-            app:title="GitHub">
+            app:title="GitHub"
+            android:icon="@drawable/github">
                 <intent android:action="android.intent.action.VIEW"
                     android:data="https://github.com/leandro-jesus-eng/Apis-mobile-UEMS" />
         </Preference>
@@ -38,6 +39,17 @@
             app:title="Ícones e recursos gráficos">
         </Preference>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="dados_category"
+        app:title="Dados do Usuário">
+
+        <Preference
+            app:key="user_email"
+            app:title="usuario@email.com"
+            android:icon="@drawable/cow_red">
+        </Preference>
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

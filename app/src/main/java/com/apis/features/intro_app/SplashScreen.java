@@ -1,9 +1,10 @@
-package com.apis.features.others;
+package com.apis.features.intro_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.apis.features.lote_list.MainActivity;
 import com.apis.R;
 
