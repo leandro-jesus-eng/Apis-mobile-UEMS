@@ -38,7 +38,10 @@ import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.features.intro_app.IntroActivity;
 import com.apis.features.settings.SettingsActivity;
 import com.apis.features.sign_up.SignUpActivity;
+import com.apis.model.Comportamento;
+import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
+import com.apis.model.TipoComportamento;
 import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String nomeLote;
     private String nomeExperimento;
     private User user;
+    private int formularioId;
     private SwipeRefreshLayout swipeRefreshLayout;
     DbRepository dbRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         new ManageUser().setUser(user);
         firestoreRepository.setupRemoteChangeListener();
         configurarLista();
+        formularioPadraoExist();
     }
 
     private void hasUserLogged(User user) {
@@ -132,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //dbRepository.excluirTudo();
                 configurarLista();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -234,6 +238,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    private void formularioPadraoExist() {
+        if (dbRepository.getFormularioPadrao(user.getUserId()) == null) {
+            dbRepository.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
+            formularioId = dbRepository.getFormularioPadrao(user.getUserId()).getId();
+            createPatternData();
+        } else {
+            formularioId = dbRepository.getFormularioPadrao(user.getUserId()).getId();
+        }
+    }
+
+    private void createPatternData(){
+        insertNewType("Comportamento Fisiológico");
+        insertNewType("Comportamento Reprodutivo");
+        insertNewType("Uso da Sombra");
+
+        for(TipoComportamento tipoComportamento : getFormularioPadraoWithTipo()){
+            switch (tipoComportamento.getDescricao()){
+                case "Comportamento Fisiológico":
+                    insertNewComportamento("Pastejando", tipoComportamento.getId());
+                    insertNewComportamento("Ociosa em pé", tipoComportamento.getId());
+                    insertNewComportamento("Ociosa deitada", tipoComportamento.getId());
+                    insertNewComportamento("Ruminando em pé", tipoComportamento.getId());
+                    insertNewComportamento("Ruminando deitada", tipoComportamento.getId());
+                    break;
+                case "Comportamento Reprodutivo":
+                    insertNewComportamento("Aceita de monta", tipoComportamento.getId());
+                    insertNewComportamento("Monta outra", tipoComportamento.getId());
+                    insertNewComportamento("Inquieta", tipoComportamento.getId());
+                    break;
+                case "Uso da Sombra":
+                    insertNewComportamento("Sol", tipoComportamento.getId());
+                    insertNewComportamento("Sombra", tipoComportamento.getId());
+                    break;
+            }
+        }
+    }
+
+    private void insertNewType(String descricao) {
+        dbRepository.insertTipoComportamento(new TipoComportamento(0, descricao, formularioId));
+    }
+
+    private void insertNewComportamento(String nome, int tipoId){
+        dbRepository.insertComportamento(new Comportamento(0, nome, tipoId));
+    }
+
+    private List<TipoComportamento> getFormularioPadraoWithTipo() {
+        int formularioPadrao = dbRepository.getFormularioPadrao(user.getUserId()).getId();
+        return dbRepository.getFormularioPadraoWithTipoComportamento(formularioPadrao)
+                .get(0)
+                .tiposComportamento;
     }
 
     final static String[] PERMISSIONS_STORAGE = {
@@ -339,4 +395,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onBackPressed() { }
 }
