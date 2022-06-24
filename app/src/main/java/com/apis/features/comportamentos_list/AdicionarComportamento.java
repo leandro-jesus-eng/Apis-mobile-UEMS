@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -43,6 +44,7 @@ import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -143,17 +145,10 @@ public class AdicionarComportamento extends AppCompatActivity {
         });
     }
 
-    private void setList(){
+    private void setList() {
         List<TipoComportamento> tiposComportamento;
         if (database.getLoteAndFormulario(idLote).get(0).formularioLote == null) {
-            if (database.getFormularioPadrao(user.getUserId()) == null) {
-                database.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
-                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
-
-                createPatternData();
-            } else {
-                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
-            }
+            formularioId = database.getFormularioPadrao(user.getUserId()).getId();
             tiposComportamento = getFormularioWithTipo(true);
         } else {
             formularioId = database.getLoteAndFormulario(idLote).get(0).formularioLote.getId();
@@ -162,68 +157,68 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         List<Comportamento> comportamentos = database.getAllComportamentos();
 
-        for(TipoComportamento tipoComportamento : tiposComportamento){
-            if(
+        for (TipoComportamento tipoComportamento : tiposComportamento) {
+            if (
                     tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") ||
                             tipoComportamento.getDescricao().equals("Reprodutivo") ||
                             tipoComportamento.getDescricao().equals("reprodutivo") ||
                             tipoComportamento.getDescricao().equals("comportamento reprodutivo")
-            ){
+            ) {
                 temReprodutivo = true;
                 break;
             }
         }
 
         layout.removeAllViews();
-        for(TipoComportamento tipoComportamento : tiposComportamento) {
+        for (TipoComportamento tipoComportamento : tiposComportamento) {
             createTextView(tipoComportamento.getDescricao(), false);
 
-            for(Comportamento comportamento : comportamentos){
-                if(comportamento.getIdTipo() == tipoComportamento.getId()){
+            for (Comportamento comportamento : comportamentos) {
+                if (comportamento.getIdTipo() == tipoComportamento.getId()) {
 
-                    if(comportamentoReprodutivo.equals("")){
+                    if (comportamentoReprodutivo.equals("")) {
                         createCheckListView(comportamento.getNome());
                     }
 
-                    if(!comportamentoReprodutivo.equals("") &&
+                    if (!comportamentoReprodutivo.equals("") &&
                             (!tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") &&
                                     !tipoComportamento.getDescricao().equals("Reprodutivo") &&
                                     !tipoComportamento.getDescricao().equals("reprodutivo") &&
                                     !tipoComportamento.getDescricao().equals("comportamento reprodutivo"))
-                    ){
+                    ) {
                         createCheckListView(comportamento.getNome());
                     }
                 }
             }
-            if(!comportamentoReprodutivo.equals("") &&
+            if (!comportamentoReprodutivo.equals("") &&
                     (tipoComportamento.getDescricao().equals("Comportamento Reprodutivo") ||
-                    tipoComportamento.getDescricao().equals("Reprodutivo") ||
-                    tipoComportamento.getDescricao().equals("reprodutivo") ||
-                    tipoComportamento.getDescricao().equals("comportamento reprodutivo"))){
-                createTextView("*"+comportamentoReprodutivo, true);
+                            tipoComportamento.getDescricao().equals("Reprodutivo") ||
+                            tipoComportamento.getDescricao().equals("reprodutivo") ||
+                            tipoComportamento.getDescricao().equals("comportamento reprodutivo"))) {
+                createTextView("*" + comportamentoReprodutivo, true);
             }
         }
-        if(!comportamentoReprodutivo.equals("") && !temReprodutivo){
+        if (!comportamentoReprodutivo.equals("") && !temReprodutivo) {
             createTextView("Comportamento Reprodutivo", false);
-            createTextView("*"+comportamentoReprodutivo, true);
+            createTextView("*" + comportamentoReprodutivo, true);
         }
     }
 
-    private Animal findAnimalByName(String nomeAnimal){
+    private Animal findAnimalByName(String nomeAnimal) {
         List<Animal> animais = database.getAnimais(idLote);
-        for(Animal animal : animais){
-            if(animal.getNome().equals(nomeAnimal)){
+        for (Animal animal : animais) {
+            if (animal.getNome().equals(nomeAnimal)) {
                 return animal;
             }
         }
         return null;
     }
 
-    private void createTextView(String texto, Boolean avisoDeAnotacaoReprodutiva){
+    private void createTextView(String texto, Boolean avisoDeAnotacaoReprodutiva) {
         TextView textTipoComportamento = new TextView(this);
         textTipoComportamento.setText(texto);
 
-        if(avisoDeAnotacaoReprodutiva){
+        if (avisoDeAnotacaoReprodutiva) {
             textTipoComportamento.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
 
@@ -235,7 +230,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         layout.addView(textTipoComportamento);
     }
 
-    private void createCheckListView(String texto){
+    private void createCheckListView(String texto) {
         CheckBox checkComportamento = new CheckBox(this);
         checkComportamento.setText(texto);
 
@@ -260,15 +255,15 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         File files[] = getBaseContext().getExternalFilesDirs(null);
         File fileWithinMyDir = null;
-        if(files.length > 0) {
-            fileWithinMyDir = new File( files[0] , FileControl.getNameOfAnimalCSV(lote, animal));
+        if (files.length > 0) {
+            fileWithinMyDir = new File(files[0], FileControl.getNameOfAnimalCSV(lote, animal));
         } else {
             Toast.makeText(getApplicationContext(), "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
         }
 
-        if(fileWithinMyDir.exists()) {
+        if (fileWithinMyDir.exists()) {
             intentShareFile.setType("application/pdf");
-            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/"+FileControl.getNameOfAnimalCSV(lote, animal) ));
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(files[0].getAbsolutePath() + "/" + FileControl.getNameOfAnimalCSV(lote, animal)));
 
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                     "Dados" + nomeLote + " - " + nomeAnimal);
@@ -291,9 +286,9 @@ public class AdicionarComportamento extends AppCompatActivity {
         recyclerView.setLayoutManager(layout);
     }
 
-    private void pegarDadosActivityPassada(){
+    private void pegarDadosActivityPassada() {
 
-        if (getIntent().hasExtra("animal_nome") && getIntent().hasExtra("animal_id") && getIntent().hasExtra("lote_id")){
+        if (getIntent().hasExtra("animal_nome") && getIntent().hasExtra("animal_id") && getIntent().hasExtra("lote_id")) {
             nomeAnimal = getIntent().getStringExtra("animal_nome");
             idAnimal = getIntent().getIntExtra("animal_id", 9999);
             idLote = getIntent().getIntExtra("lote_id", 9999);
@@ -301,32 +296,27 @@ public class AdicionarComportamento extends AppCompatActivity {
         }
 
         if (database.getLoteAndFormulario(idLote).get(0).formularioLote == null) {
-            if (database.getFormularioPadrao(user.getUserId()) == null) {
-                database.insertFormularioPadrao(new FormularioPadrao(0, user.getUserId()));
-                formularioId = database.getFormularioPadrao(user.getUserId()).getId();
-                createPatternData();
-            }
             formularioId = database.getFormularioPadrao(user.getUserId()).getId();
         } else {
             formularioId = database.getLoteAndFormulario(idLote).get(0).formularioLote.getId();
         }
 
-        if (getIntent().hasExtra("anotacao_vaca")){
-            comportamentoReprodutivo =  getIntent().getStringExtra("anotacao_vaca");
+        if (getIntent().hasExtra("anotacao_vaca")) {
+            comportamentoReprodutivo = getIntent().getStringExtra("anotacao_vaca");
             nomeOutraVaca = getIntent().getStringExtra("outra_vaca_nome");
             comportamentoOutraVaca = getIntent().getStringExtra("anotacao_outra_vaca");
 
             List<TipoComportamento> tiposComportamento = getFormularioWithTipo(false);
 
-            for(TipoComportamento tipoComportamento : tiposComportamento){
-                if(tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")){
+            for (TipoComportamento tipoComportamento : tiposComportamento) {
+                if (tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")) {
                     tiposComportamentoReprodutivo.add(tipoComportamento);
                 }
             }
 
-            for(TipoComportamento tipoComportamento : tiposComportamentoReprodutivo){
-                for(Comportamento comportamento : database.getAllComportamentos()){
-                    if(comportamento.getIdTipo() == tipoComportamento.getId()){
+            for (TipoComportamento tipoComportamento : tiposComportamentoReprodutivo) {
+                for (Comportamento comportamento : database.getAllComportamentos()) {
+                    if (comportamento.getIdTipo() == tipoComportamento.getId()) {
                         comportamentosReprodutivos.add(comportamento);
                     }
                 }
@@ -334,13 +324,12 @@ public class AdicionarComportamento extends AppCompatActivity {
         }
     }
 
-
     private void pegarUltimaAtualizacao() {
         TextView atualizadoEm = (TextView) findViewById(R.id.atualizadoEm);
         List<Animal> animais = database.getAnimais(idLote);
         String lastUpdate = "";
-        for (Animal animal : animais){
-            if(animal.getId() == idAnimal){
+        for (Animal animal : animais) {
+            if (animal.getId() == idAnimal) {
                 lastUpdate = database.getLastUpdateAnimal(animal);
             }
         }
@@ -350,24 +339,23 @@ public class AdicionarComportamento extends AppCompatActivity {
         boolean receberNotificacao = sharedPreferences.getBoolean("notifications", false);
         String intervaloAtualizacao = sharedPreferences.getString("intervalo_atualizacao", "0");
 
-        if(lastUpdate != ""){
-            atualizadoEm.setText(receberNotificacao ? "Notificações ativadas ("+intervaloAtualizacao+"min)" : "Notificações desativadas");
-        }else {
+        if (lastUpdate != "") {
+            atualizadoEm.setText(receberNotificacao ? "Notificações ativadas (" + intervaloAtualizacao + "min)" : "Notificações desativadas");
+        } else {
             atualizadoEm.setText("Não existem registros para este animal.");
         }
 
     }
 
-    public void salvarDados(){
-        //comportamento = "";
+    public void salvarDados() {
 
-        for (CheckBox viewComportamento : listComportamentoView){
-            if(viewComportamento.isChecked()){
-                comportamento += viewComportamento.getText()+"; " ;
+        for (CheckBox viewComportamento : listComportamentoView) {
+            if (viewComportamento.isChecked()) {
+                comportamento += viewComportamento.getText() + "; ";
             }
         }
         String c = comportamento;
-        if(!comportamentoReprodutivo.isEmpty()){
+        if (!comportamentoReprodutivo.isEmpty()) {
             comportamento += comportamentoReprodutivo;
         }
 
@@ -384,9 +372,9 @@ public class AdicionarComportamento extends AppCompatActivity {
         final TextView lblComportamento = (TextView) promptView.findViewById(R.id.lbl_comportamento);
         final TextView lblObs = (TextView) promptView.findViewById(R.id.lbl_obs_alert);
 
-        lblNome.setText("Nome: "+nomeAnimal);
-        lblComportamento.setText("Comportamento: "+comportamento.replace(";", " | "));
-        lblObs.setText("Observação: "+obS);
+        lblNome.setText("Nome: " + nomeAnimal);
+        lblComportamento.setText("Comportamento: " + comportamento.replace(";", " | "));
+        lblObs.setText("Observação: " + obS);
 
 
         alertDialogBuilder.setCancelable(false)
@@ -396,15 +384,15 @@ public class AdicionarComportamento extends AppCompatActivity {
 
                         ////Salva no BD
                         AnotacaoComportamento anotacaoVaca = new AnotacaoComportamento(
-                                0, nomeAnimal , idAnimal , dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
+                                0, nomeAnimal, idAnimal, dateTime.pegarData(), dateTime.pegarHora(), comportamento, obS);
 
                         try {
-                            if(!comportamentoReprodutivo.isEmpty()){
+                            if (!comportamentoReprodutivo.isEmpty()) {
                                 Animal outra_vaca = findAnimalByName(nomeOutraVaca);
                                 AnotacaoComportamento anotacaoOutraVaca = new AnotacaoComportamento(
                                         0,
                                         nomeOutraVaca,
-                                        outra_vaca.getId() ,
+                                        outra_vaca.getId(),
                                         dateTime.pegarData(),
                                         dateTime.pegarHora(),
                                         comportamentoOutraVaca,
@@ -414,7 +402,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                                 String horaDefinida = dateTime.pegarHora();
                                 String dataDefinida = dateTime.pegarData();
 
-                                database.setLastUpdateAnimal(outra_vaca.getId(), dataDefinida+" "+horaDefinida);
+                                database.setLastUpdateAnimal(outra_vaca.getId(), dataDefinida + " " + horaDefinida);
                                 salvarTxt(outra_vaca.getId(), nomeOutraVaca, dataDefinida, horaDefinida, comportamentoOutraVaca, "");
                             }
 
@@ -426,13 +414,13 @@ public class AdicionarComportamento extends AppCompatActivity {
                             String horaDefinida = dateTime.pegarHora();
                             String dataDefinida = dateTime.pegarData();
 
-                            database.setLastUpdateAnimal(idAnimal, dataDefinida+" "+horaDefinida);
+                            database.setLastUpdateAnimal(idAnimal, dataDefinida + " " + horaDefinida);
                             salvarTxt(idAnimal, nomeAnimal, dataDefinida, horaDefinida, comportamento, obS);
 
                             //Verifica se o usuário quer receber a notificação
                             boolean receberNotificacao = sharedPreferences.getBoolean("notifications", false);
 
-                            if(receberNotificacao){
+                            if (receberNotificacao) {
 
                                 //Pega o intervalo de atualizações das preferencias do  app
                                 String intervaloAtualizacaoString = sharedPreferences.getString("intervalo_atualizacao", "0");
@@ -451,7 +439,7 @@ public class AdicionarComportamento extends AppCompatActivity {
                             fc.deleteTmpFile();
 
                             finish();
-                        }catch (Throwable throwable){
+                        } catch (Throwable throwable) {
                             Toast.makeText(getApplicationContext(), "Erro ao salvar!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -469,48 +457,47 @@ public class AdicionarComportamento extends AppCompatActivity {
         alert.show();
     }
 
-    public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS){
+    public void salvarTxt(int idAnimal, String nomeAnimal, String data, String hora, String comportamento, String obS) {
 
-        String conteudo = idAnimal+";"+nomeAnimal+";"+data+";"+hora+";"+comportamento+";"+obS;
+        String conteudo = idAnimal + ";" + nomeAnimal + ";" + data + ";" + hora + ";" + comportamento + ";" + obS;
 
         Lote lote = database.getLote(idLote);
 
         try {
-                try {
+            try {
 
-                     File files[] = getBaseContext().getExternalFilesDirs(null);
+                File files[] = getBaseContext().getExternalFilesDirs(null);
 
-                    File f = null;
-                    if(files.length > 0) {
-                        f = new File( files[0] , FileControl.getNameOfLoteCSV(lote));
-                        if (!f.exists()){
-                            f.createNewFile();
-                        }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
-                        return;
+                File f = null;
+                if (files.length > 0) {
+                    f = new File(files[0], FileControl.getNameOfLoteCSV(lote));
+                    if (!f.exists()) {
+                        f.createNewFile();
                     }
-
-                    FileOutputStream out = new FileOutputStream(f, true);
-                    out.write(conteudo.getBytes());
-                    out.write('\n');
-                    out.flush();
-                    out.close();
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
+                } else {
+                    Toast.makeText(getApplicationContext(), "APP não possui permissão para salvar no dispositivo!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
 
+                FileOutputStream out = new FileOutputStream(f, true);
+                out.write(conteudo.getBytes());
+                out.write('\n');
+                out.flush();
+                out.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void definirAlarme(int tempo){
+    public void definirAlarme(int tempo) {
         AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -521,50 +508,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
-        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,  SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
-    }
-
-    private void createPatternData(){
-        database.insertTipoComportamento(
-                new TipoComportamento(0,
-                        "Comportamento Fisiológico",
-                        formularioId
-                )
-        );
-        database.insertTipoComportamento(
-                new TipoComportamento(0,
-                        "Comportamento Reprodutivo",
-                        formularioId
-                )
-        );
-        database.insertTipoComportamento(
-                new TipoComportamento(0,
-                        "Uso da Sombra",
-                        formularioId
-                )
-        );
-
-        for(TipoComportamento tipoComportamento : database.getAllTipos()){
-            switch (tipoComportamento.getDescricao()){
-                case "Comportamento Fisiológico":
-                    database.insertComportamento(new Comportamento(0, "Pastejando", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Ociosa em pé", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Ociosa deitada", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Ruminando em pé", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Ruminando deitada", tipoComportamento.getId()));
-                    break;
-                case "Comportamento Reprodutivo":
-                    database.insertComportamento(new Comportamento(0, "Aceita de monta", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Monta outra", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Inquieta", tipoComportamento.getId()));
-                    break;
-                case "Uso da Sombra":
-                    database.insertComportamento(new Comportamento(0, "Sol", tipoComportamento.getId()));
-                    database.insertComportamento(new Comportamento(0, "Sombra", tipoComportamento.getId()));
-                    break;
-            }
-        }
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
+        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + tempo * 60000, alarmIntent);
     }
 
     private List<TipoComportamento> getFormularioWithTipo(boolean padrao) {
@@ -581,11 +526,8 @@ public class AdicionarComportamento extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:break;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
         return true;
     }

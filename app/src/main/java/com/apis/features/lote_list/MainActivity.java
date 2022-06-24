@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onRefresh() {
                 configurarLista();
+                formularioPadraoExist();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
