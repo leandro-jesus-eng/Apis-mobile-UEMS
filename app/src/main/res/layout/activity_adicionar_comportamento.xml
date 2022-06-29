@@ -104,6 +104,7 @@
                     <Button
                         android:id="@+id/btnSalvar"
                         android:layout_width="0dp"
+                        style="@style/default_button"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"

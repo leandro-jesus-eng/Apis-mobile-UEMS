@@ -9,7 +9,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemListaLote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/default_item"
+        android:elevation="2dp"
+        android:hapticFeedbackEnabled="true"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/lbl_nome_lote"
@@ -19,7 +24,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="TextView"
-            android:textSize="18sp"
+            style="@style/default_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,6 +91,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lbl_experimento" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

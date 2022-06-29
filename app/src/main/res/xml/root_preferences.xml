@@ -7,7 +7,7 @@
 
         <SwitchPreferenceCompat
             app:key="notifications"
-            app:title="Lembrete de atualização de dados"/>
+            app:title="Lembrete de atualização de dados" />
 
         <ListPreference
             android:dialogTitle="Selecione o intervalo de tempo"
