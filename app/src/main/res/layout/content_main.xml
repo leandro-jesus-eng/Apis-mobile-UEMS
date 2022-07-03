@@ -16,21 +16,22 @@
         app:layout_constraintBottom_toTopOf="@id/textNenhumLote"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/alert_rounded" />
+        app:srcCompat="@drawable/img_alert" />
 
     <TextView
         android:id="@+id/lista_lotes_title_textView"
+        style="@style/default_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Lista de lotes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/default_title"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textNenhumLote"
+        style="@style/default_text_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nenhum lote cadastrado!"
@@ -56,8 +57,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lista_lotes_title_textView">
-        </androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@id/lista_lotes_title_textView" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

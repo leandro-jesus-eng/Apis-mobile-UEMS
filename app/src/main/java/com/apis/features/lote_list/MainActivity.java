@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText txtNomeLote =  promptView.findViewById(R.id.textNomeAnimal);
-        final EditText txtExperimento = promptView.findViewById(R.id.textExperimento);
+        final EditText txtNomeLote =  promptView.findViewById(R.id.lote_name_editText);
+        final EditText txtExperimento = promptView.findViewById(R.id.lote_experiment_editText);
 
         txtNomeLote.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

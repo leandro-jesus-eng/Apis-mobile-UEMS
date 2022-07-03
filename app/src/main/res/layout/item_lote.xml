@@ -8,28 +8,29 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemListaLote"
+        style="@style/default_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/default_item"
-        android:elevation="2dp"
-        android:hapticFeedbackEnabled="true"
         android:clickable="true"
-        android:focusable="true">
+        android:elevation="2dp"
+        android:focusable="true"
+        android:hapticFeedbackEnabled="true">
 
         <TextView
             android:id="@+id/lbl_nome_lote"
+            style="@style/default_text_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="TextView"
-            style="@style/default_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lbl_experimento"
+            style="@style/default_small_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -49,8 +50,8 @@
             android:background="@drawable/ic_baseline_share_24"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnExportarDados"/>
+            app:layout_constraintEnd_toStartOf="@id/btnExportarDados"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btnDeleteLote"
@@ -73,10 +74,10 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/database_export"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintEnd_toStartOf="@id/btnDeleteLote"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/database_export" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/divider"

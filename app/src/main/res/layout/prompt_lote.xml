@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,10 +7,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/default_layout_rounded">
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/title_dialog_textView"
+            style="@style/default_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -24,7 +25,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lbl_repro"
+            android:id="@+id/name_label_textView"
+            style="@style/default_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -32,10 +34,11 @@
             android:layout_marginTop="24dp"
             android:text="@string/lbl_nome"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            app:layout_constraintTop_toBottomOf="@+id/title_dialog_textView" />
 
         <EditText
-            android:id="@+id/textNomeAnimal"
+            android:id="@+id/lote_name_editText"
+            style="@style/default_editText"
             android:layout_width="0dp"
             android:layout_height="47dp"
             android:layout_marginStart="24dp"
@@ -46,10 +49,11 @@
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_repro" />
+            app:layout_constraintTop_toBottomOf="@+id/name_label_textView" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/experiment_label_textView"
+            style="@style/default_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -57,10 +61,11 @@
             android:layout_marginTop="16dp"
             android:text="@string/experimento"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textNomeAnimal" />
+            app:layout_constraintTop_toBottomOf="@+id/lote_name_editText" />
 
         <EditText
-            android:id="@+id/textExperimento"
+            android:id="@+id/lote_experiment_editText"
+            style="@style/default_editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -73,6 +78,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+            app:layout_constraintTop_toBottomOf="@+id/experiment_label_textView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

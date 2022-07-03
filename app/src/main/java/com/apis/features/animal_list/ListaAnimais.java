@@ -27,7 +27,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
-import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.model.Animal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -161,7 +160,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ListaAnimais.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText txtNomeAnimal = (EditText) promptView.findViewById(R.id.textNomeAnimal);
+        final EditText txtNomeAnimal = (EditText) promptView.findViewById(R.id.lote_name_editText);
 
         txtNomeAnimal.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

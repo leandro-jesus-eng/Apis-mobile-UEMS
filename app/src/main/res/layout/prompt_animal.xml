@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/title_dialog_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lbl_repro"
+            android:id="@+id/name_label_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -31,10 +31,10 @@
             android:layout_marginTop="24dp"
             android:text="@string/lbl_nome"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            app:layout_constraintTop_toBottomOf="@+id/title_dialog_textView" />
 
         <EditText
-            android:id="@+id/textNomeAnimal"
+            android:id="@+id/lote_name_editText"
             android:layout_width="0dp"
             android:layout_height="47dp"
             android:layout_marginStart="24dp"
@@ -47,7 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_repro" />
+            app:layout_constraintTop_toBottomOf="@+id/name_label_textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
