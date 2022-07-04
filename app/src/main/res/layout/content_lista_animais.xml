@@ -31,7 +31,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recyclerAnimais"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/default_title"/>
 
     <TextView
         android:id="@+id/txtIdLote"
@@ -41,7 +42,8 @@
         android:layout_marginLeft="16dp"
         android:text="ID LOTE"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNomeLote" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNomeLote"
+        style="@style/default_text"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/animal_list_swipe_refresh"
@@ -71,6 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/default_text_regular"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
