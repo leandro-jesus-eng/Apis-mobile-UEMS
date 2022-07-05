@@ -12,6 +12,7 @@
 
         <TextView
             android:id="@+id/title_dialog_textView"
+            style="@style/default_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -21,11 +22,11 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/default_title"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/name_label_textView"
+            style="@style/default_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -33,25 +34,25 @@
             android:layout_marginTop="24dp"
             android:text="@string/lbl_nome"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_dialog_textView"
-            style="@style/default_text"/>
+            app:layout_constraintTop_toBottomOf="@id/title_dialog_textView" />
 
         <EditText
             android:id="@+id/lote_name_editText"
+            style="@style/default_editText"
             android:layout_width="0dp"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="24dp"
             android:ems="10"
+            android:hint="Meu novo animal"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_label_textView"
-            style="@style/default_editText"/>
+            app:layout_constraintTop_toBottomOf="@id/name_label_textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

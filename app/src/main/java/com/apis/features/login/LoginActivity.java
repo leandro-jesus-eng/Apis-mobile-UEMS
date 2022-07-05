@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText emailInput;
     EditText passwordInput;
     Button saveButton;
+    TextView erroMsgTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         emailInput = findViewById(R.id.login_input_email_editText);
         passwordInput = findViewById(R.id.login_input_password_editText);
         saveButton = findViewById(R.id.login_save_button);
+        erroMsgTextView = findViewById(R.id.error_msg_textView);
         onConfirm();
     }
 
@@ -54,24 +57,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean verifyForm(String email, String password) {
         if(email.isEmpty() && password.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Preencha todos os campos!");
             return false;
         } else if(email.isEmpty()) {
-            Toast.makeText(this, "Insira um email!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira um email!");
             return false;
         } else if(password.isEmpty()) {
-            Toast.makeText(this, "Insira uma senha!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira uma senha!");
             return false;
         } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira um email válido!");
             return false;
         } else if(!entitiesHandlerRepository.userExists(email)) {
-            Toast.makeText(this, "Não há usuários com esse email!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Não há usuários com esse email!");
             return false;
         }
+        errorMsgVisible(false, "");
         return true;
     }
-
 
     private void loginUser(String email, String password) {
         try {
@@ -89,5 +92,13 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao fazer login!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void errorMsgVisible(boolean show, String message) {
+        if(show) {
+            erroMsgTextView.setVisibility(View.VISIBLE);
+            erroMsgTextView.setText(message);
+        }
+        else erroMsgTextView.setVisibility(View.INVISIBLE);
     }
 }

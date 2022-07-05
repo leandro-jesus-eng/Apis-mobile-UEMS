@@ -26,6 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText passwordInput;
     Button saveButton;
     TextView goToLoginTextView;
+    TextView erroMsgTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.sign_up_input_password_editText);
         saveButton = findViewById(R.id.sign_up_save_button);
         goToLoginTextView = findViewById(R.id.go_to_login_textView);
+        erroMsgTextView = findViewById(R.id.error_msg_textView);
         setupUi();
     }
 
@@ -61,21 +63,22 @@ public class SignUpActivity extends AppCompatActivity {
 
     private Boolean verifyForm(String email, String password) {
         if(email.isEmpty() && password.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Preencha todos os campos!");
             return false;
         } else if(email.isEmpty()) {
-            Toast.makeText(this, "Insira um email!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira um email!");
             return false;
         } else if(password.isEmpty()) {
-            Toast.makeText(this, "Insira uma senha!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira uma senha!");
             return false;
         } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Insira um email válido!");
             return false;
         } else if(entitiesHandlerRepository.userExists(email)) {
-            Toast.makeText(this, "Esse email já está sendo usado!", Toast.LENGTH_SHORT).show();
+            errorMsgVisible(true, "Esse email já está sendo usado!");
             return false;
         }
+        errorMsgVisible(false, "");
         return true;
     }
 
@@ -102,5 +105,13 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao fazer cadastro!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void errorMsgVisible(boolean show, String message) {
+        if(show) {
+            erroMsgTextView.setVisibility(View.VISIBLE);
+            erroMsgTextView.setText(message);
+        }
+        else erroMsgTextView.setVisibility(View.INVISIBLE);
     }
 }

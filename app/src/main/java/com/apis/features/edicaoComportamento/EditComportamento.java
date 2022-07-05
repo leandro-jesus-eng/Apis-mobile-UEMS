@@ -32,7 +32,7 @@ public class EditComportamento extends AppCompatActivity {
     EditComportamentoAdapter _adapter;
     private EditComportamentoAdapter adapter;
     private DbRepository dbRepository;
-    private EntitiesHandlerRepository entitiesHandlerRepository;
+    EntitiesHandlerRepository entitiesHandlerRepository;
 
     private List<TipoComportamento> listaTipos = new ArrayList<>();
     private List<Comportamento> listaComportamentos = new ArrayList<>();
