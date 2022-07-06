@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -10,54 +12,85 @@
 
         <TextView
             android:id="@+id/title_dialog_textView"
+            style="@style/default_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:text="Confirme os dados"
-            android:textSize="24sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lbl_nome_alert"
+            android:id="@+id/lbl_nome_alert_bold"
+            style="@style/default_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
-            android:text="Nome"
+            android:text="Nome:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_dialog_textView" />
 
         <TextView
-            android:id="@+id/lbl_comportamento"
-            android:layout_width="0dp"
+            android:id="@+id/lbl_comportamento_bold"
+            style="@style/default_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="32dp"
-            android:text="Comportamento"
-            app:layout_constraintBottom_toTopOf="@+id/lbl_obs_alert"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:text="Comportamento:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lbl_nome_alert" />
 
         <TextView
-            android:id="@+id/lbl_obs_alert"
+            android:id="@+id/lbl_obs_alert_bold"
+            style="@style/default_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
-            android:text="Observação"
+            android:layout_marginTop="8dp"
+            android:text="Observação:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lbl_comportamento" />
+
+        <TextView
+            android:id="@+id/lbl_nome_alert"
+            style="@style/default_text_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lbl_nome_alert_bold"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_nome_alert_bold" />
+
+        <TextView
+            android:id="@+id/lbl_comportamento"
+            style="@style/default_text_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lbl_comportamento_bold"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_comportamento_bold" />
+
+        <TextView
+            android:id="@+id/lbl_obs_alert"
+            style="@style/default_text_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lbl_obs_alert_bold"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_obs_alert_bold" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

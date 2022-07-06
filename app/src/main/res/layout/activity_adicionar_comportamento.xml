@@ -52,7 +52,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:focusable="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -64,6 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
                         android:text="Adicionar registro"
+                        style="@style/default_title"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +95,7 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
                         android:ems="10"
+                        style="@style/default_editText"
                         android:hint="@string/observa_es"
                         android:inputType="textPersonName"
                         android:textSize="16sp"
@@ -135,14 +138,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="Registros"
+                        style="@style/default_text"
                         android:textSize="24sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/fundoCinza"
                         tools:layout_editor_absoluteY="96dp" />
 
                     <TextView
                         android:id="@+id/atualizadoEm"
+                        style="@style/default_text_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -176,6 +180,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
                         android:text="Exportar"
+                        style="@style/default_button"
                         app:layout_constraintEnd_toEndOf="@id/fundoCinza"
                         app:layout_constraintTop_toTopOf="@id/fundoCinza" />
 
@@ -185,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:text="@string/reprodutivo"
-                        android:textStyle="bold"
+                        style="@style/default_small_text"
                         app:layout_constraintBottom_toTopOf="@+id/linearLayoutAddComp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"

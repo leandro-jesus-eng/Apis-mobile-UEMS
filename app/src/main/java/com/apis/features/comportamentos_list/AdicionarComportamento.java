@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,7 +27,6 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamento_reprodutivo.AdicionarCompReprodutivo;
@@ -39,12 +37,10 @@ import com.apis.model.AnotacaoComportamento;
 import com.apis.model.Comportamento;
 import com.apis.model.DateTime;
 import com.apis.model.FileControl;
-import com.apis.model.FormularioPadrao;
 import com.apis.model.Lote;
 import com.apis.model.TipoComportamento;
 import com.apis.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -219,7 +215,7 @@ public class AdicionarComportamento extends AppCompatActivity {
         textTipoComportamento.setText(texto);
 
         if (avisoDeAnotacaoReprodutiva) {
-            textTipoComportamento.setTextColor(getResources().getColor(R.color.colorPrimary));
+            textTipoComportamento.setTextColor(getResources().getColor(R.color.colorGreen));
         }
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -372,10 +368,9 @@ public class AdicionarComportamento extends AppCompatActivity {
         final TextView lblComportamento = (TextView) promptView.findViewById(R.id.lbl_comportamento);
         final TextView lblObs = (TextView) promptView.findViewById(R.id.lbl_obs_alert);
 
-        lblNome.setText("Nome: " + nomeAnimal);
-        lblComportamento.setText("Comportamento: " + comportamento.replace(";", " | "));
-        lblObs.setText("Observação: " + obS);
-
+        lblNome.setText(nomeAnimal);
+        lblComportamento.setText(comportamento.replace(";", " | "));
+        lblObs.setText(obS);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
