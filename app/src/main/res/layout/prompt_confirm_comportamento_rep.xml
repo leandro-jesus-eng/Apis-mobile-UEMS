@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/default_layout_rounded"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/title_dialog_textView"
+            style="@style/default_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="Deseja confirmar o comportamento reprodutivo?"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_vaca_montou_imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/cow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_dialog_textView" />
+
+        <TextView
+            android:id="@+id/nome_vaca_montou_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:text="nome da vaca"
+            style="@style/default_text"
+            app:layout_constraintBottom_toBottomOf="@+id/img_vaca_montou_imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_vaca_montou_imageView"
+            app:layout_constraintTop_toTopOf="@id/img_vaca_montou_imageView" />
+
+        <ImageView
+            android:id="@+id/img_vaca_montada_imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/cow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_vaca_montou_imageView" />
+
+        <TextView
+            android:id="@+id/nome_vaca_montada_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:text="nome da vaca"
+            style="@style/default_text"
+            app:layout_constraintBottom_toBottomOf="@+id/img_vaca_montada_imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_vaca_montada_imageView"
+            app:layout_constraintTop_toTopOf="@id/img_vaca_montada_imageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

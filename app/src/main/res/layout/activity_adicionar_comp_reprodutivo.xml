@@ -111,6 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Não há outros animais nesse lote!"
+        style="@style/default_text_regular"
         app:layout_anchor="@+id/nestedScrollView"
         app:layout_anchorGravity="center" />
 

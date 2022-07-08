@@ -58,11 +58,10 @@ public class ShareLoteAdapter extends RecyclerView.Adapter<ShareLoteViewHolder>{
 
     private void changeItemColor(ItemUser itemUser, ShareLoteViewHolder holder) {
         if (itemUser.isSelected()) {
-            holder.listItem.setBackground(
-                   AppCompatResources.getDrawable(context, R.drawable.ic_baseline_check_green)
-            );
+            //holder.selectedIconButton.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
+            holder.selectedIconButton.setImageResource(R.drawable.ic_baseline_check_green);
         } else {
-            holder.listItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_check_white));
+            holder.selectedIconButton.setImageResource(R.drawable.ic_baseline_check_white);
         }
     }
 

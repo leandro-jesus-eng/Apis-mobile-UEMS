@@ -8,13 +8,19 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.apis.R;
 import com.apis.data.repositories.DbRepository;
 import com.apis.features.comportamentos_list.AdicionarComportamento;
+import com.apis.features.lote_list.MainActivity;
 import com.apis.model.Animal;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,27 +66,34 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dialogText;
+                String dialogTextVacaMontou = "";
+                String dialogTextVacaMontada = "";
                 String comportamentoVacaAnotacao;
                 String comportamentoOutraVaca;
                 outraVaca = animais.get(holder.getAdapterPosition());
                 if(isMontando){
-                    dialogText = "O bovino "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
+                    dialogTextVacaMontou = "O bovino "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
                             +" montou em \n\nVaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
 
                     comportamentoVacaAnotacao = "Monta na vaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
                     comportamentoOutraVaca = "Aceita de monta da vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")";
                 }else{
-                    dialogText = "A vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
+                    dialogTextVacaMontada = "A vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
                             +" aceitou monta de \n\nBovino "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
 
                     comportamentoVacaAnotacao = "Aceita de monta da vaca "+outraVaca.getNome()+" (id:"+outraVaca.getId()+")";
                     comportamentoOutraVaca = "Monta na vaca "+vacaEmAnotacao.getNome()+" (id:"+vacaEmAnotacao.getId()+")";
                 }
 
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                View promptView = layoutInflater.inflate(R.layout.prompt_confirm_comportamento_rep, null);
+                final TextView nomeAnimalMontou =  promptView.findViewById(R.id.nome_vaca_montou_textView);
+                final TextView nomeAnimalMontado = promptView.findViewById(R.id.nome_vaca_montada_textView);
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setView(promptView);
+                nomeAnimalMontou.setText(dialogTextVacaMontou);
+                nomeAnimalMontado.setText(dialogTextVacaMontada);
                 builder.setTitle("Confirmação de comportamento reprodutivo:")
-                        .setMessage(dialogText)
                         .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
