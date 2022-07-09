@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable-v21/ic_menu_send.xml" value="0.239" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/button_ir_para_reprodutivo.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/default_button_rounded.xml" value="0.24" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/default_edit_text_rounded.xml" value="0.24" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/default_item_rounded.xml" value="0.1085" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/default_layout_rounded.xml" value="0.218" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.3828125" />
+        <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.239" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.239" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/ic_baseline_check_white.xml" value="0.239" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/drawable/ic_baseline_error_outline_24.xml" value="0.316" />
@@ -47,7 +49,7 @@
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/item_vaca_rep.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/nav_header_drawer.xml" value="0.360054347826087" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/prompt_animal.xml" value="0.3491847826086957" />
-        <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/prompt_confirm_comportamento_rep.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/prompt_confirm_comportamento_rep.xml" value="0.33" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/prompt_lote.xml" value="0.1" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/prompt_preferencia.xml" value="0.360054347826087" />
         <entry key="..\:/Users/USUARIO/GIT/projeto/Apis-mobile-UEMS/app/src/main/res/layout/settings_activity.xml" value="0.3319746376811594" />

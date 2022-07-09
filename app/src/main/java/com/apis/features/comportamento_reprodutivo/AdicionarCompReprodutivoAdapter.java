@@ -73,7 +73,7 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                 outraVaca = animais.get(holder.getAdapterPosition());
                 if(isMontando){
                     dialogTextVacaMontou = "O bovino "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")"
-                            +" montou em \n\nVaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
+                            +" montou na \n\nVaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
 
                     comportamentoVacaAnotacao = "Monta na vaca "+outraVaca.getNome()+" (id: "+outraVaca.getId()+")";
                     comportamentoOutraVaca = "Aceita de monta da vaca "+vacaEmAnotacao.getNome()+" (id: "+vacaEmAnotacao.getId()+")";
@@ -93,8 +93,7 @@ public class AdicionarCompReprodutivoAdapter extends RecyclerView.Adapter<Adicio
                 builder.setView(promptView);
                 nomeAnimalMontou.setText(dialogTextVacaMontou);
                 nomeAnimalMontado.setText(dialogTextVacaMontada);
-                builder.setTitle("Confirmação de comportamento reprodutivo:")
-                        .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
