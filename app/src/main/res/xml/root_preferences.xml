@@ -7,7 +7,8 @@
 
         <SwitchPreferenceCompat
             app:key="notifications"
-            app:title="Lembrete de atualização de dados" />
+            app:title="Lembrete de atualização de dados"
+            android:icon="@drawable/ic_baseline_timer_24"/>
 
         <ListPreference
             android:dialogTitle="Selecione o intervalo de tempo"
@@ -15,7 +16,8 @@
             android:entryValues="@array/settings_list_preference_values"
             android:key="intervalo_atualizacao"
             android:summary="Escolha o tempo entre a atualização de dados"
-            android:title="Intervalo entre notificações" />
+            android:title="Intervalo entre notificações"
+            android:icon="@drawable/ic_baseline_av_timer_24"/>
 
 
     </PreferenceCategory>
@@ -36,7 +38,8 @@
         <Preference
             app:key="icons"
             app:summary="https://www.flaticon.com/br/ e https://material.io/"
-            app:title="Ícones e recursos gráficos">
+            app:title="Ícones e recursos gráficos"
+            android:icon="@drawable/ic_baseline_insert_emoticon_24">
         </Preference>
 
     </PreferenceCategory>
