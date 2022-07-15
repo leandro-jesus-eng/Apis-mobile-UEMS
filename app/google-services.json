@@ -49,6 +49,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435363191263:android:5c55c0974f9cbc99338c6a",
+        "android_client_info": {
+          "package_name": "com.ifms.apis.apis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435363191263-m84o622n2cp7bt0c3v28q3v7uo1degtf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ifms.apis.apis",
+            "certificate_hash": "fc893bbf8dc929039e2380612a3a1833c8027075"
+          }
+        },
+        {
+          "client_id": "435363191263-mv5pdbbb4fc09lf4b3lijst9aa3h7ems.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdI9muR16eFGhHmG7Tqe75PAEUHBVSNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435363191263-mv5pdbbb4fc09lf4b3lijst9aa3h7ems.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
