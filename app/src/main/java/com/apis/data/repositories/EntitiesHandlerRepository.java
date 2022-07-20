@@ -48,11 +48,11 @@ public class EntitiesHandlerRepository {
         relationsDao = databaseInstance.relationsDao();
     }
 
-    public boolean animalExiste(String nomeAnimal) {
+    public boolean animalExiste(String nomeAnimal, Integer loteId) {
         List<Animal> result = animalDao.getAllAnimais();
 
         for(Animal animal : result) {
-            if(animal.getNome().equals(nomeAnimal)) {
+            if(animal.getNome().equals(nomeAnimal) && animal.getLoteId() == loteId) {
                 return true;
             }
         }

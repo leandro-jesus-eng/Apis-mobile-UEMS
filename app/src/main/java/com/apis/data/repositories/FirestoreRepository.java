@@ -73,6 +73,10 @@ public class FirestoreRepository {
         relationsDao = databaseInstance.relationsDao();
     }
 
+    public void setupRemoteChangeListenerUserOnly(){
+        refreshUsersWithFirestore();
+    }
+
     public void setupRemoteChangeListener(){
         refreshLotesWithFirestore();
         refreshAnimaisWithFirestore();
@@ -311,19 +315,19 @@ public class FirestoreRepository {
                             for(DocumentChange animalChange : value.getDocumentChanges()){
                                 Animal animal = animalChange.getDocument().toObject(Animal.class);
 
-                                if(!entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                if(!entitiesHandlerRepository.animalExiste(animal.getNome(), animal.getLoteId()) &&
                                         animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_ADDED)
                                 ){
                                     animalDao.insertAnimal(animal);
                                 }
 
-                                if(entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                if(entitiesHandlerRepository.animalExiste(animal.getNome(), animal.getLoteId()) &&
                                         animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_REMOVED)
                                 ){
                                     animalDao.deleteAnimal(animal);
                                 }
 
-                                if(entitiesHandlerRepository.animalExiste(animal.getNome()) &&
+                                if(entitiesHandlerRepository.animalExiste(animal.getNome(), animal.getLoteId()) &&
                                         animalChange.getType().toString().equals(DOCUMENT_CHANGE_TYPE_MODIFIED)
                                 ){
                                     animalDao.setLastUpdate(animal.getId(), animal.getLastUpdate());

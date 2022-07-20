@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();
 
+        firestoreRepository.setupRemoteChangeListener();
         pedirPermissoes();
         createNotificationChannel();
         setupSwipeRefresh();
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         hasUserLogged(user);
         new ManageUser().setUser(user);
-        firestoreRepository.setupRemoteChangeListener();
         configurarLista();
         formularioPadraoExist();
     }
@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this, IntroActivity.class);
             this.startActivity(intent);
 
-        }else if (id == R.id.nav_github) {
+        } else if (id == R.id.nav_github) {
             String url = "https://github.com/leandro-jesus-eng/Apis-mobile-UEMS";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));

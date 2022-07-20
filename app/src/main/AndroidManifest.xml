@@ -19,9 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".features.shareLote.already_shared_users.AlreadySharedUsersActivity"
+            android:exported="false"
+            android:parentActivityName=".features.shareLote.ShareLoteActivity"/>
+        <activity
             android:name=".features.shareLote.ShareLoteActivity"
             android:exported="false"
-            android:parentActivityName=".features.lote_list.MainActivity"/>
+            android:parentActivityName=".features.lote_list.MainActivity" />
         <activity
             android:name=".features.login.LoginActivity"
             android:exported="false"

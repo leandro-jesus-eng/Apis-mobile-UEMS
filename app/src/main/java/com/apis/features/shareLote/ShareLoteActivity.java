@@ -1,36 +1,31 @@
 package com.apis.features.shareLote;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apis.R;
 import com.apis.data.database.relations.UserLoteCrossRef;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
-import com.apis.features.comportamentos_list.AdicionarComportamento;
-import com.apis.features.lote_list.LoteAdapter;
-import com.apis.features.lote_list.MainActivity;
+import com.apis.features.shareLote.already_shared_users.AlreadySharedUsersActivity;
 import com.apis.model.ItemUser;
-import com.apis.model.Lote;
 import com.apis.model.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +37,13 @@ public class ShareLoteActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DbRepository dbRepository;
     private EntitiesHandlerRepository entitiesHandlerRepository;
-    private String loteName;
-    private Integer loteId;
+    static private String loteName;
+    static private Integer loteId;
     private ArrayList<User> users = new ArrayList<>();
-    private User currentUser;
+    static private User currentUser;
     private ShareLoteAdapter adapter;
     private LinearLayout alertUser;
+    List<User> nonNecessaryUsers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +66,25 @@ public class ShareLoteActivity extends AppCompatActivity {
         setupSwipeRefresh();
         setListeners();
         setupList(users);
-        getSupportActionBar().setTitle("Compartilhar "+loteName+" com outros usuários");
+        getSupportActionBar().setTitle("Compartilhar "+loteName);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_lote, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.already_shared_users) {
+            Intent intent = new Intent(this, AlreadySharedUsersActivity.class);
+            intent.putExtra("users", (Serializable) nonNecessaryUsers);
+            this.startActivity(intent);
+            return true;
+        }
+        finish();
+        return true;
     }
 
     private void setupSwipeRefresh() {
@@ -92,7 +106,6 @@ public class ShareLoteActivity extends AppCompatActivity {
     }
 
     private void removeUnnecessaryUsers() {
-        List<User> nonNecessaryUsers = new ArrayList<>();
         for (User user : users) {
             if (user.getEmail().equals(currentUser.getEmail()) || entitiesHandlerRepository
                     .userLoteCrosRefExists(user.getUserId(), loteId)

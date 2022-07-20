@@ -176,7 +176,7 @@ public class ListaAnimais extends AppCompatActivity implements NavigationView.On
 
                         if(!nomeAnimal.equals("")) {
 
-                            if(entitiesHandlerRepository.animalExiste(nomeAnimal)) {
+                            if(entitiesHandlerRepository.animalExiste(nomeAnimal, idLote)) {
                                 Toast.makeText(getApplicationContext(), "O animal com esse nome já existe!", Toast.LENGTH_LONG).show();
                             } else {
                                 ////Salva no BD

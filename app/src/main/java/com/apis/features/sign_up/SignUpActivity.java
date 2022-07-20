@@ -13,6 +13,7 @@ import com.apis.R;
 import com.apis.data.repositories.AuthenticationRepository;
 import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
+import com.apis.data.repositories.FirestoreRepository;
 import com.apis.features.login.LoginActivity;
 import com.apis.features.lote_list.MainActivity;
 import com.apis.model.User;
@@ -21,6 +22,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     AuthenticationRepository authenticationRepository;
     DbRepository dbRepository;
+    FirestoreRepository firestoreRepository;
     EntitiesHandlerRepository entitiesHandlerRepository;
     EditText emailInput;
     EditText passwordInput;
@@ -33,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();
         entitiesHandlerRepository = new EntitiesHandlerRepository(this);
         dbRepository = new DbRepository(this);
@@ -41,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.sign_up_save_button);
         goToLoginTextView = findViewById(R.id.go_to_login_textView);
         erroMsgTextView = findViewById(R.id.error_msg_textView);
+        firestoreRepository.setupRemoteChangeListenerUserOnly();
         setupUi();
     }
 
