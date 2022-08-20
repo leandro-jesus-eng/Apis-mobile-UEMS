@@ -29,6 +29,7 @@ import com.apis.data.repositories.DbRepository;
 import com.apis.data.repositories.EntitiesHandlerRepository;
 import com.apis.features.edicaoComportamento.EditComportamento;
 import com.apis.model.Animal;
+import com.apis.model.FormularioPadrao;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;

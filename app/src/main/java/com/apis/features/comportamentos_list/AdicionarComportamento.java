@@ -302,7 +302,13 @@ public class AdicionarComportamento extends AppCompatActivity {
             nomeOutraVaca = getIntent().getStringExtra("outra_vaca_nome");
             comportamentoOutraVaca = getIntent().getStringExtra("anotacao_outra_vaca");
 
-            List<TipoComportamento> tiposComportamento = getFormularioWithTipo(false);
+            List<TipoComportamento> tiposComportamento = new ArrayList<>();
+
+            if (database.getLoteAndFormulario(idLote).get(0).formularioLote == null) {
+                tiposComportamento = getFormularioWithTipo(true);
+            } else {
+                tiposComportamento = getFormularioWithTipo(false);
+            }
 
             for (TipoComportamento tipoComportamento : tiposComportamento) {
                 if (tipoComportamento.getDescricao().equals("Comportamento Reprodutivo")) {

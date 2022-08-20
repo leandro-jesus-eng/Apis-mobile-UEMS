@@ -146,11 +146,11 @@ public class ShareLoteActivity extends AppCompatActivity {
 
     private void showNoUsersAlert(List<ItemUser> users) {
         if(users.size() > 0)  {
-            alertUser.setVisibility(View.INVISIBLE);
+            alertUser.setVisibility(View.GONE);
             saveButton.setVisibility(View.VISIBLE);
         } else {
             alertUser.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.GONE);
         }
     }
 
